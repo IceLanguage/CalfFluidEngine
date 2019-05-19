@@ -1,9 +1,9 @@
 #ifndef _OutputForMatplotlib_
 #define _OutputForMatplotlib_
 
-#include <pystring/pystring.h>
+#include "External\pystring\pystring.h"
 #include <direct.h>
-#include <cnpy/cnpy.h>
+#include "External\cnpy\cnpy.h"
 #include <vector>
 
 class OutputForMatplotlib final
