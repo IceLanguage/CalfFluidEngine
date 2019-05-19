@@ -13,10 +13,25 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="External">
+      <UniqueIdentifier>{ecd8ecb1-2d5b-4164-8d3f-a54c01449a12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\cnpy">
+      <UniqueIdentifier>{b688d0a1-0a02-4e97-be51-ea4d3276d244}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\pystring">
+      <UniqueIdentifier>{3b0d49b8-f1f7-4171-97aa-3b0980882ffc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="External\cnpy\cnpy.cpp">
+      <Filter>External\cnpy</Filter>
+    </ClCompile>
+    <ClCompile Include="External\pystring\pystring.cpp">
+      <Filter>External\pystring</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -25,6 +40,12 @@
     </ClInclude>
     <ClInclude Include="OutputForMatplotlib.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="External\cnpy\cnpy.h">
+      <Filter>External\cnpy</Filter>
+    </ClInclude>
+    <ClInclude Include="External\pystring\pystring.h">
+      <Filter>External\pystring</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
