@@ -14,7 +14,6 @@ namespace CalfFluidEngine{
 	class VectorField3 : public Field3 {
 	public:
 		VectorField3();
-
 		virtual ~VectorField3();
 
 		//**********************************************
@@ -32,8 +31,32 @@ namespace CalfFluidEngine{
 		//**********************************************
 		virtual Vector3D Curl(const Vector3D& x) const = 0;
 
-		//! Returns sampler function object.
 		virtual std::function<Vector3D(const Vector3D&)> Sampler() const;
 	};
+
+	class ScalarField3 : public Field3 {
+	public:
+		ScalarField3();
+		virtual ~ScalarField3();
+
+		//**********************************************
+		//Returns sampled value at given position ;
+		//**********************************************
+		virtual double Sample(const Vector3D& x) const = 0;
+
+		//**********************************************
+		//Returns gradient vector at given position ;
+		//**********************************************
+		virtual Vector3D Gradient(const Vector3D& x) const = 0;
+
+		//**********************************************
+		//Returns Laplacian at given position ;
+		//**********************************************
+		virtual double Laplacian(const Vector3D& x) const = 0;
+
+		virtual std::function<double(const Vector3D&)> Sampler() const;
+	};
 }
+
+
 #endif
