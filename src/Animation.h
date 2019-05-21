@@ -12,8 +12,7 @@ namespace CalfFluidEngine {
 		void Advance(int delta);
 	};
 
-	class Animation
-	{
+	class Animation{
 	public:
 		Animation();
 		virtual ~Animation();

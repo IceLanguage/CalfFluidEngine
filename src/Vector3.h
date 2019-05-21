@@ -1,155 +1,129 @@
 #ifndef _CalfFluidEngine_Vector3_
 #define _CalfFluidEngine_Vector3_
-namespace CalfFluidEngine
-{
+namespace CalfFluidEngine{
 	template <typename T>
-	struct Vector3 final
-	{
+	struct Vector3 final{
 	public:
 		Vector3() : x(0), y(0), z(0) {}
 		Vector3(const T x, const T y, const T z)
 			: x(x), y(y), z(z) {}
 
-		float operator[](unsigned int i) const
-		{
+		float operator[](unsigned int i) const{
 			if (i == 0) return x;
 			if (i == 1) return y;
 			return z;
 		}
 
-		float& operator[](unsigned int i)
-		{
+		float& operator[](unsigned int i){
 			if (i == 0) return x;
 			if (i == 1) return y;
 			return z;
 		}
 
-		void operator+=(const Vector3& v)
-		{
+		void operator+=(const Vector3& v){
 			x += v.x;
 			y += v.y;
 			z += v.z;
 		}
 
-		Vector3 operator+(const Vector3& v) const
-		{
+		Vector3 operator+(const Vector3& v) const{
 			return Vector3(x + v.x, y + v.y, z + v.z);
 		}
 
-		void operator-=(const Vector3& v)
-		{
+		void operator-=(const Vector3& v){
 			x -= v.x;
 			y -= v.y;
 			z -= v.z;
 		}
 
-		Vector3 operator-(const Vector3& v) const
-		{
+		Vector3 operator-(const Vector3& v) const{
 			return Vector3(x - v.x, y - v.y, z - v.z);
 		}
 
-		void operator*=(const T value)
-		{
+		void operator*=(const T value){
 			x *= value;
 			y *= value;
 			z *= value;
 		}
 
-		Vector3 operator*(const T value) const
-		{
+		Vector3 operator*(const T value) const{
 			return Vector3(x * value, y * value, z * value);
 		}
 
-		void operator/=(const T value)
-		{
+		void operator/=(const T value){
 			x /= value;
 			y /= value;
 			z /= value;
 		}
 
-		Vector3 operator/(const T value) const
-		{
+		Vector3 operator/(const T value) const{
 			return Vector3(x / value, y / value, z / value);
 		}
 
-		void operator*=(const Vector3& v)
-		{
+		void operator*=(const Vector3& v){
 			x *= v.x;
 			y *= v.y;
 			z *= v.z;
 		}
 
-		Vector3 operator*(const Vector3& v) const
-		{
+		Vector3 operator*(const Vector3& v) const{
 			return Vector3(x * v.x, y * v.y, z * v.z);
 		}
 
-		bool operator==(const Vector3& other) const
-		{
+		bool operator==(const Vector3& other) const{
 			return
 				x == other.x &&
 				y == other.y &&
 				z == other.z;
 		}
 
-		bool operator!=(const Vector3& other) const
-		{
+		bool operator!=(const Vector3& other) const{
 			return
 				x != other.x ||
 				y != other.y ||
 				z != other.z;
 		}
 
-		float SquareMagnitude() const
-		{
+		float SquareMagnitude() const{
 			return x * x + y * y + z * z;
 		}
 
-		float Magnitude() const
-		{
+		float Magnitude() const{
 			return sqrtf(SquareMagnitude());
 		}
 
-		void AddScaledVector(const Vector3& vector, T scale)
-		{
+		void AddScaledVector(const Vector3& vector, T scale){
 			x += vector.x * scale;
 			y += vector.y * scale;
 			z += vector.z * scale;
 		}
 
-		void Normalize()
-		{
+		void Normalize(){
 			float l = Magnitude();
-			if (l > 0)
-			{
+			if (l > 0){
 				(*this) *= ((float)1) / l;
 			}
 		}
 
-		void Clear()
-		{
+		void Clear(){
 			x = y = z = (T)0;
 		}
 
-		static Vector3 Cross(const Vector3& lhsV, const Vector3& rhsV)
-		{
+		static Vector3 Cross(const Vector3& lhsV, const Vector3& rhsV){
 			return Vector3(
 				lhsV.y * rhsV.z - lhsV.z * rhsV.y,
 				lhsV.z * rhsV.x - lhsV.x * rhsV.z,
 				lhsV.x * rhsV.y - lhsV.y * rhsV.x);
 		}
 
-		static float Dot(const Vector3& lhsV, const Vector3& rhsV)
-		{
+		static float Dot(const Vector3& lhsV, const Vector3& rhsV){
 			return lhsV.x * rhsV.x + lhsV.y * rhsV.y + lhsV.z * rhsV.z;
 		}
 
-		static Vector3 Normalize(const Vector3& v)
-		{
+		static Vector3 Normalize(const Vector3& v){
 			float l = v.Magnitude();
 			Vector3 res = zero;
-			if (l > 0)
-			{
+			if (l > 0){
 				float reciprocal = ((float)1) / l;
 				res = reciprocal * v;
 			}
@@ -167,8 +141,7 @@ namespace CalfFluidEngine
 	};
 
 	template <typename T>
-	Vector3<T> operator*(float value, const Vector3<T>& v)
-	{
+	Vector3<T> operator*(float value, const Vector3<T>& v){
 		return v * value;
 	}
 
@@ -180,5 +153,10 @@ namespace CalfFluidEngine
 	const Vector3D Vector3D::up = Vector3D(0, 1, 0);
 	const Vector3D Vector3D::forward = Vector3D(0, 0, 1);
 	const Vector3D Vector3D::zero = Vector3D(0, 0, 0);
+
+	const Vector3F Vector3F::right = Vector3F(1, 0, 0);
+	const Vector3F Vector3F::up = Vector3F(0, 1, 0);
+	const Vector3F Vector3F::forward = Vector3F(0, 0, 1);
+	const Vector3F Vector3F::zero = Vector3F(0, 0, 0);
 }
 #endif

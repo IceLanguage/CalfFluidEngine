@@ -2,40 +2,28 @@
 
 using namespace CalfFluidEngine;
 
-Animation::Animation()
-{
-}
+Animation::Animation(){}
 
-Animation::~Animation()
-{
-}
+Animation::~Animation(){}
 
-void Animation::Update(const Frame & frame)
-{
+void Animation::Update(const Frame & frame){
 	OnUpdate(frame);
 }
 
-Frame::Frame()
-{
-}
+Frame::Frame(){}
 
 Frame::Frame(int newIndex, double newTimeIntervalInSeconds) : 
 	index(newIndex), 
-	timeIntervalInSeconds(newTimeIntervalInSeconds)
-{
-}
+	timeIntervalInSeconds(newTimeIntervalInSeconds){}
 
-double Frame::GetTimeInSeconds() const
-{
+double Frame::GetTimeInSeconds() const{
 	return index * timeIntervalInSeconds;
 }
 
-void Frame::Advance()
-{
+void Frame::Advance(){
 	++index;
 }
 
-void Frame::Advance(int delta)
-{
+void Frame::Advance(int delta){
 	index += delta;
 }

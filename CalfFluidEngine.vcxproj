@@ -159,12 +159,14 @@
     <ClCompile Include="External\pystring\pystring.cpp" />
     <ClCompile Include="PhysicsAnimation.cpp" />
     <ClCompile Include="src\Animation.cpp" />
+    <ClCompile Include="src\Field3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\cnpy\cnpy.h" />
     <ClInclude Include="External\pystring\pystring.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Constant.h" />
+    <ClInclude Include="src\Field3.h" />
     <ClInclude Include="src\OutputForMatplotlib.h" />
     <ClInclude Include="src\PhysicsAnimation.h" />
     <ClInclude Include="src\Vector3.h" />

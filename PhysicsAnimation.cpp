@@ -2,47 +2,38 @@
 
 using namespace CalfFluidEngine;
 
-PhysicsAnimation::PhysicsAnimation()
-{
+PhysicsAnimation::PhysicsAnimation(){
 	_currentFrame.index = -1;
 }
 
 
-PhysicsAnimation::~PhysicsAnimation()
-{
+PhysicsAnimation::~PhysicsAnimation(){
 }
 
-bool CalfFluidEngine::PhysicsAnimation::IsUsingFixedTimeSteps() const
-{
+bool CalfFluidEngine::PhysicsAnimation::IsUsingFixedTimeSteps() const{
 	return _isUsingFixedTimeSteps;
 }
 
-void CalfFluidEngine::PhysicsAnimation::SetIsUsingFixedTimeSteps(bool isUsing)
-{
+void CalfFluidEngine::PhysicsAnimation::SetIsUsingFixedTimeSteps(bool isUsing){
 	_isUsingFixedTimeSteps = isUsing;
 }
 
-void CalfFluidEngine::PhysicsAnimation::SetNumberOfFixedTimeSteps(unsigned int numberOfSteps)
-{
+void CalfFluidEngine::PhysicsAnimation::SetNumberOfFixedTimeSteps(unsigned int numberOfSteps){
 	_numberOfFixedTimeSteps = numberOfSteps;
 }
 
-unsigned int CalfFluidEngine::PhysicsAnimation::GetNumberOfFixedTimeSteps() const
-{
+unsigned int CalfFluidEngine::PhysicsAnimation::GetNumberOfFixedTimeSteps() const{
 	return _numberOfFixedTimeSteps;
 }
 
-void PhysicsAnimation::Initialize()
-{
+void PhysicsAnimation::Initialize(){
 	OnInitialize();
 }
 
-void PhysicsAnimation::TimeStep(double timeIntervalInSeconds)
-{
+void PhysicsAnimation::TimeStep(double timeIntervalInSeconds){
 	_currentTime = _currentFrame.GetTimeInSeconds();
 
-	if (_isUsingFixedTimeSteps)
-	{
+	if (_isUsingFixedTimeSteps){
 		const double actualTimeInterval = timeIntervalInSeconds /
 			static_cast<double>(_numberOfFixedTimeSteps);
 
@@ -52,8 +43,7 @@ void PhysicsAnimation::TimeStep(double timeIntervalInSeconds)
 			_currentTime += actualTimeInterval;
 		}
 	}
-	else 
-	{
+	else {
 		//Using adaptive sub-timesteps
 
 		double remainingTime = timeIntervalInSeconds;
@@ -77,19 +67,15 @@ void PhysicsAnimation::TimeStep(double timeIntervalInSeconds)
 //This is why PhysicsAnimation class takes a progressive approach 
 //for updating its state with the function named TimeStep;
 //**********************************************
-void PhysicsAnimation::OnUpdate(const Frame & frame)
-{
-	if (frame.index > _currentFrame.index) 
-	{
-		if (_currentFrame.index < 0) 
-		{
+void PhysicsAnimation::OnUpdate(const Frame & frame){
+	if (frame.index > _currentFrame.index) {
+		if (_currentFrame.index < 0) {
 			Initialize();
 		}
 
 		int numberOfFrames = frame.index - _currentFrame.index;
 
-		for (int i = 0; i < numberOfFrames; ++i) 
-		{
+		for (int i = 0; i < numberOfFrames; ++i) {
 			TimeStep(frame.timeIntervalInSeconds);
 		}
 
@@ -97,7 +83,6 @@ void PhysicsAnimation::OnUpdate(const Frame & frame)
 	}
 }
 
-unsigned int PhysicsAnimation::GetNumberOfSubTimeSteps(double timeIntervalInSeconds) const
-{
+unsigned int PhysicsAnimation::GetNumberOfSubTimeSteps(double timeIntervalInSeconds) const{
 	return _numberOfFixedTimeSteps;
 }

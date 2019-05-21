@@ -5,10 +5,8 @@
 #include <Animation.h>
 #include <Constant.h>
 
-namespace CalfFluidEngine
-{
-	class PhysicsAnimation : public Animation
-	{
+namespace CalfFluidEngine{
+	class PhysicsAnimation : public Animation{
 	public:
 		PhysicsAnimation();
 		virtual ~PhysicsAnimation();
