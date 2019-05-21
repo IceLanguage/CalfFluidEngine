@@ -155,6 +155,9 @@
       <Project>{b049c3cc-e1b8-4559-b202-8d13b5a54020}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SimpleMassSpringAnimation.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

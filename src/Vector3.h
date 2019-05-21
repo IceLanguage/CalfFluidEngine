@@ -7,17 +7,17 @@ namespace CalfFluidEngine
 	{
 	public:
 		Vector3() : x(0), y(0), z(0) {}
-		Vector3(const float x, const float y, const float z)
+		Vector3(const T x, const T y, const T z)
 			: x(x), y(y), z(z) {}
 
-		float operator[](unsigned i) const
+		float operator[](unsigned int i) const
 		{
 			if (i == 0) return x;
 			if (i == 1) return y;
 			return z;
 		}
 
-		float& operator[](unsigned i)
+		float& operator[](unsigned int i)
 		{
 			if (i == 0) return x;
 			if (i == 1) return y;
@@ -48,16 +48,28 @@ namespace CalfFluidEngine
 			return Vector3(x - v.x, y - v.y, z - v.z);
 		}
 
-		void operator*=(const float value)
+		void operator*=(const T value)
 		{
 			x *= value;
 			y *= value;
 			z *= value;
 		}
 
-		Vector3 operator*(const float value) const
+		Vector3 operator*(const T value) const
 		{
 			return Vector3(x * value, y * value, z * value);
+		}
+
+		void operator/=(const T value)
+		{
+			x /= value;
+			y /= value;
+			z /= value;
+		}
+
+		Vector3 operator/(const T value) const
+		{
+			return Vector3(x / value, y / value, z / value);
 		}
 
 		void operator*=(const Vector3& v)
@@ -98,7 +110,7 @@ namespace CalfFluidEngine
 			return sqrtf(SquareMagnitude());
 		}
 
-		void AddScaledVector(const Vector3& vector, float scale)
+		void AddScaledVector(const Vector3& vector, T scale)
 		{
 			x += vector.x * scale;
 			y += vector.y * scale;
@@ -150,6 +162,7 @@ namespace CalfFluidEngine
 		const static Vector3 up;
 		const static Vector3 forward;
 		const static Vector3 zero;
+		
 		typedef Vector3<float> Vector3F;
 	};
 
@@ -162,5 +175,10 @@ namespace CalfFluidEngine
 	typedef Vector3<float> Vector3F;
 
 	typedef Vector3<double> Vector3D;
+
+	const Vector3D Vector3D::right = Vector3D(1, 0, 0);
+	const Vector3D Vector3D::up = Vector3D(0, 1, 0);
+	const Vector3D Vector3D::forward = Vector3D(0, 0, 1);
+	const Vector3D Vector3D::zero = Vector3D(0, 0, 0);
 }
 #endif

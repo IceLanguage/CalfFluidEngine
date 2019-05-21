@@ -1,12 +1,13 @@
 #ifndef _CalfFluidEngine_PhysicsAnimation_
 #define _CalfFluidEngine_PhysicsAnimation_
 
-#include "Animation.h"
-#include "Constant.h"
+
+#include <Animation.h>
+#include <Constant.h>
 
 namespace CalfFluidEngine
 {
-	class PhysicsAnimation : Animation
+	class PhysicsAnimation : public Animation
 	{
 	public:
 		PhysicsAnimation();
