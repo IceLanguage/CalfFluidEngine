@@ -1,5 +1,8 @@
 #ifndef _CalfFluidEngine_Vector3_
 #define _CalfFluidEngine_Vector3_
+
+#include <algorithm>
+
 namespace CalfFluidEngine{
 	template <typename T>
 	struct Vector3 final{
@@ -89,7 +92,7 @@ namespace CalfFluidEngine{
 		}
 
 		float Magnitude() const{
-			return sqrtf(SquareMagnitude());
+			return sqrt(SquareMagnitude());
 		}
 
 		void AddScaledVector(const Vector3& vector, T scale){

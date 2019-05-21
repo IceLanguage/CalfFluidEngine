@@ -4,6 +4,9 @@
 #include <PhysicsAnimation.h>
 #include <vector>
 #include <Vector3.h>
+#include <memory>
+#include <Field3.h>
+
 using namespace CalfFluidEngine;
 
 class SimpleMassSpringAnimation : public PhysicsAnimation
@@ -49,6 +52,8 @@ public:
 	double dragCoefficient = 0.1;
 	double floorPositionY = -7.0;
 	double restitutionCoefficient = 0.3;
+
+	std::shared_ptr<VectorField3> wind;
 
 protected:
 	void OnTimeStep(double timeIntervalInSeconds) override;
