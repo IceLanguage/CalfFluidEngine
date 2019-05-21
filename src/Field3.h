@@ -56,6 +56,16 @@ namespace CalfFluidEngine{
 
 		virtual std::function<double(const Vector3D&)> Sampler() const;
 	};
+
+	class ConstantVectorField3 final : public VectorField3 {
+	public:
+		explicit ConstantVectorField3(const Vector3D& value);
+		Vector3D Sample(const Vector3D& x) const override;
+		double Divergence(const Vector3D& x) const override;
+		Vector3D Curl(const Vector3D& x) const override;
+	private:
+		Vector3D _value;
+	};
 }
 
 

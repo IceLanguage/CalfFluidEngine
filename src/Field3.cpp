@@ -33,3 +33,22 @@ std::function<double(const Vector3D&)> ScalarField3::Sampler() const
 	};
 }
 
+CalfFluidEngine::ConstantVectorField3::ConstantVectorField3(const Vector3D & value)
+{
+	_value = value;
+}
+
+Vector3D CalfFluidEngine::ConstantVectorField3::Sample(const Vector3D & x) const
+{
+	return Vector3D::zero;
+}
+
+double CalfFluidEngine::ConstantVectorField3::Divergence(const Vector3D & x) const
+{
+	return 0.0;
+}
+
+Vector3D CalfFluidEngine::ConstantVectorField3::Curl(const Vector3D & x) const
+{
+	return Vector3D::zero;
+}
