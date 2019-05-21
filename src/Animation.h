@@ -19,6 +19,11 @@ namespace CalfFluidEngine {
 		virtual ~Animation();
 		void Update(const Frame& frame);
 	protected:
+
+		//**********************************************
+		//the function is called from Animation:Update();
+		//this function and implement its logic for updating the animation state.
+		//**********************************************
 		virtual void OnUpdate(const Frame& frame) = 0;
 	};
 }

@@ -24,7 +24,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Animation.cpp">
+    <ClCompile Include="PhysicsAnimation.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="External\cnpy\cnpy.cpp">
@@ -33,12 +33,18 @@
     <ClCompile Include="External\pystring\pystring.cpp">
       <Filter>External\pystring</Filter>
     </ClCompile>
+    <ClCompile Include="src\Animation.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animation.h">
+    <ClInclude Include="src\Animation.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="OutputForMatplotlib.h">
+    <ClInclude Include="src\OutputForMatplotlib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsAnimation.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="External\cnpy\cnpy.h">
@@ -46,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="External\pystring\pystring.h">
       <Filter>External\pystring</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Constant.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
