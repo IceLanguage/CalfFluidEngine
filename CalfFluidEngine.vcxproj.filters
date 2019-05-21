@@ -56,5 +56,8 @@
     <ClInclude Include="src\Constant.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Vector3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

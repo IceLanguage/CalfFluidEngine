@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{D39AB7BE-A76A-428F-8D0A-65D3B3280F83}</ProjectGuid>
+    <ProjectGuid>{8A964498-8F52-4D97-A574-8D0CD1D346A5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>SineAnimation</RootNamespace>
+    <RootNamespace>SimpleMassSpringAnimation</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -90,12 +90,11 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -149,10 +148,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="SineAnimation.cpp" />
+    <ClCompile Include="SimpleMassSpringAnimation.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CalfFluidEngine.vcxproj">
+    <ProjectReference Include="..\..\CalfFluidEngine.vcxproj">
       <Project>{b049c3cc-e1b8-4559-b202-8d13b5a54020}</Project>
     </ProjectReference>
   </ItemGroup>

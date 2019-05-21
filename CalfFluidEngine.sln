@@ -5,7 +5,11 @@ VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CalfFluidEngine", "CalfFluidEngine.vcxproj", "{B049C3CC-E1B8-4559-B202-8D13B5A54020}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SineAnimation", "SineAnimation\SineAnimation.vcxproj", "{D39AB7BE-A76A-428F-8D0A-65D3B3280F83}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SineAnimation", "Example\SineAnimation\SineAnimation.vcxproj", "{D39AB7BE-A76A-428F-8D0A-65D3B3280F83}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleMassSpringAnimation", "Example\SimpleMassSpringAnimation\SimpleMassSpringAnimation.vcxproj", "{8A964498-8F52-4D97-A574-8D0CD1D346A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{D48CB682-909B-488F-82FA-8326801CB4E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,9 +35,21 @@ Global
 		{D39AB7BE-A76A-428F-8D0A-65D3B3280F83}.Release|x64.Build.0 = Release|x64
 		{D39AB7BE-A76A-428F-8D0A-65D3B3280F83}.Release|x86.ActiveCfg = Release|Win32
 		{D39AB7BE-A76A-428F-8D0A-65D3B3280F83}.Release|x86.Build.0 = Release|Win32
+		{8A964498-8F52-4D97-A574-8D0CD1D346A5}.Debug|x64.ActiveCfg = Debug|x64
+		{8A964498-8F52-4D97-A574-8D0CD1D346A5}.Debug|x64.Build.0 = Debug|x64
+		{8A964498-8F52-4D97-A574-8D0CD1D346A5}.Debug|x86.ActiveCfg = Debug|Win32
+		{8A964498-8F52-4D97-A574-8D0CD1D346A5}.Debug|x86.Build.0 = Debug|Win32
+		{8A964498-8F52-4D97-A574-8D0CD1D346A5}.Release|x64.ActiveCfg = Release|x64
+		{8A964498-8F52-4D97-A574-8D0CD1D346A5}.Release|x64.Build.0 = Release|x64
+		{8A964498-8F52-4D97-A574-8D0CD1D346A5}.Release|x86.ActiveCfg = Release|Win32
+		{8A964498-8F52-4D97-A574-8D0CD1D346A5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D39AB7BE-A76A-428F-8D0A-65D3B3280F83} = {D48CB682-909B-488F-82FA-8326801CB4E5}
+		{8A964498-8F52-4D97-A574-8D0CD1D346A5} = {D48CB682-909B-488F-82FA-8326801CB4E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0BE0C207-BF62-4B96-B2FF-43159ACE30BD}
