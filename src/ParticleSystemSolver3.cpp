@@ -16,6 +16,127 @@ ParticleSystemSolver3::~ParticleSystemSolver3()
 
 ParticleSystemSolver3::ParticleSystemSolver3(double radius, double mass)
 {
+	_particleSystemData = std::make_shared<ParticleSystemData3>();
+	_particleSystemData->SetParticleRadius(radius);
+	_particleSystemData->SetParticleMass(mass);
+	_wind = std::make_shared<ConstantVectorField3>(Vector3D());
+}
+
+void CalfFluidEngine::ParticleSystemSolver3::TimeStepStart(double timeStepInSeconds)
+{
+	auto forces = _particleSystemData->GetForces();
+
+	tbb::parallel_for(
+		tbb::blocked_range<size_t>(0, forces.size()),
+		[&](const tbb::blocked_range<size_t> & b) {
+		for (size_t i = b.begin(); i != b.end(); ++i)
+			forces[i] = Vector3D::zero;
+	});
+
+	size_t n = _particleSystemData->GetNumberOfParticles();
+	_newPositions.resize(n);
+	_newVelocities.resize(n);
+
+	OnTimeStepStart(timeStepInSeconds);
+}
+
+
+void CalfFluidEngine::ParticleSystemSolver3::TimeStepEnd(double timeStepInSeconds)
+{
+	size_t n = _particleSystemData->GetNumberOfParticles();
+	auto positions = _particleSystemData->GetPositions();
+	auto velocities = _particleSystemData->GetVelocities();
+
+	tbb::parallel_for(
+		tbb::blocked_range<size_t>(0, n),
+		[&](const tbb::blocked_range<size_t> & b) {
+		for (size_t i = b.begin(); i != b.end(); ++i)
+		{
+			positions[i] = _newPositions[i];
+			velocities[i] = _newVelocities[i];
+		}
+			
+	});
+
+	OnTimeStepEnd(timeStepInSeconds);
+}
+
+void CalfFluidEngine::ParticleSystemSolver3::OnTimeStepStart(double timeStepInSeconds)
+{
+}
+
+void CalfFluidEngine::ParticleSystemSolver3::OnTimeStepEnd(double timeStepInSeconds)
+{
+}
+
+void CalfFluidEngine::ParticleSystemSolver3::AccumulateForces(double timeIntervalInSeconds)
+{
+	size_t n = _particleSystemData->GetNumberOfParticles();
+	auto forces = _particleSystemData->GetForces();
+	auto velocities = _particleSystemData->GetVelocities();
+	auto positions = _particleSystemData->GetPositions();
+	const double mass = _particleSystemData->GetParticleMass();
+
+	tbb::parallel_for(
+		tbb::blocked_range<size_t>(0, n),
+		[&](const tbb::blocked_range<size_t> & b) {
+			for (size_t i = b.begin(); i != b.end(); ++i){
+				// Gravity
+				Vector3D force = mass * _gravity;
+
+				// Wind forces
+				Vector3D relativeVel = velocities[i] - _wind->Sample(positions[i]);
+				force += -_dragCoefficient * relativeVel;
+
+				forces[i] += force;
+		}
+		
+	});
+}
+
+void CalfFluidEngine::ParticleSystemSolver3::TimeIntegration(double timeIntervalInSeconds)
+{
+	size_t n = _particleSystemData->GetNumberOfParticles();
+	auto forces = _particleSystemData->GetForces();
+	auto velocities = _particleSystemData->GetVelocities();
+	auto positions = _particleSystemData->GetPositions();
+	const double mass = _particleSystemData->GetParticleMass();
+
+	tbb::parallel_for(
+		tbb::blocked_range<size_t>(0, n),
+		[&](const tbb::blocked_range<size_t> & b) {
+		for (size_t i = b.begin(); i != b.end(); ++i) {
+			Vector3D& newVelocity = _newVelocities[i];
+			newVelocity = velocities[i];
+			newVelocity.AddScaledVector(forces[i] / mass, timeIntervalInSeconds);
+
+			Vector3D& newPosition = _newPositions[i];
+			newPosition = positions[i];
+			newPosition.AddScaledVector(newVelocity, timeIntervalInSeconds);
+		}
+
+	});
+}
+
+void CalfFluidEngine::ParticleSystemSolver3::ResolveCollision()
+{
+
+}
+
+
+void CalfFluidEngine::ParticleSystemSolver3::OnTimeStep(double timeIntervalInSeconds)
+{
+	TimeStepStart(timeIntervalInSeconds);
+
+	AccumulateForces(timeIntervalInSeconds);
+	TimeIntegration(timeIntervalInSeconds);
+	ResolveCollision();
+
+	TimeStepEnd(timeIntervalInSeconds);
+}
+
+void CalfFluidEngine::ParticleSystemSolver3::OnInitialize()
+{
 }
 
 CalfFluidEngine::ParticleSystemData3::ParticleSystemData3() 
@@ -159,6 +280,26 @@ std::vector<Vector3D> CalfFluidEngine::ParticleSystemData3::VectorDataAt(size_t 
 std::vector<Vector3D> CalfFluidEngine::ParticleSystemData3::VectorDataAt(size_t idx)
 {
 	return _vectorDataList[idx];
+}
+
+double CalfFluidEngine::ParticleSystemData3::GetParticleRadius() const
+{
+	return _radius;
+}
+
+void CalfFluidEngine::ParticleSystemData3::SetParticleRadius(double newRadius)
+{
+	_radius = std::max(newRadius, 0.0);
+}
+
+double CalfFluidEngine::ParticleSystemData3::GetParticleMass() const
+{
+	return _mass;
+}
+
+void CalfFluidEngine::ParticleSystemData3::SetParticleMass(double newMass)
+{
+	_mass = std::max(newMass, 0.0);
 }
 
 

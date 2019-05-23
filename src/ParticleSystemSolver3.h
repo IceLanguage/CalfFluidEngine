@@ -4,6 +4,8 @@
 #include <PhysicsAnimation.h>
 #include <vector>
 #include <Vector3.h>
+#include <memory>
+#include <Field3.h>
 
 namespace CalfFluidEngine {
 
@@ -38,11 +40,18 @@ namespace CalfFluidEngine {
 		std::vector<double> ScalarDataAt(size_t idx);
 		std::vector<Vector3D> VectorDataAt(size_t idx) const;
 		std::vector<Vector3D> VectorDataAt(size_t idx);
+
+		double GetParticleRadius() const;
+		void SetParticleRadius(double newRadius);
+		double GetParticleMass() const;
+		void SetParticleMass(double newMass);
 	protected:
 		size_t _positionIdx;
 		size_t _velocityIdx;
 		size_t _forceIdx;
 		size_t _numberOfParticles = 0;
+		double _radius = 1e-3;
+		double _mass = 1e-3;
 
 		std::vector<ScalarData> _scalarDataList;
 		std::vector<VectorData> _vectorDataList;
@@ -53,6 +62,40 @@ namespace CalfFluidEngine {
 		ParticleSystemSolver3();
 		virtual ~ParticleSystemSolver3();
 		ParticleSystemSolver3(double radius,double mass);
+	private:
+		void TimeStepStart(double timeStepInSeconds);
+		void TimeStepEnd(double timeStepInSeconds);
+		void TimeIntegration(double timeIntervalInSeconds);
+		void ResolveCollision();
+
+		ParticleSystemData3::VectorData _newPositions;
+		ParticleSystemData3::VectorData _newVelocities;
+	protected:
+		void OnTimeStep(double timeIntervalInSeconds) override;
+		virtual void OnInitialize() override;
+
+		//**********************************************
+		//the function is called in ParticleSystemSolver3:TimeStepStart(double);
+		// Called when a time-step is about to begin;
+		//**********************************************
+		virtual void OnTimeStepStart(double timeStepInSeconds);
+
+		//**********************************************
+		//the function is called in ParticleSystemSolver3:TimeStepEnd(double);
+		// Called when a time-step is about to end;
+		//**********************************************
+		virtual void OnTimeStepEnd(double timeStepInSeconds);
+
+		//**********************************************
+		//the function is called in ParticleSystemSolver3:OnTimeStep(double);
+		//accumulate forces
+		//**********************************************
+		virtual void AccumulateForces(double timeIntervalInSeconds);
+
+		std::shared_ptr<ParticleSystemData3> _particleSystemData;
+		std::shared_ptr<VectorField3> _wind;
+        Vector3D _gravity = Vector3D(0.0, -9.8, 0.0);
+		double _dragCoefficient = 1e-4;
 	};
 }
 #endif
