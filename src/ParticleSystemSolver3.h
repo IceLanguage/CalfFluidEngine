@@ -6,6 +6,7 @@
 #include <Vector3.h>
 #include <memory>
 #include <Field3.h>
+#include <Collider3.h>
 
 namespace CalfFluidEngine {
 
@@ -96,6 +97,8 @@ namespace CalfFluidEngine {
 		std::shared_ptr<VectorField3> _wind;
         Vector3D _gravity = Vector3D(0.0, -9.8, 0.0);
 		double _dragCoefficient = 1e-4;
+		std::shared_ptr<Collider3> _collider;
+		double _restitutionCoefficient = 0.0;
 	};
 }
 #endif

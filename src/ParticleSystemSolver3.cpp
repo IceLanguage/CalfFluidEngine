@@ -120,7 +120,24 @@ void CalfFluidEngine::ParticleSystemSolver3::TimeIntegration(double timeInterval
 
 void CalfFluidEngine::ParticleSystemSolver3::ResolveCollision()
 {
+	if (_collider != nullptr) {
+		size_t numberOfParticles = _particleSystemData->GetNumberOfParticles();
+		const double radius = _particleSystemData->GetParticleRadius();
 
+		tbb::parallel_for(
+			tbb::blocked_range<size_t>(size_t(0), numberOfParticles),
+			[&](const tbb::blocked_range<size_t> & b) {
+			for (size_t i = b.begin(); i != b.end(); ++i)
+			{
+				_collider->ResolveCollision(
+					radius,
+					_restitutionCoefficient,
+					&_newPositions[i],
+					&_newVelocities[i]);
+			}
+				
+		});
+	}
 }
 
 

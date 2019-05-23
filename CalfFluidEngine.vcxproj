@@ -158,6 +158,7 @@
     <ClCompile Include="External\cnpy\cnpy.cpp" />
     <ClCompile Include="External\pystring\pystring.cpp" />
     <ClCompile Include="src\Animation.cpp" />
+    <ClCompile Include="src\Collider3.cpp" />
     <ClCompile Include="src\Field3.cpp" />
     <ClCompile Include="src\ParticleSystemSolver3.cpp" />
     <ClCompile Include="src\PhysicsAnimation.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="External\cnpy\cnpy.h" />
     <ClInclude Include="External\pystring\pystring.h" />
     <ClInclude Include="src\Animation.h" />
+    <ClInclude Include="src\Collider3.h" />
     <ClInclude Include="src\Constant.h" />
     <ClInclude Include="src\Field3.h" />
     <ClInclude Include="src\OutputForMatplotlib.h" />
