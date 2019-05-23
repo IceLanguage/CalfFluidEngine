@@ -24,9 +24,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PhysicsAnimation.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="External\cnpy\cnpy.cpp">
       <Filter>External\cnpy</Filter>
     </ClCompile>
@@ -39,15 +36,18 @@
     <ClCompile Include="src\Field3.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\PhysicsAnimation.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticleSystemSolver3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\OutputForMatplotlib.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PhysicsAnimation.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="External\cnpy\cnpy.h">
@@ -65,5 +65,14 @@
     <ClInclude Include="src\Field3.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\PhysicsAnimation.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParticleSystemSolver3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
