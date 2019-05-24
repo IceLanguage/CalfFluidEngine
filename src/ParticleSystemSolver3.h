@@ -64,34 +64,34 @@ namespace CalfFluidEngine {
 		virtual ~ParticleSystemSolver3();
 		ParticleSystemSolver3(double radius,double mass);
 	private:
-		void TimeStepStart(double timeStepInSeconds);
-		void TimeStepEnd(double timeStepInSeconds);
-		void TimeIntegration(double timeIntervalInSeconds);
-		void ResolveCollision();
+		void timeStepStart(double timeStepInSeconds);
+		void timeStepEnd(double timeStepInSeconds);
+		void timeIntegration(double timeIntervalInSeconds);
+		void resolveCollision();
 
 		ParticleSystemData3::VectorData _newPositions;
 		ParticleSystemData3::VectorData _newVelocities;
 	protected:
-		void OnTimeStep(double timeIntervalInSeconds) override;
-		virtual void OnInitialize() override;
+		void onTimeStep(double timeIntervalInSeconds) override;
+		virtual void onInitialize() override;
 
 		//**********************************************
-		//the function is called in ParticleSystemSolver3:TimeStepStart(double);
+		//the function is called in ParticleSystemSolver3:timeStepStart(double);
 		// Called when a time-step is about to begin;
 		//**********************************************
-		virtual void OnTimeStepStart(double timeStepInSeconds);
+		virtual void onTimeStepStart(double timeStepInSeconds);
 
 		//**********************************************
-		//the function is called in ParticleSystemSolver3:TimeStepEnd(double);
+		//the function is called in ParticleSystemSolver3:timeStepEnd(double);
 		// Called when a time-step is about to end;
 		//**********************************************
-		virtual void OnTimeStepEnd(double timeStepInSeconds);
+		virtual void onTimeStepEnd(double timeStepInSeconds);
 
 		//**********************************************
-		//the function is called in ParticleSystemSolver3:OnTimeStep(double);
+		//the function is called in ParticleSystemSolver3:onTimeStep(double);
 		//accumulate forces
 		//**********************************************
-		virtual void AccumulateForces(double timeIntervalInSeconds);
+		virtual void accumulateForces(double timeIntervalInSeconds);
 
 		std::shared_ptr<ParticleSystemData3> _particleSystemData;
 		std::shared_ptr<VectorField3> _wind;

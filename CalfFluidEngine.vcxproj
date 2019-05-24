@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -162,6 +162,7 @@
     <ClCompile Include="src\Field3.cpp" />
     <ClCompile Include="src\ParticleSystemSolver3.cpp" />
     <ClCompile Include="src\PhysicsAnimation.cpp" />
+    <ClCompile Include="src\PointNeighborSearcher3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\cnpy\cnpy.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="src\OutputForMatplotlib.h" />
     <ClInclude Include="src\ParticleSystemSolver3.h" />
     <ClInclude Include="src\PhysicsAnimation.h" />
+    <ClInclude Include="src\PointNeighborSearcher3.h" />
     <ClInclude Include="src\Vector3.h" />
   </ItemGroup>
   <ItemGroup>

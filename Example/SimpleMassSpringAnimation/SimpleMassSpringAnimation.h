@@ -56,8 +56,8 @@ public:
 	std::shared_ptr<VectorField3> wind;
 
 protected:
-	void OnTimeStep(double timeIntervalInSeconds) override;
-	virtual void OnInitialize() {}
+	void onTimeStep(double timeIntervalInSeconds) override;
+	virtual void onInitialize() override {}
 };
 
 #endif

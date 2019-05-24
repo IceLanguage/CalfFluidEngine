@@ -26,11 +26,11 @@ unsigned int CalfFluidEngine::PhysicsAnimation::GetNumberOfFixedTimeSteps() cons
 	return _numberOfFixedTimeSteps;
 }
 
-void PhysicsAnimation::Initialize(){
-	OnInitialize();
+void PhysicsAnimation::initialize(){
+	onInitialize();
 }
 
-void PhysicsAnimation::TimeStep(double timeIntervalInSeconds){
+void PhysicsAnimation::timeStep(double timeIntervalInSeconds){
 	_currentTime = _currentFrame.GetTimeInSeconds();
 
 	if (_isUsingFixedTimeSteps){
@@ -39,7 +39,7 @@ void PhysicsAnimation::TimeStep(double timeIntervalInSeconds){
 
 		for (unsigned int i = 0; i < _numberOfFixedTimeSteps; ++i) {
 
-			OnTimeStep(actualTimeInterval);
+			onTimeStep(actualTimeInterval);
 			_currentTime += actualTimeInterval;
 		}
 	}
@@ -48,11 +48,11 @@ void PhysicsAnimation::TimeStep(double timeIntervalInSeconds){
 
 		double remainingTime = timeIntervalInSeconds;
 		while (remainingTime > kEpsilonD) {
-			unsigned int numSteps = GetNumberOfSubTimeSteps(remainingTime);
+			unsigned int numSteps = getNumberOfSubTimeSteps(remainingTime);
 			double actualTimeInterval =
 				remainingTime / static_cast<double>(numSteps);
 
-			OnTimeStep(actualTimeInterval);
+			onTimeStep(actualTimeInterval);
 
 			remainingTime -= actualTimeInterval;
 			_currentTime += actualTimeInterval;
@@ -67,22 +67,22 @@ void PhysicsAnimation::TimeStep(double timeIntervalInSeconds){
 //This is why PhysicsAnimation class takes a progressive approach 
 //for updating its state with the function named TimeStep;
 //**********************************************
-void PhysicsAnimation::OnUpdate(const Frame & frame){
+void PhysicsAnimation::onUpdate(const Frame & frame){
 	if (frame.index > _currentFrame.index) {
 		if (_currentFrame.index < 0) {
-			Initialize();
+			initialize();
 		}
 
 		int numberOfFrames = frame.index - _currentFrame.index;
 
 		for (int i = 0; i < numberOfFrames; ++i) {
-			TimeStep(frame.timeIntervalInSeconds);
+			timeStep(frame.timeIntervalInSeconds);
 		}
 
 		_currentFrame = frame;
 	}
 }
 
-unsigned int PhysicsAnimation::GetNumberOfSubTimeSteps(double timeIntervalInSeconds) const{
+unsigned int PhysicsAnimation::getNumberOfSubTimeSteps(double timeIntervalInSeconds) const{
 	return _numberOfFixedTimeSteps;
 }

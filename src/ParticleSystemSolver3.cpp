@@ -22,7 +22,7 @@ ParticleSystemSolver3::ParticleSystemSolver3(double radius, double mass)
 	_wind = std::make_shared<ConstantVectorField3>(Vector3D());
 }
 
-void CalfFluidEngine::ParticleSystemSolver3::TimeStepStart(double timeStepInSeconds)
+void CalfFluidEngine::ParticleSystemSolver3::timeStepStart(double timeStepInSeconds)
 {
 	auto forces = _particleSystemData->GetForces();
 
@@ -37,11 +37,11 @@ void CalfFluidEngine::ParticleSystemSolver3::TimeStepStart(double timeStepInSeco
 	_newPositions.resize(n);
 	_newVelocities.resize(n);
 
-	OnTimeStepStart(timeStepInSeconds);
+	onTimeStepStart(timeStepInSeconds);
 }
 
 
-void CalfFluidEngine::ParticleSystemSolver3::TimeStepEnd(double timeStepInSeconds)
+void CalfFluidEngine::ParticleSystemSolver3::timeStepEnd(double timeStepInSeconds)
 {
 	size_t n = _particleSystemData->GetNumberOfParticles();
 	auto positions = _particleSystemData->GetPositions();
@@ -58,18 +58,18 @@ void CalfFluidEngine::ParticleSystemSolver3::TimeStepEnd(double timeStepInSecond
 			
 	});
 
-	OnTimeStepEnd(timeStepInSeconds);
+	onTimeStepEnd(timeStepInSeconds);
 }
 
-void CalfFluidEngine::ParticleSystemSolver3::OnTimeStepStart(double timeStepInSeconds)
+void CalfFluidEngine::ParticleSystemSolver3::onTimeStepStart(double timeStepInSeconds)
 {
 }
 
-void CalfFluidEngine::ParticleSystemSolver3::OnTimeStepEnd(double timeStepInSeconds)
+void CalfFluidEngine::ParticleSystemSolver3::onTimeStepEnd(double timeStepInSeconds)
 {
 }
 
-void CalfFluidEngine::ParticleSystemSolver3::AccumulateForces(double timeIntervalInSeconds)
+void CalfFluidEngine::ParticleSystemSolver3::accumulateForces(double timeIntervalInSeconds)
 {
 	size_t n = _particleSystemData->GetNumberOfParticles();
 	auto forces = _particleSystemData->GetForces();
@@ -94,7 +94,7 @@ void CalfFluidEngine::ParticleSystemSolver3::AccumulateForces(double timeInterva
 	});
 }
 
-void CalfFluidEngine::ParticleSystemSolver3::TimeIntegration(double timeIntervalInSeconds)
+void CalfFluidEngine::ParticleSystemSolver3::timeIntegration(double timeIntervalInSeconds)
 {
 	size_t n = _particleSystemData->GetNumberOfParticles();
 	auto forces = _particleSystemData->GetForces();
@@ -118,7 +118,7 @@ void CalfFluidEngine::ParticleSystemSolver3::TimeIntegration(double timeInterval
 	});
 }
 
-void CalfFluidEngine::ParticleSystemSolver3::ResolveCollision()
+void CalfFluidEngine::ParticleSystemSolver3::resolveCollision()
 {
 	if (_collider != nullptr) {
 		size_t numberOfParticles = _particleSystemData->GetNumberOfParticles();
@@ -141,18 +141,18 @@ void CalfFluidEngine::ParticleSystemSolver3::ResolveCollision()
 }
 
 
-void CalfFluidEngine::ParticleSystemSolver3::OnTimeStep(double timeIntervalInSeconds)
+void CalfFluidEngine::ParticleSystemSolver3::onTimeStep(double timeIntervalInSeconds)
 {
-	TimeStepStart(timeIntervalInSeconds);
+	timeStepStart(timeIntervalInSeconds);
 
-	AccumulateForces(timeIntervalInSeconds);
-	TimeIntegration(timeIntervalInSeconds);
-	ResolveCollision();
+	accumulateForces(timeIntervalInSeconds);
+	timeIntegration(timeIntervalInSeconds);
+	resolveCollision();
 
-	TimeStepEnd(timeIntervalInSeconds);
+	timeStepEnd(timeIntervalInSeconds);
 }
 
-void CalfFluidEngine::ParticleSystemSolver3::OnInitialize()
+void CalfFluidEngine::ParticleSystemSolver3::onInitialize()
 {
 }
 
