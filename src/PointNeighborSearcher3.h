@@ -30,8 +30,8 @@ namespace CalfFluidEngine {
 	{
 	public:
 		PointHashGridSearcher3(const Vector3<size_t>& resolution, double gridSpacing);
-		void Build(const std::vector<Vector3D>& points);
-		void ForEachNearbyPoint(
+		virtual void Build(const std::vector<Vector3D>& points);
+		virtual void ForEachNearbyPoint(
 			const Vector3D& origin,
 			double radius,
 			const std::function<void(size_t, const Vector3D&)>& callback) const;
