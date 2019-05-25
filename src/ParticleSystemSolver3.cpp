@@ -33,6 +33,8 @@ void CalfFluidEngine::ParticleSystemSolver3::timeStepStart(double timeStepInSeco
 			forces[i] = Vector3D::zero;
 	});
 
+	updateCollider(timeStepInSeconds);
+
 	size_t n = _particleSystemData->GetNumberOfParticles();
 	_newPositions.resize(n);
 	_newVelocities.resize(n);
@@ -140,6 +142,11 @@ void CalfFluidEngine::ParticleSystemSolver3::resolveCollision()
 	}
 }
 
+void CalfFluidEngine::ParticleSystemSolver3::updateCollider(double timeStepInSeconds)
+{
+
+}
+
 
 void CalfFluidEngine::ParticleSystemSolver3::onTimeStep(double timeIntervalInSeconds)
 {
@@ -154,6 +161,7 @@ void CalfFluidEngine::ParticleSystemSolver3::onTimeStep(double timeIntervalInSec
 
 void CalfFluidEngine::ParticleSystemSolver3::onInitialize()
 {
+	updateCollider(0.0);
 }
 
 CalfFluidEngine::ParticleSystemData3::ParticleSystemData3() 
@@ -172,6 +180,10 @@ CalfFluidEngine::ParticleSystemData3::ParticleSystemData3(size_t numberOfParticl
 	_forceIdx = AddVectorData();
 
 	Resize(numberOfParticles);
+
+	_neighborSearcher = std::make_shared<PointHashGridSearcher3>(
+		Vector3<size_t>(64, 64, 64),
+		2.0 * _radius);
 }
 
 void CalfFluidEngine::ParticleSystemData3::Resize(size_t newNumberOfParticles)
@@ -317,6 +329,36 @@ double CalfFluidEngine::ParticleSystemData3::GetParticleMass() const
 void CalfFluidEngine::ParticleSystemData3::SetParticleMass(double newMass)
 {
 	_mass = std::max(newMass, 0.0);
+}
+
+void CalfFluidEngine::ParticleSystemData3::BuildNeighborSearcher(double maxSearchRadius)
+{
+	_neighborSearcher = std::make_shared<PointHashGridSearcher3>(
+		Vector3<size_t>(64, 64, 64),
+		2.0 * maxSearchRadius);
+
+	_neighborSearcher->Build(GetPositions());
+}
+
+void CalfFluidEngine::ParticleSystemData3::BuildNeighborLists(double maxSearchRadius)
+{
+	size_t numberOfParticles = GetNumberOfParticles();
+	_neighborLists.resize(numberOfParticles);
+
+	auto points = GetPositions();
+	for (size_t i = 0; i < numberOfParticles; ++i) {
+		Vector3D origin = points[i];
+		_neighborLists[i].clear();
+
+		_neighborSearcher->ForEachNearbyPoint(
+			origin,
+			maxSearchRadius,
+			[&](size_t j, const Vector3D&) {
+			if (i != j) {
+				_neighborLists[i].push_back(j);
+			}
+		});
+	}
 }
 
 

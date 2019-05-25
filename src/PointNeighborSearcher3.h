@@ -30,11 +30,11 @@ namespace CalfFluidEngine {
 	{
 	public:
 		PointHashGridSearcher3(const Vector3<size_t>& resolution, double gridSpacing);
-		void Build(const std::vector<Vector3D>& points) override;
+		void Build(const std::vector<Vector3D>& points);
 		void ForEachNearbyPoint(
 			const Vector3D& origin,
 			double radius,
-			const std::function<void(size_t, const Vector3D&)>& callback) const override;
+			const std::function<void(size_t, const Vector3D&)>& callback) const;
 		size_t GetHashKeyFromPosition(const Vector3D& position) const;
 		size_t GetHashKeyFromBucketIndex(const Vector3<size_t>& bucketIndex) const;
 		Vector3<size_t> GetBucketIndex(const Vector3D& position) const;

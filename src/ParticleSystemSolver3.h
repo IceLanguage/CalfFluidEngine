@@ -7,6 +7,7 @@
 #include <memory>
 #include <Field3.h>
 #include <Collider3.h>
+#include <PointNeighborSearcher3.h>
 
 namespace CalfFluidEngine {
 
@@ -46,6 +47,9 @@ namespace CalfFluidEngine {
 		void SetParticleRadius(double newRadius);
 		double GetParticleMass() const;
 		void SetParticleMass(double newMass);
+
+		void BuildNeighborSearcher(double maxSearchRadius);
+		void BuildNeighborLists(double maxSearchRadius);
 	protected:
 		size_t _positionIdx;
 		size_t _velocityIdx;
@@ -56,7 +60,9 @@ namespace CalfFluidEngine {
 
 		std::vector<ScalarData> _scalarDataList;
 		std::vector<VectorData> _vectorDataList;
-	};
+		std::shared_ptr<PointNeighborSearcher3> _neighborSearcher;
+		std::vector<std::vector<size_t>>_neighborLists;
+ 	};
 
 	class ParticleSystemSolver3 : public PhysicsAnimation{
 	public:
@@ -68,7 +74,7 @@ namespace CalfFluidEngine {
 		void timeStepEnd(double timeStepInSeconds);
 		void timeIntegration(double timeIntervalInSeconds);
 		void resolveCollision();
-
+		void updateCollider(double timeStepInSeconds);
 		ParticleSystemData3::VectorData _newPositions;
 		ParticleSystemData3::VectorData _newVelocities;
 	protected:
