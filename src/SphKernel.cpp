@@ -1,5 +1,6 @@
 #include "SphKernel.h"
 #include <Constant.h>
+using namespace CalfFluidEngine;
 CalfFluidEngine::SphStandardKernel3::SphStandardKernel3()
 	:SphStandardKernel3(0)
 {
@@ -23,6 +24,22 @@ double CalfFluidEngine::SphStandardKernel3::operator()(double distance) const
 		double x = 1.0 - distance * distance / h2;
 		return 315.0 / (64.0 * kPiD * h3) * x * x * x;
 	}
+}
+
+Vector3D CalfFluidEngine::SphStandardKernel3::Gradient(const Vector3D & point) const
+{
+	double dist = point.Magnitude();
+	if (dist > kEpsilonD) {
+		return Gradient(dist, point / dist);
+	}
+	else {
+		return Vector3D::zero;
+	}
+}
+
+Vector3D CalfFluidEngine::SphStandardKernel3::Gradient(double distance, const Vector3D & CenterToPoint) const
+{
+	return -firstDerivative(distance) * CenterToPoint;
 }
 
 double CalfFluidEngine::SphStandardKernel3::firstDerivative(double distance) const
