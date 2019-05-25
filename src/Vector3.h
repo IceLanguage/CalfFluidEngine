@@ -133,6 +133,11 @@ namespace CalfFluidEngine{
 			return res;
 		}
 
+		static T Distance(const Vector3& lhsV, const Vector3& rhsV)
+		{
+			return (lhsV - rhsV).Magnitude();
+		}
+
 		float x, y, z;
 
 		const static Vector3 right;
@@ -142,6 +147,12 @@ namespace CalfFluidEngine{
 		
 		typedef Vector3<float> Vector3F;
 	};
+
+	template <typename T>
+	Vector3<T> operator-(const Vector3<T> & lhsV, const Vector3<T> & rhsV)
+	{
+		return Vector3<T>(lhsV.x - rhsV.x, lhsV.y - rhsV.y, lhsV.z - rhsV.z);
+	}
 
 	template <typename T>
 	Vector3<T> operator*(float value, const Vector3<T>& v){

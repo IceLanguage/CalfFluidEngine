@@ -160,10 +160,12 @@
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Collider3.cpp" />
     <ClCompile Include="src\Field3.cpp" />
+    <ClCompile Include="src\ParticleSystemData3.cpp" />
     <ClCompile Include="src\ParticleSystemSolver3.cpp" />
     <ClCompile Include="src\PhysicsAnimation.cpp" />
     <ClCompile Include="src\PointNeighborSearcher3.cpp" />
     <ClCompile Include="src\SphKernel.cpp" />
+    <ClCompile Include="src\SphSystemData3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\cnpy\cnpy.h" />
@@ -173,10 +175,12 @@
     <ClInclude Include="src\Constant.h" />
     <ClInclude Include="src\Field3.h" />
     <ClInclude Include="src\OutputForMatplotlib.h" />
+    <ClInclude Include="src\ParticleSystemData3.h" />
     <ClInclude Include="src\ParticleSystemSolver3.h" />
     <ClInclude Include="src\PhysicsAnimation.h" />
     <ClInclude Include="src\PointNeighborSearcher3.h" />
     <ClInclude Include="src\SphKernel.h" />
+    <ClInclude Include="src\SphSystemData3.h" />
     <ClInclude Include="src\Vector3.h" />
   </ItemGroup>
   <ItemGroup>

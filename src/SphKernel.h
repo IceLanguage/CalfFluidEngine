@@ -8,8 +8,9 @@ namespace CalfFluidEngine {
 		explicit SphStandardKernel3(double kernelRadius);
 		~SphStandardKernel3();
 		double operator()(double distance) const;
-
+		
 	private:
+		double firstDerivative(double distance) const;
 		//Kernel radius.
 		double h;
 
