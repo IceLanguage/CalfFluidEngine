@@ -48,6 +48,9 @@
     <ClCompile Include="src\PointNeighborSearcher3.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\SphKernel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -81,6 +84,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\PointNeighborSearcher3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SphKernel.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
