@@ -166,6 +166,7 @@
     <ClCompile Include="src\PointNeighborSearcher3.cpp" />
     <ClCompile Include="src\SphKernel.cpp" />
     <ClCompile Include="src\SphSystemData3.cpp" />
+    <ClCompile Include="src\SphSystemSolver3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\cnpy\cnpy.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="src\PointNeighborSearcher3.h" />
     <ClInclude Include="src\SphKernel.h" />
     <ClInclude Include="src\SphSystemData3.h" />
+    <ClInclude Include="src\SphSystemSolver3.h" />
     <ClInclude Include="src\Vector3.h" />
   </ItemGroup>
   <ItemGroup>

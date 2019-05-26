@@ -12,7 +12,6 @@ namespace CalfFluidEngine {
 		std::vector<double> GetPressures() const;
 		std::vector<double> GetDensities();
 		std::vector<double> GetPressures();
-
 		Vector3D Interpolate(
 			const Vector3D& origin,
 			const std::vector<Vector3D>& values) const;

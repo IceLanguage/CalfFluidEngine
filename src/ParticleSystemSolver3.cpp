@@ -149,6 +149,11 @@ void CalfFluidEngine::ParticleSystemSolver3::updateCollider(double timeStepInSec
 }
 
 
+std::shared_ptr<ParticleSystemData3> CalfFluidEngine::ParticleSystemSolver3::GetParticleSystemData() const
+{
+	return _particleSystemData;
+}
+
 void CalfFluidEngine::ParticleSystemSolver3::onTimeStep(double timeIntervalInSeconds)
 {
 	timeStepStart(timeIntervalInSeconds);
@@ -163,5 +168,10 @@ void CalfFluidEngine::ParticleSystemSolver3::onTimeStep(double timeIntervalInSec
 void CalfFluidEngine::ParticleSystemSolver3::onInitialize()
 {
 	updateCollider(0.0);
+}
+
+void CalfFluidEngine::ParticleSystemSolver3::setParticleSystemData(const std::shared_ptr<ParticleSystemData3>& newParticles)
+{
+	_particleSystemData = newParticles;
 }
 
