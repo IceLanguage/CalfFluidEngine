@@ -27,10 +27,14 @@ namespace CalfFluidEngine {
 		double LaplacianAt(
 			size_t i,
 			const std::vector<double>& values) const;
+
+		double GetDensity() const;
+		double GetKernelRadius() const;
 	protected:
 		size_t _pressureIdx;
 		size_t _densityIdx;
 		double _kernelRadius;
+		double _density;
 	};
 }
 #endif

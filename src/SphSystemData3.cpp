@@ -131,3 +131,13 @@ double CalfFluidEngine::SphSystemData3::LaplacianAt(size_t i, const std::vector<
 
 	return sum;
 }
+
+double CalfFluidEngine::SphSystemData3::GetDensity() const
+{
+	return _density;
+}
+
+double CalfFluidEngine::SphSystemData3::GetKernelRadius() const
+{
+	return _kernelRadius;
+}

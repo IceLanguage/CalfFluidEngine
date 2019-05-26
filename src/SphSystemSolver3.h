@@ -21,7 +21,18 @@ namespace CalfFluidEngine {
 			const std::vector<double>& pressures,
 			std::vector<Vector3D> pressureForces);
 		void computePseudoViscosity(double timeStepInSeconds);
-		double _kernelRadius;
+
+		//! Exponent component of equation - of - state(or Tait's equation).
+		double _eosExponent = 7.0;
+
+		//! Speed of sound in medium to determin the stiffness of the system.
+		//! Ideally, it should be the actual speed of sound in the fluid, but in
+		//! practice, use lower value to trace-off performance and compressibility.
+		double _speedOfSound = 100.0;
+
+		//! Negative pressure scaling factor.
+		//! Zero means clamping. One means do nothing.
+		double _negativePressureScale = 0.0;
 	};
 }
 #endif
