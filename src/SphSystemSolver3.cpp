@@ -2,6 +2,8 @@
 #include <SphSystemData3.h>
 #include <tbb\parallel_for.h>
 #include <tbb\blocked_range.h>
+#include <SphKernel.h>
+#include <Constant.h>
 using namespace CalfFluidEngine;
 
 inline double computePressureFromEos(
@@ -103,6 +105,32 @@ void CalfFluidEngine::SphSystemSolver3::computePressure()
 
 void CalfFluidEngine::SphSystemSolver3::accumulatePressureForce(const std::vector<Vector3D>& positions, const std::vector<double>& densities, const std::vector<double>& pressures, std::vector<Vector3D> pressureForces)
 {
+	auto particles = std::dynamic_pointer_cast<SphSystemData3>(GetParticleSystemData());
+	size_t numberOfParticles = particles->GetNumberOfParticles();
+
+	double mass = particles->GetParticleMass();
+	const double massSquared = mass * mass;
+	const SphStandardKernel3 kernel(particles->GetKernelRadius());
+
+	tbb::parallel_for(
+		tbb::blocked_range<size_t>(0, numberOfParticles),
+		[&](const tbb::blocked_range<size_t> & b) {
+		for (size_t i = b.begin(); i != b.end(); ++i)
+		{
+			const auto& neighbors = particles->GetNeighborLists()[i];
+			for (size_t j : neighbors) {
+				double dist = Vector3D::Distance(positions[i], positions[j]);
+
+				if (dist > kEpsilonD) {
+					Vector3D dir = (positions[j] - positions[i]) / dist;
+					pressureForces[i] -= massSquared
+						* (pressures[i] / (densities[i] * densities[i])
+							+ pressures[j] / (densities[j] * densities[j]))
+						* kernel.Gradient(dist, dir);
+				}
+			}
+		}
+	});
 }
 
 void CalfFluidEngine::SphSystemSolver3::computePseudoViscosity(double timeStepInSeconds)
