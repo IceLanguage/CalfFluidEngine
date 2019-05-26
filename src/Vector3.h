@@ -87,11 +87,11 @@ namespace CalfFluidEngine{
 				z != other.z;
 		}
 
-		float SquareMagnitude() const{
+		T SquareMagnitude() const{
 			return x * x + y * y + z * z;
 		}
 
-		float Magnitude() const{
+		T Magnitude() const{
 			return sqrt(SquareMagnitude());
 		}
 
