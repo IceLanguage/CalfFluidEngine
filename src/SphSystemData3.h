@@ -24,6 +24,10 @@ namespace CalfFluidEngine {
 		Vector3D GradientAt(
 			size_t i,
 			const std::vector<double>& values) const;
+
+		double LaplacianAt(
+			size_t i,
+			const std::vector<double>& values) const;
 	protected:
 		size_t _pressureIdx;
 		size_t _densityIdx;

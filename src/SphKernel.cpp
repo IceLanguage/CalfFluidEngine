@@ -42,6 +42,11 @@ Vector3D CalfFluidEngine::SphStandardKernel3::Gradient(double distance, const Ve
 	return -firstDerivative(distance) * directionToParticle;
 }
 
+double CalfFluidEngine::SphStandardKernel3::Laplacian(double distance) const
+{
+	return secondDerivative(distance);
+}
+
 double CalfFluidEngine::SphStandardKernel3::firstDerivative(double distance) const
 {
 	if (distance >= h) {
@@ -50,5 +55,16 @@ double CalfFluidEngine::SphStandardKernel3::firstDerivative(double distance) con
 	else {
 		double x = 1.0 - distance * distance / h2;
 		return -945.0 / (32.0 * kPiD * h3 * h2) * distance * x * x;
+	}
+}
+
+double CalfFluidEngine::SphStandardKernel3::secondDerivative(double distance) const
+{
+	if (distance * distance >= h2) {
+		return 0.0;
+	}
+	else {
+		double x = distance * distance / h2;
+		return 945.0 / (32.0 * kPiD * h3 * h2) * (1 - x) * (3 * x - 1);
 	}
 }

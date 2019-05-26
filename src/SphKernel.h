@@ -11,8 +11,10 @@ namespace CalfFluidEngine {
 		double operator()(double distance) const;
 		Vector3D Gradient(const Vector3D& point) const;
 		Vector3D Gradient(double distance, const Vector3D& directionToParticle) const;
+		double Laplacian(double distance) const;
 	private:
 		double firstDerivative(double distance) const;
+		double secondDerivative(double distance) const;
 		//Kernel radius.
 		double h;
 
