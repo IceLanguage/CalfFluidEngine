@@ -20,6 +20,10 @@ namespace CalfFluidEngine {
 
 		//Returns sum of kernel function evaluation for each nearby particle.
 		double SumOfKernelNearby(const Vector3D& origin) const;
+
+		Vector3D GradientAt(
+			size_t i,
+			const std::vector<double>& values) const;
 	protected:
 		size_t _pressureIdx;
 		size_t _densityIdx;

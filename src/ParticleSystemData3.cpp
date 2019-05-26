@@ -208,4 +208,9 @@ const std::shared_ptr<PointNeighborSearcher3>& CalfFluidEngine::ParticleSystemDa
 	return _neighborSearcher;
 }
 
+const std::vector<std::vector<size_t>>& CalfFluidEngine::ParticleSystemData3::GetNeighborLists() const
+{
+	return _neighborLists;
+}
+
 

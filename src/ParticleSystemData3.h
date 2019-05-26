@@ -52,6 +52,7 @@ namespace CalfFluidEngine {
 		void BuildNeighborLists(double maxSearchRadius);
 
 		const std::shared_ptr<PointNeighborSearcher3> & GetNeighborSearcher() const;
+		const std::vector<std::vector<size_t>>& GetNeighborLists() const;
 	protected:
 		size_t _positionIdx;
 		size_t _velocityIdx;

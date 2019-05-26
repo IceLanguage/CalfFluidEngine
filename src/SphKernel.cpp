@@ -37,9 +37,9 @@ Vector3D CalfFluidEngine::SphStandardKernel3::Gradient(const Vector3D & point) c
 	}
 }
 
-Vector3D CalfFluidEngine::SphStandardKernel3::Gradient(double distance, const Vector3D & CenterToPoint) const
+Vector3D CalfFluidEngine::SphStandardKernel3::Gradient(double distance, const Vector3D & directionToParticle) const
 {
-	return -firstDerivative(distance) * CenterToPoint;
+	return -firstDerivative(distance) * directionToParticle;
 }
 
 double CalfFluidEngine::SphStandardKernel3::firstDerivative(double distance) const

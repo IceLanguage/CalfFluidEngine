@@ -2,6 +2,7 @@
 #include <SphKernel.h>
 #include <tbb\parallel_for.h>
 #include <tbb\blocked_range.h>
+#include <Constant.h>
 using namespace CalfFluidEngine;
 
 SphSystemData3::SphSystemData3() : SphSystemData3(0)
@@ -42,7 +43,7 @@ std::vector<double> CalfFluidEngine::SphSystemData3::GetPressures()
 
 Vector3D CalfFluidEngine::SphSystemData3::Interpolate(const Vector3D & origin, const std::vector<Vector3D>& values) const
 {
-	Vector3D sum;
+	Vector3D sum = Vector3D::zero;
 	auto d = GetDensities();
 	SphStandardKernel3 kernel(_kernelRadius);
 	const double m = GetParticleMass();
@@ -85,5 +86,29 @@ double CalfFluidEngine::SphSystemData3::SumOfKernelNearby(const Vector3D & origi
 		double dist = Vector3D::Distance(origin, neighborPosition);
 		sum += kernel(dist);
 	});
+	return sum;
+}
+
+Vector3D CalfFluidEngine::SphSystemData3::GradientAt(size_t i, const std::vector<double>& values) const
+{
+	Vector3D sum;
+	auto p = GetPositions();
+	auto d = GetDensities();
+	const auto& neighbors =  GetNeighborLists()[i];
+	Vector3D origin = p[i];
+	SphStandardKernel3 kernel(_kernelRadius);
+	const double m = GetParticleMass();
+
+	for (size_t j : neighbors) {
+		Vector3D neighborPosition = p[j];
+		double dist = Vector3D::Distance(origin, neighborPosition);
+		if (dist > kEpsilonD) {
+			Vector3D dir = (neighborPosition - origin) / dist;
+			sum += d[i] * m *
+				(values[i] / (d[i] * d[i]) + values[j] / (d[j] * d[j])) *
+				kernel.Gradient(dist, dir);
+		}
+	}
+
 	return sum;
 }
