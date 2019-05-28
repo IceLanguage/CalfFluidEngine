@@ -33,6 +33,8 @@ namespace CalfFluidEngine {
 		//! Negative pressure scaling factor.
 		//! Zero means clamping. One means do nothing.
 		double _negativePressureScale = 0.0;
+
+		double _viscosityCoefficient = 0.01;
 	};
 }
 #endif

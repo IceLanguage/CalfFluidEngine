@@ -59,7 +59,32 @@ void CalfFluidEngine::SphSystemSolver3::onTimeStepEnd(double timeStepInSeconds)
 
 void CalfFluidEngine::SphSystemSolver3::accumulateViscosityForce()
 {
-	
+	auto particles = std::dynamic_pointer_cast<SphSystemData3>(GetParticleSystemData());
+	size_t numberOfParticles = particles->GetNumberOfParticles();
+	auto x = particles->GetPositions();
+	auto v = particles->GetVelocities();
+	auto d = particles->GetDensities();
+	auto f = particles->GetForces();
+
+	double mass = particles->GetParticleMass();
+	const double massSquared = mass * mass;
+	const SphSpikyKernel3 kernel(particles->GetKernelRadius());
+
+	tbb::parallel_for(
+		tbb::blocked_range<size_t>(0, numberOfParticles),
+		[&](const tbb::blocked_range<size_t> & b) {
+		for (size_t i = b.begin(); i != b.end(); ++i)
+		{
+			const auto& neighbors = particles->GetNeighborLists()[i];
+			for (size_t j : neighbors) {
+				double dist = Vector3D::Distance(x[i],x[j]);
+
+				f[i] += _viscosityCoefficient * massSquared
+					* (v[j] - v[i]) / d[j]
+					* kernel.Laplacian(dist);
+			}
+		}
+	});
 }
 
 void CalfFluidEngine::SphSystemSolver3::accumulatePressureForce(double timeStepInSeconds)
