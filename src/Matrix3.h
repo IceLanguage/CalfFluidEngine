@@ -182,5 +182,8 @@ namespace CalfFluidEngine {
 		data[7] = compTwo.z;
 		data[8] = compThree.z;
 	}
+
+	typedef Matrix3<float> Matrix3x3F;
+	typedef Matrix3<double> Matrix3x3D;
 }
 #endif
