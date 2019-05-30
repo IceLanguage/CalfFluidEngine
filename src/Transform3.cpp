@@ -35,3 +35,10 @@ Vector3D CalfFluidEngine::Transform3::TransformDirection(const Vector3D & dirInL
 {
 	return _orientationMat3 * dirInLocal;
 }
+
+Ray3D CalfFluidEngine::Transform3::InverseTransformRay(const Ray3D & rayInWorld) const
+{
+	return Ray3D(
+		InverseTransformPoint(rayInWorld.origin),
+		InverseTransformDirection(rayInWorld.direction));
+}

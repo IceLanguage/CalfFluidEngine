@@ -8,7 +8,7 @@ namespace CalfFluidEngine {
 	public:
 		Ray3();
 		virtual ~Ray3() {}
-		Ray(const Vector3<T>& newOrigin, const Vector3<T>& newDirection);
+		Ray3(const Vector3<T>& newOrigin, const Vector3<T>& newDirection);
 		Vector3<T> origin;
 		Vector3<T> direction;
 	};
@@ -17,7 +17,7 @@ namespace CalfFluidEngine {
 	{
 	}
 	template<typename T>
-	inline Ray3<T>::Ray(const Vector3<T>& newOrigin, const Vector3<T>& newDirection):
+	inline Ray3<T>::Ray3(const Vector3<T>& newOrigin, const Vector3<T>& newDirection):
 		origin(newOrigin),
 		direction(Vector3<T>::Normalize(newDirection))
 	{

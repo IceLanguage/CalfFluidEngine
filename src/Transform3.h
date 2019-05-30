@@ -2,6 +2,7 @@
 #define _CalfFluidEngine_Transform3_
 #include <Quaternion.h>
 #include <Matrix3.h>
+#include <Ray3.h>
 namespace CalfFluidEngine {
 	class Transform3
 	{
@@ -19,6 +20,7 @@ namespace CalfFluidEngine {
 		Vector3D InverseTransformDirection(const Vector3D& dirInWorld) const;
 		Vector3D TransformPoint(const Vector3D& pointInLocal) const;
 		Vector3D TransformDirection(const Vector3D& dirInLocal) const;
+		Ray3D InverseTransformRay(const Ray3D& rayInWorld) const;
 	private:
 		Vector3D _translation;
 		Quaternion _orientation;
