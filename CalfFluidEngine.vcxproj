@@ -181,6 +181,7 @@
     <ClInclude Include="src\ParticleSystemSolver3.h" />
     <ClInclude Include="src\PhysicsAnimation.h" />
     <ClInclude Include="src\PointNeighborSearcher3.h" />
+    <ClInclude Include="src\Ray3.h" />
     <ClInclude Include="src\SphKernel.h" />
     <ClInclude Include="src\SphSystemData3.h" />
     <ClInclude Include="src\SphSystemSolver3.h" />

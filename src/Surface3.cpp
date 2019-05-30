@@ -25,3 +25,8 @@ double CalfFluidEngine::Surface3::GetClosestDistance(const Vector3D & otherPoint
 {
 	return 0.0;
 }
+
+bool CalfFluidEngine::Surface3::Intersects(const Ray3D & ray) const
+{
+	return false;
+}

@@ -113,6 +113,9 @@
     <ClInclude Include="src\Surface3.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Ray3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

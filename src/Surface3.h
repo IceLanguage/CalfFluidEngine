@@ -1,7 +1,16 @@
 #ifndef _CalfFluidEngine_Surface3_
 #define _CalfFluidEngine_Surface3_
 #include <Vector3.h>
+#include <Ray3.h>
+#include <Constant.h>
 namespace CalfFluidEngine {
+	struct SurfaceRayIntersection3 {
+		bool isIntersecting = false;
+		double distance = kMaxD;
+		Vector3D point;
+		Vector3D normal;
+	};
+
 	class Surface3
 	{
 	public:
@@ -16,12 +25,19 @@ namespace CalfFluidEngine {
 		//**********************************************
 		//Returns the normal to the closest point on the surface from the given
 		//**********************************************
-		Vector3D GetClosestNormal(const Vector3D& otherPoint) const;
+		virtual Vector3D GetClosestNormal(const Vector3D& otherPoint) const;
 
 		//**********************************************
 		//Returns the closest distance from the given point
 		//**********************************************
-		double GetClosestDistance(const Vector3D& otherPoint) const;
+		virtual double GetClosestDistance(const Vector3D& otherPoint) const;
+
+		//**********************************************
+		//Returns true if the given ray intersects with this surface object.
+		//**********************************************
+		virtual bool Intersects(const Ray3D& ray) const;
+
+		virtual SurfaceRayIntersection3 GetClosestIntersection(const Ray3D& ray) const = 0;
 	};
 }
 #endif
