@@ -23,6 +23,11 @@ ParticleSystemSolver3::ParticleSystemSolver3(double radius, double mass)
 	_wind = std::make_shared<ConstantVectorField3>(Vector3D());
 }
 
+void CalfFluidEngine::ParticleSystemSolver3::SetCollider(const std::shared_ptr<Collider3>& newCollider)
+{
+	_collider = newCollider;
+}
+
 void CalfFluidEngine::ParticleSystemSolver3::timeStepStart(double timeStepInSeconds)
 {
 	auto forces = _particleSystemData->GetForces();

@@ -14,6 +14,7 @@ namespace CalfFluidEngine {
 		ParticleSystemSolver3();
 		virtual ~ParticleSystemSolver3();
 		ParticleSystemSolver3(double radius,double mass);
+		void SetCollider(const std::shared_ptr<Collider3>& newCollider);
 	private:
 		void timeStepStart(double timeStepInSeconds);
 		void timeStepEnd(double timeStepInSeconds);

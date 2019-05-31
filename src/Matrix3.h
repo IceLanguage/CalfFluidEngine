@@ -52,9 +52,9 @@ namespace CalfFluidEngine {
 	}
 
 	template<typename T>
-	inline Matrix3 Matrix3<T>::operator*(const Matrix3 & o) const
+	inline Matrix3<T> Matrix3<T>::operator*(const Matrix3<T> & o) const
 	{
-		return Matrix3(
+		return Matrix3<T>(
 			data[0] * o.data[0] + data[1] * o.data[3] + data[2] * o.data[6],
 			data[0] * o.data[1] + data[1] * o.data[4] + data[2] * o.data[7],
 			data[0] * o.data[2] + data[1] * o.data[5] + data[2] * o.data[8],
@@ -105,9 +105,9 @@ namespace CalfFluidEngine {
 	}
 
 	template<typename T>
-	inline Matrix3 Matrix3<T>::Inverse() const
+	inline Matrix3<T> Matrix3<T>::Inverse() const
 	{
-		Matrix3 result;
+		Matrix3<T> result;
 		result.SetInverse(*this);
 		return result;
 	}
@@ -127,9 +127,9 @@ namespace CalfFluidEngine {
 	}
 
 	template<typename T>
-	inline Matrix3 Matrix3<T>::Transpose() const
+	inline Matrix3<T> Matrix3<T>::Transpose() const
 	{
-		Matrix3 result;
+		Matrix3<T> result;
 		result.SetTranspose(*this);
 		return result;
 	}
@@ -160,9 +160,9 @@ namespace CalfFluidEngine {
 	}
 
 	template<typename T>
-	inline Matrix3 Matrix3<T>::linearInterpolate(const Matrix3 & a, const Matrix3 & b, T prop)
+	inline Matrix3<T> Matrix3<T>::linearInterpolate(const Matrix3<T> & a, const Matrix3<T> & b, T prop)
 	{
-		Matrix3 result;
+		Matrix3<T> result;
 		for (unsigned i = 0; i < 9; i++) {
 			result.data[i] = a.data[i] * (1 - prop) + b.data[i] * prop;
 		}
