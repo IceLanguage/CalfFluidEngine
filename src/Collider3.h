@@ -4,7 +4,7 @@
 #include <Vector3.h>
 #include <memory>
 #include <Surface3.h>
-
+#include <functional>
 namespace CalfFluidEngine {
 	class Collider3
 	{
@@ -16,6 +16,9 @@ namespace CalfFluidEngine {
 			double restitutionCoefficient,
 			Vector3D* position,
 			Vector3D* velocity);
+		void Update(
+			double currentTimeInSeconds,
+			double timeIntervalInSeconds);
 		//**********************************************
 		//Returns the velocity of the collider at given point.
 		//**********************************************
@@ -39,6 +42,9 @@ namespace CalfFluidEngine {
 			const Vector3D& position,
 			double radius);
 	private:
+		typedef std::function<void(Collider3*, double, double)>
+			OnBeginUpdateCallback;
+		OnBeginUpdateCallback _onUpdateCallback;
 		std::shared_ptr<Surface3> _surface;
 		double _frictionCoeffient = 0.0;
 	};

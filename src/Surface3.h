@@ -22,6 +22,11 @@ namespace CalfFluidEngine {
 		Surface3();
 		virtual ~Surface3();
 
+		//**********************************************
+		// Maybe updates internal spatial query engine.
+		//**********************************************
+		virtual void Update() {}
+
 		Vector3D GetClosestPoint(const Vector3D& otherPoint) const;
 
 		Vector3D GetClosestNormal(const Vector3D& otherPoint) const;

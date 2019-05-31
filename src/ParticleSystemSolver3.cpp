@@ -150,7 +150,9 @@ void CalfFluidEngine::ParticleSystemSolver3::resolveCollision()
 
 void CalfFluidEngine::ParticleSystemSolver3::updateCollider(double timeStepInSeconds)
 {
-
+	if (_collider != nullptr) {
+		_collider->Update(GetCurrentTime(), timeStepInSeconds);
+	}
 }
 
 

@@ -14,6 +14,7 @@ namespace CalfFluidEngine{
 		void SetIsUsingFixedTimeSteps(bool isUsing);
 		void SetNumberOfFixedTimeSteps(unsigned int numberOfSteps);
 		unsigned int GetNumberOfFixedTimeSteps() const;
+		double GetCurrentTime() const { return _currentTime; }
 	private:
 		void initialize();
 

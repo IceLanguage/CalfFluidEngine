@@ -57,6 +57,15 @@ void CalfFluidEngine::Collider3::ResolveCollision(
 	}
 }
 
+void CalfFluidEngine::Collider3::Update(double currentTimeInSeconds, double timeIntervalInSeconds)
+{
+	_surface->Update();
+
+	if (_onUpdateCallback) {
+		_onUpdateCallback(this, currentTimeInSeconds, timeIntervalInSeconds);
+	}
+}
+
 void CalfFluidEngine::Collider3::getClosestPoint(
 	const std::shared_ptr<Surface3>& surface, 
 	const Vector3D & queryPoint, 

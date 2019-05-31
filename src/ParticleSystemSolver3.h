@@ -52,7 +52,6 @@ namespace CalfFluidEngine {
 		double _dragCoefficient = 1e-4;
 		std::shared_ptr<Collider3> _collider;
 		double _restitutionCoefficient = 0.0;
-		
 	};
 }
 #endif
