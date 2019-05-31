@@ -31,6 +31,8 @@ namespace CalfFluidEngine {
 		bool Intersects(const Ray3D& ray) const;
 
 		virtual SurfaceRayIntersection3 GetClosestIntersection(const Ray3D& ray) const = 0;
+
+		bool IsInside(const Vector3D& otherPoint) const;
 	protected:
 		//**********************************************
 		// Returns the closest point from the given point
@@ -52,6 +54,11 @@ namespace CalfFluidEngine {
 		// Returns the closest distance from the given point in local
 		//**********************************************
 		virtual double closestDistanceLocal(const Vector3D& otherPointLocal) const;
+
+		//**********************************************
+		// Returns true if otherPoint in local is inside by given depth the volume
+		//**********************************************
+		virtual bool isInsideLocal(const Vector3D& otherPoint) const;
 	};
 }
 #endif
