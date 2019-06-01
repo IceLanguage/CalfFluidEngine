@@ -1,9 +1,10 @@
 #ifndef _CalfFluidEngine_Math_utils_
 #define _CalfFluidEngine_Math_utils_
 #include <algorithm>
-inline double Clamp(double v, double min, double max)
+template<typename T>
+inline T Clamp(T v, T minV, T maxV)
 {
-	return std::max(std::min(v, 1.0), 0.0);
+	return std::max(std::min(v, maxV), minV);
 }
 
 template<typename S, typename T>
