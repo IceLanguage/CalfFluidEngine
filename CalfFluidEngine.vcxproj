@@ -178,6 +178,7 @@
     <ClInclude Include="src\Collider3.h" />
     <ClInclude Include="src\Constant.h" />
     <ClInclude Include="src\Field3.h" />
+    <ClInclude Include="src\Math_utils.h" />
     <ClInclude Include="src\Matrix3.h" />
     <ClInclude Include="src\OutputForMatplotlib.h" />
     <ClInclude Include="src\ParticleSystemData3.h" />

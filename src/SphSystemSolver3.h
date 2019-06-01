@@ -40,6 +40,11 @@ namespace CalfFluidEngine {
 
 		//Scales the max allowed time-step.
 		double _timeStepLimitScale = 1.0;
+
+		//! Pseudo-viscosity coefficient velocity filtering.
+		//! This is a minimum "safety-net" for SPH solver which is quite
+		//! sensitive to the parameters.
+		double _pseudoViscosityCoefficient = 10.0;
 	};
 }
 #endif

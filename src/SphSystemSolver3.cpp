@@ -4,6 +4,7 @@
 #include <tbb\blocked_range.h>
 #include <SphKernel.h>
 #include <Constant.h>
+#include <Math_utils.h>
 using namespace CalfFluidEngine;
 
 static double kTimeStepLimitBySpeedFactor = 0.4;
@@ -192,4 +193,55 @@ void CalfFluidEngine::SphSystemSolver3::accumulatePressureForce(const std::vecto
 
 void CalfFluidEngine::SphSystemSolver3::computePseudoViscosity(double timeStepInSeconds)
 {
+	auto particles = std::dynamic_pointer_cast<SphSystemData3>(GetParticleSystemData());
+	size_t numberOfParticles = particles->GetNumberOfParticles();
+	auto x = particles->GetPositions();
+	auto v = particles->GetVelocities();
+	auto d = particles->GetDensities();
+
+	const double mass = particles->GetParticleMass();
+	const SphSpikyKernel3 kernel(particles->GetKernelRadius());
+
+	std::vector<Vector3D> smoothedVelocities(numberOfParticles);
+
+	tbb::parallel_for(
+		tbb::blocked_range<size_t>(0, numberOfParticles),
+		[&](const tbb::blocked_range<size_t> & b) {
+		for (size_t i = b.begin(); i != b.end(); ++i)
+		{
+			double weightSum = 0.0;
+			Vector3D smoothedVelocity;
+
+			const auto& neighbors = particles->GetNeighborLists()[i];
+			for (size_t j : neighbors) {
+				double dist = Vector3D::Distance(x[i],x[j]);
+				double wj = mass / d[j] * kernel(dist);
+				weightSum += wj;
+				smoothedVelocity += wj * v[j];
+			}
+
+			double wi = mass / d[i];
+			weightSum += wi;
+			smoothedVelocity += wi * v[i];
+
+			if (weightSum > 0.0) {
+				smoothedVelocity /= weightSum;
+			}
+
+			smoothedVelocities[i] = smoothedVelocity;
+		}
+	});
+
+	double factor = timeStepInSeconds * _pseudoViscosityCoefficient;
+	factor = Clamp(factor, 0.0, 1.0); 
+
+	tbb::parallel_for(
+		tbb::blocked_range<size_t>(0, numberOfParticles),
+		[&](const tbb::blocked_range<size_t> & b) {
+		for (size_t i = b.begin(); i != b.end(); ++i)
+		{
+			v[i] = Lerp(
+				v[i], smoothedVelocities[i], factor);
+		}
+	});
 }
