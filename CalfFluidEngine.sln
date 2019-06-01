@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleMassSpringAnimation",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{D48CB682-909B-488F-82FA-8326801CB4E5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PerfectBounce", "Example\PerfectBounce\PerfectBounce.vcxproj", "{94249996-153E-4BD9-BDFD-E903C8F58A55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -43,6 +45,14 @@ Global
 		{8A964498-8F52-4D97-A574-8D0CD1D346A5}.Release|x64.Build.0 = Release|x64
 		{8A964498-8F52-4D97-A574-8D0CD1D346A5}.Release|x86.ActiveCfg = Release|Win32
 		{8A964498-8F52-4D97-A574-8D0CD1D346A5}.Release|x86.Build.0 = Release|Win32
+		{94249996-153E-4BD9-BDFD-E903C8F58A55}.Debug|x64.ActiveCfg = Debug|x64
+		{94249996-153E-4BD9-BDFD-E903C8F58A55}.Debug|x64.Build.0 = Debug|x64
+		{94249996-153E-4BD9-BDFD-E903C8F58A55}.Debug|x86.ActiveCfg = Debug|Win32
+		{94249996-153E-4BD9-BDFD-E903C8F58A55}.Debug|x86.Build.0 = Debug|Win32
+		{94249996-153E-4BD9-BDFD-E903C8F58A55}.Release|x64.ActiveCfg = Release|x64
+		{94249996-153E-4BD9-BDFD-E903C8F58A55}.Release|x64.Build.0 = Release|x64
+		{94249996-153E-4BD9-BDFD-E903C8F58A55}.Release|x86.ActiveCfg = Release|Win32
+		{94249996-153E-4BD9-BDFD-E903C8F58A55}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +60,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D39AB7BE-A76A-428F-8D0A-65D3B3280F83} = {D48CB682-909B-488F-82FA-8326801CB4E5}
 		{8A964498-8F52-4D97-A574-8D0CD1D346A5} = {D48CB682-909B-488F-82FA-8326801CB4E5}
+		{94249996-153E-4BD9-BDFD-E903C8F58A55} = {D48CB682-909B-488F-82FA-8326801CB4E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0BE0C207-BF62-4B96-B2FF-43159ACE30BD}
