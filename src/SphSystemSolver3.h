@@ -7,6 +7,15 @@ namespace CalfFluidEngine {
 	public:
 		SphSystemSolver3();
 		virtual ~SphSystemSolver3();
+		void SetViscosityCoefficient(
+			double newViscosityCoefficient) {
+			_viscosityCoefficient = std::max(newViscosityCoefficient, 0.0);
+		}
+		void SetPseudoViscosityCoefficient(
+			double newPseudoViscosityCoefficient) {
+			_pseudoViscosityCoefficient
+				= std::max(newPseudoViscosityCoefficient, 0.0);
+		}
 	protected:
 		virtual void accumulateForces(double timeIntervalInSeconds) override;
 		virtual void onTimeStepStart(double timeStepInSeconds) override;
