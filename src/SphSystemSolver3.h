@@ -11,6 +11,8 @@ namespace CalfFluidEngine {
 		virtual void accumulateForces(double timeIntervalInSeconds) override;
 		virtual void onTimeStepStart(double timeStepInSeconds) override;
 		virtual void onTimeStepEnd(double timeStepInSeconds) override;
+		virtual unsigned int getNumberOfSubTimeSteps(
+			double timeIntervalInSeconds) const override;
 	private:
 		void accumulateViscosityForce();
 		void accumulatePressureForce(double timeStepInSeconds);
@@ -35,6 +37,9 @@ namespace CalfFluidEngine {
 		double _negativePressureScale = 0.0;
 
 		double _viscosityCoefficient = 0.01;
+
+		//Scales the max allowed time-step.
+		double _timeStepLimitScale = 1.0;
 	};
 }
 #endif

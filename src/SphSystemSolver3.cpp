@@ -6,6 +6,9 @@
 #include <Constant.h>
 using namespace CalfFluidEngine;
 
+static double kTimeStepLimitBySpeedFactor = 0.4;
+static double kTimeStepLimitByForceFactor = 0.25;
+
 inline double computePressureFromEos(
 	double density,
 	double targetDensity,
@@ -55,6 +58,35 @@ void CalfFluidEngine::SphSystemSolver3::onTimeStepStart(double timeStepInSeconds
 void CalfFluidEngine::SphSystemSolver3::onTimeStepEnd(double timeStepInSeconds)
 {
 	computePseudoViscosity(timeStepInSeconds);
+}
+
+unsigned int CalfFluidEngine::SphSystemSolver3::getNumberOfSubTimeSteps(double timeIntervalInSeconds) const
+{
+	auto particles = std::dynamic_pointer_cast<SphSystemData3>(GetParticleSystemData());
+	size_t numberOfParticles = particles->GetNumberOfParticles();
+	auto f = particles->GetForces();
+
+	const double kernelRadius = particles->GetKernelRadius();
+	const double mass = particles->GetParticleMass();
+
+	double maxForceMagnitude = 0.0;
+
+	for (size_t i = 0; i < numberOfParticles; ++i) {
+		maxForceMagnitude = std::max(maxForceMagnitude, f[i].Magnitude());
+	}
+
+	double timeStepLimitBySpeed
+		= kTimeStepLimitBySpeedFactor * kernelRadius / _speedOfSound;
+	double timeStepLimitByForce
+		= kTimeStepLimitByForceFactor
+		* std::sqrt(kernelRadius * mass / maxForceMagnitude);
+
+	double desiredTimeStep
+		= _timeStepLimitScale
+		* std::min(timeStepLimitBySpeed, timeStepLimitByForce);
+
+	return static_cast<unsigned int>(
+		std::ceil(timeIntervalInSeconds / desiredTimeStep));
 }
 
 void CalfFluidEngine::SphSystemSolver3::accumulateViscosityForce()
