@@ -160,6 +160,7 @@
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Collider3.cpp" />
     <ClCompile Include="src\Field3.cpp" />
+    <ClCompile Include="src\ParticleEmitter3.cpp" />
     <ClCompile Include="src\ParticleSystemData3.cpp" />
     <ClCompile Include="src\ParticleSystemSolver3.cpp" />
     <ClCompile Include="src\PhysicsAnimation.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="src\SphSystemSolver3.cpp" />
     <ClCompile Include="src\Surface3.cpp" />
     <ClCompile Include="src\Transform3.cpp" />
+    <ClCompile Include="src\VolumeParticleEmitter3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoundingBox3.h" />
@@ -182,6 +184,7 @@
     <ClInclude Include="src\Math_utils.h" />
     <ClInclude Include="src\Matrix3.h" />
     <ClInclude Include="src\OutputForMatplotlib.h" />
+    <ClInclude Include="src\ParticleEmitter3.h" />
     <ClInclude Include="src\ParticleSystemData3.h" />
     <ClInclude Include="src\ParticleSystemSolver3.h" />
     <ClInclude Include="src\PhysicsAnimation.h" />
@@ -194,6 +197,7 @@
     <ClInclude Include="src\Surface3.h" />
     <ClInclude Include="src\Transform3.h" />
     <ClInclude Include="src\Vector3.h" />
+    <ClInclude Include="src\VolumeParticleEmitter3.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
