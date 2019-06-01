@@ -21,7 +21,10 @@ namespace CalfFluidEngine {
 		bool isNormalFlipped = false;
 		Surface3();
 		virtual ~Surface3();
-
+		Surface3(const Transform3& transform_, bool isNormalFlipped_)
+			: transform(transform_), isNormalFlipped(isNormalFlipped_) {}
+		Surface3(const Surface3& other)
+			: transform(other.transform), isNormalFlipped(other.isNormalFlipped) {}
 		//**********************************************
 		// Maybe updates internal spatial query engine.
 		//**********************************************

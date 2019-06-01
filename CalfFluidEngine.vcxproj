@@ -164,6 +164,7 @@
     <ClCompile Include="src\ParticleSystemData3.cpp" />
     <ClCompile Include="src\ParticleSystemSolver3.cpp" />
     <ClCompile Include="src\PhysicsAnimation.cpp" />
+    <ClCompile Include="src\Plane3.cpp" />
     <ClCompile Include="src\PointNeighborSearcher3.cpp" />
     <ClCompile Include="src\Quaternion.cpp" />
     <ClCompile Include="src\SphKernel.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="src\ParticleSystemData3.h" />
     <ClInclude Include="src\ParticleSystemSolver3.h" />
     <ClInclude Include="src\PhysicsAnimation.h" />
+    <ClInclude Include="src\Plane3.h" />
     <ClInclude Include="src\PointNeighborSearcher3.h" />
     <ClInclude Include="src\Quaternion.h" />
     <ClInclude Include="src\Ray3.h" />

@@ -9,6 +9,10 @@ namespace CalfFluidEngine {
 		Ray3();
 		virtual ~Ray3() {}
 		Ray3(const Vector3<T>& newOrigin, const Vector3<T>& newDirection);
+		Vector3<T> GetPointAt(T t) const
+		{
+			return origin + t * direction;
+		}
 		Vector3<T> origin;
 		Vector3<T> direction;
 	};
