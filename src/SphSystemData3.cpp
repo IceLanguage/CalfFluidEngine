@@ -41,6 +41,14 @@ std::vector<double> CalfFluidEngine::SphSystemData3::GetPressures()
 	return ScalarDataAt(_pressureIdx);
 }
 
+void CalfFluidEngine::SphSystemData3::SetTargetSpacing(double spacing)
+{
+	SetParticleRadius(spacing);
+	_targetSpacing = spacing;
+	_kernelRadius = _kernelRadiusOverTargetSpacing * _targetSpacing;
+	computeMass();
+}
+
 Vector3D CalfFluidEngine::SphSystemData3::Interpolate(const Vector3D & origin, const std::vector<Vector3D>& values) const
 {
 	Vector3D sum = Vector3D::zero;
@@ -140,4 +148,8 @@ double CalfFluidEngine::SphSystemData3::GetDensity() const
 double CalfFluidEngine::SphSystemData3::GetKernelRadius() const
 {
 	return _kernelRadius;
+}
+
+void CalfFluidEngine::SphSystemData3::computeMass()
+{
 }

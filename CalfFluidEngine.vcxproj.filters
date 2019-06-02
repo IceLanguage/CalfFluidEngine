@@ -143,9 +143,6 @@
     <ClInclude Include="src\Math_utils.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="BoundingBox3.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\ParticleEmitter3.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -153,6 +150,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Plane3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BoundingBox3.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

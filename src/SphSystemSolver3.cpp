@@ -40,6 +40,11 @@ SphSystemSolver3::~SphSystemSolver3()
 {
 }
 
+std::shared_ptr<SphSystemData3> CalfFluidEngine::SphSystemSolver3::GetSphData() const
+{
+	std::dynamic_pointer_cast<SphSystemData3>(GetParticleSystemData())
+}
+
 void CalfFluidEngine::SphSystemSolver3::accumulateForces(double timeIntervalInSeconds)
 {
 	ParticleSystemSolver3::accumulateForces(timeIntervalInSeconds);
@@ -49,7 +54,7 @@ void CalfFluidEngine::SphSystemSolver3::accumulateForces(double timeIntervalInSe
 
 void CalfFluidEngine::SphSystemSolver3::onTimeStepStart(double timeStepInSeconds)
 {
-	auto particles = std::dynamic_pointer_cast<SphSystemData3>(GetParticleSystemData());
+	auto particles = GetSphData();
 
 	particles->BuildNeighborSearcher(particles->GetKernelRadius());
 	particles->BuildNeighborLists(particles->GetKernelRadius());
@@ -63,7 +68,7 @@ void CalfFluidEngine::SphSystemSolver3::onTimeStepEnd(double timeStepInSeconds)
 
 unsigned int CalfFluidEngine::SphSystemSolver3::getNumberOfSubTimeSteps(double timeIntervalInSeconds) const
 {
-	auto particles = std::dynamic_pointer_cast<SphSystemData3>(GetParticleSystemData());
+	auto particles = GetSphData();
 	size_t numberOfParticles = particles->GetNumberOfParticles();
 	auto f = particles->GetForces();
 
@@ -92,7 +97,7 @@ unsigned int CalfFluidEngine::SphSystemSolver3::getNumberOfSubTimeSteps(double t
 
 void CalfFluidEngine::SphSystemSolver3::accumulateViscosityForce()
 {
-	auto particles = std::dynamic_pointer_cast<SphSystemData3>(GetParticleSystemData());
+	auto particles = GetSphData();
 	size_t numberOfParticles = particles->GetNumberOfParticles();
 	auto x = particles->GetPositions();
 	auto v = particles->GetVelocities();
@@ -122,7 +127,7 @@ void CalfFluidEngine::SphSystemSolver3::accumulateViscosityForce()
 
 void CalfFluidEngine::SphSystemSolver3::accumulatePressureForce(double timeStepInSeconds)
 {
-	auto particles = std::dynamic_pointer_cast<SphSystemData3>(GetParticleSystemData());
+	auto particles = GetSphData();
 	auto x = particles->GetPositions();
 	auto d = particles->GetDensities();
 	auto p = particles->GetPressures();
@@ -135,7 +140,7 @@ void CalfFluidEngine::SphSystemSolver3::accumulatePressureForce(double timeStepI
 
 void CalfFluidEngine::SphSystemSolver3::computePressure()
 {
-	auto particles = std::dynamic_pointer_cast<SphSystemData3>(GetParticleSystemData());
+	auto particles = GetSphData();
 	size_t numberOfParticles = particles->GetNumberOfParticles();
 	auto d = particles->GetDensities();
 	auto p = particles->GetPressures();
@@ -163,7 +168,7 @@ void CalfFluidEngine::SphSystemSolver3::computePressure()
 
 void CalfFluidEngine::SphSystemSolver3::accumulatePressureForce(const std::vector<Vector3D>& positions, const std::vector<double>& densities, const std::vector<double>& pressures, std::vector<Vector3D> pressureForces)
 {
-	auto particles = std::dynamic_pointer_cast<SphSystemData3>(GetParticleSystemData());
+	auto particles = GetSphData();
 	size_t numberOfParticles = particles->GetNumberOfParticles();
 
 	double mass = particles->GetParticleMass();
@@ -193,7 +198,7 @@ void CalfFluidEngine::SphSystemSolver3::accumulatePressureForce(const std::vecto
 
 void CalfFluidEngine::SphSystemSolver3::computePseudoViscosity(double timeStepInSeconds)
 {
-	auto particles = std::dynamic_pointer_cast<SphSystemData3>(GetParticleSystemData());
+	auto particles = GetSphData();
 	size_t numberOfParticles = particles->GetNumberOfParticles();
 	auto x = particles->GetPositions();
 	auto v = particles->GetVelocities();
