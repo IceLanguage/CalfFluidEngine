@@ -28,6 +28,12 @@ void CalfFluidEngine::ParticleSystemSolver3::SetCollider(const std::shared_ptr<C
 	_collider = newCollider;
 }
 
+void CalfFluidEngine::ParticleSystemSolver3::SetEmitter(const std::shared_ptr<ParticleEmitter3>& newEmitter)
+{
+	_emitter = newEmitter;
+	newEmitter->SetTarget(_particleSystemData);
+}
+
 void CalfFluidEngine::ParticleSystemSolver3::timeStepStart(double timeStepInSeconds)
 {
 	auto forces = _particleSystemData->GetForces();
@@ -40,6 +46,7 @@ void CalfFluidEngine::ParticleSystemSolver3::timeStepStart(double timeStepInSeco
 	});
 
 	updateCollider(timeStepInSeconds);
+	updateEmitter(timeStepInSeconds);
 
 	size_t n = _particleSystemData->GetNumberOfParticles();
 	_newPositions.resize(n);
@@ -155,6 +162,13 @@ void CalfFluidEngine::ParticleSystemSolver3::updateCollider(double timeStepInSec
 	}
 }
 
+void CalfFluidEngine::ParticleSystemSolver3::updateEmitter(double timeStepInSeconds)
+{
+	if (_emitter != nullptr) {
+		_emitter->Update(GetCurrentTime(), timeStepInSeconds);
+	}
+}
+
 
 std::shared_ptr<ParticleSystemData3> CalfFluidEngine::ParticleSystemSolver3::GetParticleSystemData() const
 {
@@ -175,6 +189,7 @@ void CalfFluidEngine::ParticleSystemSolver3::onTimeStep(double timeIntervalInSec
 void CalfFluidEngine::ParticleSystemSolver3::onInitialize()
 {
 	updateCollider(0.0);
+	updateEmitter(0.0);
 }
 
 void CalfFluidEngine::ParticleSystemSolver3::setParticleSystemData(const std::shared_ptr<ParticleSystemData3>& newParticles)

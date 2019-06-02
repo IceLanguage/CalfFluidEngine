@@ -7,7 +7,7 @@
 #include <memory>
 #include <Collider3.h>
 #include <ParticleSystemData3.h>
-
+#include <ParticleEmitter3.h>
 namespace CalfFluidEngine {
 	class ParticleSystemSolver3 : public PhysicsAnimation{
 	public:
@@ -15,12 +15,14 @@ namespace CalfFluidEngine {
 		virtual ~ParticleSystemSolver3();
 		ParticleSystemSolver3(double radius,double mass);
 		void SetCollider(const std::shared_ptr<Collider3>& newCollider);
+		void SetEmitter(const std::shared_ptr<ParticleEmitter3>& newEmitter);
 	private:
 		void timeStepStart(double timeStepInSeconds);
 		void timeStepEnd(double timeStepInSeconds);
 		void timeIntegration(double timeIntervalInSeconds);
 		void resolveCollision();
 		void updateCollider(double timeStepInSeconds);
+		void updateEmitter(double timeStepInSeconds);
 		ParticleSystemData3::VectorData _newPositions;
 		ParticleSystemData3::VectorData _newVelocities;
 	protected:
@@ -52,6 +54,7 @@ namespace CalfFluidEngine {
 		double _dragCoefficient = 1e-4;
 		std::shared_ptr<Collider3> _collider;
 		double _restitutionCoefficient = 0.0;
+		std::shared_ptr<ParticleEmitter3> _emitter;
 	};
 }
 #endif
