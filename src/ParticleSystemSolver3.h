@@ -16,6 +16,9 @@ namespace CalfFluidEngine {
 		ParticleSystemSolver3(double radius,double mass);
 		void SetCollider(const std::shared_ptr<Collider3>& newCollider);
 		void SetEmitter(const std::shared_ptr<ParticleEmitter3>& newEmitter);
+		std::shared_ptr<ParticleSystemData3> GetParticleSystemData() const;
+		void SetDragCoefficient(double newDragCoefficient);
+		void SetRestitutionCoefficient(double newRestitutionCoefficient);
 	private:
 		void timeStepStart(double timeStepInSeconds);
 		void timeStepEnd(double timeStepInSeconds);
@@ -29,7 +32,7 @@ namespace CalfFluidEngine {
 		void onTimeStep(double timeIntervalInSeconds) override;
 		virtual void onInitialize() override;
 		void setParticleSystemData(const std::shared_ptr<ParticleSystemData3>& newParticles);
-		std::shared_ptr<ParticleSystemData3> GetParticleSystemData() const;
+		
 		//**********************************************
 		//the function is called in ParticleSystemSolver3:timeStepStart(double);
 		// Called when a time-step is about to begin;

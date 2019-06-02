@@ -41,11 +41,12 @@ namespace CalfFluidEngine {
 			const ColliderQueryResult& colliderPoint,
 			const Vector3D& position,
 			double radius);
+		std::shared_ptr<Surface3> _surface;
 	private:
 		typedef std::function<void(Collider3*, double, double)>
 			OnBeginUpdateCallback;
 		OnBeginUpdateCallback _onUpdateCallback;
-		std::shared_ptr<Surface3> _surface;
+		
 		double _frictionCoeffient = 0.0;
 	};
 }

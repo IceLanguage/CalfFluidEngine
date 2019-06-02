@@ -8,10 +8,10 @@ namespace CalfFluidEngine {
 		SphSystemData3();
 		explicit SphSystemData3(size_t numberOfParticles);
 		~SphSystemData3();
-		std::vector<double> GetDensities() const;
-		std::vector<double> GetPressures() const;
-		std::vector<double> GetDensities();
-		std::vector<double> GetPressures();
+		const std::vector<double>& GetDensities() const;
+		const std::vector<double>& GetPressures() const;
+		std::vector<double>& GetDensities();
+		std::vector<double>& GetPressures();
 		double GetTargetSpacing() const { return _targetSpacing; }
 		void SetTargetSpacing(double spacing);
 		Vector3D Interpolate(

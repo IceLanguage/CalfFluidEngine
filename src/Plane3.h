@@ -14,8 +14,8 @@ namespace CalfFluidEngine {
 		Plane3(
 			const Vector3D& normal, 
 			const Vector3D& point,
-			const Transform3& transform_,
-			bool isNormalFlipped_)
+			const Transform3& transform_ = Transform3(),
+			bool isNormalFlipped_ = false)
 			: Surface3(transform_, isNormalFlipped_), 
 			_normal(normal),
 			_NormalDotPoint(Vector3D::Dot(normal,point)) {}
@@ -30,8 +30,9 @@ namespace CalfFluidEngine {
 			_normal.Normalize();
 			_NormalDotPoint = Vector3D::Dot(_normal, point0);
 		}
+		virtual bool Intersects(const Ray3D& ray) const override;
 	protected:
-		virtual Vector3D closestPointLocal(const Vector3D& otherPoint) const ;
+		virtual Vector3D closestPointLocal(const Vector3D& otherPoint) const;
 		virtual Vector3D closestNormalLocal(const Vector3D& otherPoint) const;
 		virtual SurfaceRayIntersection3 closestIntersectionLocal(
 			const Ray3D& ray) const;

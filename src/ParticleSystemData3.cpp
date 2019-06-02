@@ -60,32 +60,32 @@ size_t CalfFluidEngine::ParticleSystemData3::AddScalarData(double initialVal)
 	return attrIdx;
 }
 
-std::vector<Vector3D> CalfFluidEngine::ParticleSystemData3::GetPositions() const
+const std::vector<Vector3D>& CalfFluidEngine::ParticleSystemData3::GetPositions() const
 {
 	return VectorDataAt(_positionIdx);
 }
 
-std::vector<Vector3D> CalfFluidEngine::ParticleSystemData3::GetPositions()
+std::vector<Vector3D>& CalfFluidEngine::ParticleSystemData3::GetPositions()
 {
 	return VectorDataAt(_positionIdx);
 }
 
-std::vector<Vector3D> CalfFluidEngine::ParticleSystemData3::GetVelocities() const
+const std::vector<Vector3D>& CalfFluidEngine::ParticleSystemData3::GetVelocities() const
 {
 	return VectorDataAt(_velocityIdx);
 }
 
-std::vector<Vector3D> CalfFluidEngine::ParticleSystemData3::GetVelocities()
+std::vector<Vector3D>& CalfFluidEngine::ParticleSystemData3::GetVelocities()
 {
 	return VectorDataAt(_velocityIdx);
 }
 
-std::vector<Vector3D> CalfFluidEngine::ParticleSystemData3::GetForces() const
+const std::vector<Vector3D>& CalfFluidEngine::ParticleSystemData3::GetForces() const
 {
 	return VectorDataAt(_forceIdx);
 }
 
-std::vector<Vector3D> CalfFluidEngine::ParticleSystemData3::GetForces()
+std::vector<Vector3D>& CalfFluidEngine::ParticleSystemData3::GetForces()
 {
 	return VectorDataAt(_forceIdx);
 }
@@ -106,9 +106,9 @@ void CalfFluidEngine::ParticleSystemData3::AddParticles(const std::vector<Vector
 
 	Resize(newNumberOfParticles);
 
-	auto pos = GetPositions();
-	auto vel = GetVelocities();
-	auto frc = GetForces();
+	auto& pos = GetPositions();
+	auto& vel = GetVelocities();
+	auto& frc = GetForces();
 
 	tbb::parallel_for(tbb::blocked_range<size_t>(size_t(0),newPositions.size()),
 		[&](const tbb::blocked_range<size_t> & b) {
@@ -133,22 +133,22 @@ void CalfFluidEngine::ParticleSystemData3::AddParticles(const std::vector<Vector
 	}
 }
 
-std::vector<double> CalfFluidEngine::ParticleSystemData3::ScalarDataAt(size_t idx) const
+const std::vector<double>& CalfFluidEngine::ParticleSystemData3::ScalarDataAt(size_t idx) const
 {
 	return _scalarDataList[idx];
 }
 
-std::vector<double> CalfFluidEngine::ParticleSystemData3::ScalarDataAt(size_t idx)
+std::vector<double>& CalfFluidEngine::ParticleSystemData3::ScalarDataAt(size_t idx)
 {
 	return _scalarDataList[idx];
 }
 
-std::vector<Vector3D> CalfFluidEngine::ParticleSystemData3::VectorDataAt(size_t idx) const
+const std::vector<Vector3D>& CalfFluidEngine::ParticleSystemData3::VectorDataAt(size_t idx) const
 {
 	return _vectorDataList[idx];
 }
 
-std::vector<Vector3D> CalfFluidEngine::ParticleSystemData3::VectorDataAt(size_t idx)
+std::vector<Vector3D>& CalfFluidEngine::ParticleSystemData3::VectorDataAt(size_t idx)
 {
 	return _vectorDataList[idx];
 }
@@ -187,7 +187,7 @@ void CalfFluidEngine::ParticleSystemData3::BuildNeighborLists(double maxSearchRa
 	size_t numberOfParticles = GetNumberOfParticles();
 	_neighborLists.resize(numberOfParticles);
 
-	auto points = GetPositions();
+	auto& points = GetPositions();
 	for (size_t i = 0; i < numberOfParticles; ++i) {
 		Vector3D origin = points[i];
 		_neighborLists[i].clear();

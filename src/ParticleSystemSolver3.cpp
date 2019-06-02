@@ -2,7 +2,7 @@
 #include <Constant.h>
 #include <tbb\parallel_for.h>
 #include <tbb\blocked_range.h>
-
+#include <Math_utils.h>
 using namespace CalfFluidEngine;
 
 ParticleSystemSolver3::ParticleSystemSolver3() 
@@ -36,7 +36,7 @@ void CalfFluidEngine::ParticleSystemSolver3::SetEmitter(const std::shared_ptr<Pa
 
 void CalfFluidEngine::ParticleSystemSolver3::timeStepStart(double timeStepInSeconds)
 {
-	auto forces = _particleSystemData->GetForces();
+	auto& forces = _particleSystemData->GetForces();
 
 	tbb::parallel_for(
 		tbb::blocked_range<size_t>(0, forces.size()),
@@ -59,8 +59,8 @@ void CalfFluidEngine::ParticleSystemSolver3::timeStepStart(double timeStepInSeco
 void CalfFluidEngine::ParticleSystemSolver3::timeStepEnd(double timeStepInSeconds)
 {
 	size_t n = _particleSystemData->GetNumberOfParticles();
-	auto positions = _particleSystemData->GetPositions();
-	auto velocities = _particleSystemData->GetVelocities();
+	auto& positions = _particleSystemData->GetPositions();
+	auto& velocities = _particleSystemData->GetVelocities();
 
 	tbb::parallel_for(
 		tbb::blocked_range<size_t>(0, n),
@@ -87,9 +87,9 @@ void CalfFluidEngine::ParticleSystemSolver3::onTimeStepEnd(double timeStepInSeco
 void CalfFluidEngine::ParticleSystemSolver3::accumulateForces(double timeIntervalInSeconds)
 {
 	size_t n = _particleSystemData->GetNumberOfParticles();
-	auto forces = _particleSystemData->GetForces();
-	auto velocities = _particleSystemData->GetVelocities();
-	auto positions = _particleSystemData->GetPositions();
+	auto& forces = _particleSystemData->GetForces();
+	auto& velocities = _particleSystemData->GetVelocities();
+	auto& positions = _particleSystemData->GetPositions();
 	const double mass = _particleSystemData->GetParticleMass();
 
 	tbb::parallel_for(
@@ -112,9 +112,9 @@ void CalfFluidEngine::ParticleSystemSolver3::accumulateForces(double timeInterva
 void CalfFluidEngine::ParticleSystemSolver3::timeIntegration(double timeIntervalInSeconds)
 {
 	size_t n = _particleSystemData->GetNumberOfParticles();
-	auto forces = _particleSystemData->GetForces();
-	auto velocities = _particleSystemData->GetVelocities();
-	auto positions = _particleSystemData->GetPositions();
+	auto& forces = _particleSystemData->GetForces();
+	auto& velocities = _particleSystemData->GetVelocities();
+	auto& positions = _particleSystemData->GetPositions();
 	const double mass = _particleSystemData->GetParticleMass();
 
 	tbb::parallel_for(
@@ -173,6 +173,16 @@ void CalfFluidEngine::ParticleSystemSolver3::updateEmitter(double timeStepInSeco
 std::shared_ptr<ParticleSystemData3> CalfFluidEngine::ParticleSystemSolver3::GetParticleSystemData() const
 {
 	return _particleSystemData;
+}
+
+void CalfFluidEngine::ParticleSystemSolver3::SetDragCoefficient(double newDragCoefficient)
+{
+	_dragCoefficient = std::max(newDragCoefficient, 0.0);
+}
+
+void CalfFluidEngine::ParticleSystemSolver3::SetRestitutionCoefficient(double newRestitutionCoefficient)
+{
+	_restitutionCoefficient = Clamp(newRestitutionCoefficient, 0.0, 1.0);
 }
 
 void CalfFluidEngine::ParticleSystemSolver3::onTimeStep(double timeIntervalInSeconds)

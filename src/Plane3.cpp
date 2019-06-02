@@ -11,6 +11,11 @@ Plane3::~Plane3()
 {
 }
 
+bool CalfFluidEngine::Plane3::Intersects(const Ray3D & ray) const
+{
+	return std::fabs(Vector3D::Dot(ray.direction,_normal)) > 0;
+}
+
 Vector3D CalfFluidEngine::Plane3::closestPointLocal(const Vector3D & otherPoint) const
 {
 	float t = Vector3D::Dot(_normal, otherPoint) - _NormalDotPoint;

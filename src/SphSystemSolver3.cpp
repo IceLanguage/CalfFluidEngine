@@ -72,7 +72,7 @@ unsigned int CalfFluidEngine::SphSystemSolver3::getNumberOfSubTimeSteps(double t
 {
 	auto particles = GetSphData();
 	size_t numberOfParticles = particles->GetNumberOfParticles();
-	auto f = particles->GetForces();
+	auto& f = particles->GetForces();
 
 	const double kernelRadius = particles->GetKernelRadius();
 	const double mass = particles->GetParticleMass();
@@ -101,10 +101,10 @@ void CalfFluidEngine::SphSystemSolver3::accumulateViscosityForce()
 {
 	auto particles = GetSphData();
 	size_t numberOfParticles = particles->GetNumberOfParticles();
-	auto x = particles->GetPositions();
-	auto v = particles->GetVelocities();
-	auto d = particles->GetDensities();
-	auto f = particles->GetForces();
+	auto& x = particles->GetPositions();
+	auto& v = particles->GetVelocities();
+	auto& d = particles->GetDensities();
+	auto& f = particles->GetForces();
 
 	double mass = particles->GetParticleMass();
 	const double massSquared = mass * mass;
@@ -130,10 +130,10 @@ void CalfFluidEngine::SphSystemSolver3::accumulateViscosityForce()
 void CalfFluidEngine::SphSystemSolver3::accumulatePressureForce(double timeStepInSeconds)
 {
 	auto particles = GetSphData();
-	auto x = particles->GetPositions();
-	auto d = particles->GetDensities();
-	auto p = particles->GetPressures();
-	auto f = particles->GetForces();
+	auto& x = particles->GetPositions();
+	auto& d = particles->GetDensities();
+	auto& p = particles->GetPressures();
+	auto& f = particles->GetForces();
 
 	computePressure();
 
@@ -144,8 +144,8 @@ void CalfFluidEngine::SphSystemSolver3::computePressure()
 {
 	auto particles = GetSphData();
 	size_t numberOfParticles = particles->GetNumberOfParticles();
-	auto d = particles->GetDensities();
-	auto p = particles->GetPressures();
+	auto& d = particles->GetDensities();
+	auto& p = particles->GetPressures();
 
 	// See Equation 9 from
 	// http://cg.informatik.uni-freiburg.de/publications/2007_SCA_SPH.pdf
@@ -202,9 +202,9 @@ void CalfFluidEngine::SphSystemSolver3::computePseudoViscosity(double timeStepIn
 {
 	auto particles = GetSphData();
 	size_t numberOfParticles = particles->GetNumberOfParticles();
-	auto x = particles->GetPositions();
-	auto v = particles->GetVelocities();
-	auto d = particles->GetDensities();
+	auto& x = particles->GetPositions();
+	auto& v = particles->GetVelocities();
+	auto& d = particles->GetDensities();
 
 	const double mass = particles->GetParticleMass();
 	const SphSpikyKernel3 kernel(particles->GetKernelRadius());

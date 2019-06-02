@@ -21,22 +21,22 @@ SphSystemData3::~SphSystemData3()
 {
 }
 
-std::vector<double> CalfFluidEngine::SphSystemData3::GetDensities() const
+const std::vector<double>& CalfFluidEngine::SphSystemData3::GetDensities() const
 {
 	return ScalarDataAt(_densityIdx);
 }
 
-std::vector<double> CalfFluidEngine::SphSystemData3::GetPressures() const
+const std::vector<double>& CalfFluidEngine::SphSystemData3::GetPressures() const
 {
 	return ScalarDataAt(_pressureIdx);
 }
 
-std::vector<double> CalfFluidEngine::SphSystemData3::GetDensities()
+std::vector<double>& CalfFluidEngine::SphSystemData3::GetDensities()
 {
 	return ScalarDataAt(_densityIdx);
 }
 
-std::vector<double> CalfFluidEngine::SphSystemData3::GetPressures()
+std::vector<double>& CalfFluidEngine::SphSystemData3::GetPressures()
 {
 	return ScalarDataAt(_pressureIdx);
 }
@@ -52,7 +52,7 @@ void CalfFluidEngine::SphSystemData3::SetTargetSpacing(double spacing)
 Vector3D CalfFluidEngine::SphSystemData3::Interpolate(const Vector3D & origin, const std::vector<Vector3D>& values) const
 {
 	Vector3D sum = Vector3D::zero;
-	auto d = GetDensities();
+	auto& d = GetDensities();
 	SphStandardKernel3 kernel(_kernelRadius);
 	const double m = GetParticleMass();
 
@@ -70,8 +70,8 @@ Vector3D CalfFluidEngine::SphSystemData3::Interpolate(const Vector3D & origin, c
 
 void CalfFluidEngine::SphSystemData3::UpdateDensities()
 {
-	auto p = GetPositions();
-	auto d = GetDensities();
+	auto& p = GetPositions();
+	auto& d = GetDensities();
 	const double m = GetParticleMass();
 
 	tbb::parallel_for(
@@ -100,8 +100,8 @@ double CalfFluidEngine::SphSystemData3::SumOfKernelNearby(const Vector3D & origi
 Vector3D CalfFluidEngine::SphSystemData3::GradientAt(size_t i, const std::vector<double>& values) const
 {
 	Vector3D sum;
-	auto p = GetPositions();
-	auto d = GetDensities();
+	auto& p = GetPositions();
+	auto& d = GetDensities();
 	const auto& neighbors = GetNeighborLists()[i];
 	Vector3D origin = p[i];
 	SphStandardKernel3 kernel(_kernelRadius);
@@ -124,8 +124,8 @@ Vector3D CalfFluidEngine::SphSystemData3::GradientAt(size_t i, const std::vector
 double CalfFluidEngine::SphSystemData3::LaplacianAt(size_t i, const std::vector<double>& values) const
 {
 	double sum = 0.0;
-	auto p = GetPositions();
-	auto d = GetDensities();
+	auto& p = GetPositions();
+	auto& d = GetDensities();
 	const auto& neighbors = GetNeighborLists()[i];
 	Vector3D origin = p[i];
 	SphStandardKernel3 kernel(_kernelRadius);

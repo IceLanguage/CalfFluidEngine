@@ -44,6 +44,15 @@ bool CalfFluidEngine::Surface3::Intersects(const Ray3D & ray) const
 	return result.isIntersecting;
 }
 
+SurfaceRayIntersection3 CalfFluidEngine::Surface3::GetClosestIntersection(const Ray3D & ray)
+{
+	auto result = closestIntersectionLocal(transform.InverseTransformRay(ray));
+	result.point = transform.TransformPoint(result.point);
+	result.normal = transform.TransformDirection(result.normal);
+	result.normal *= (isNormalFlipped) ? -1.0 : 1.0;
+	return result;
+}
+
 bool CalfFluidEngine::Surface3::IsInside(const Vector3D & otherPoint) const
 {
 	return isNormalFlipped != 

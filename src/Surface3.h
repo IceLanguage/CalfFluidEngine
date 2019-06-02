@@ -36,9 +36,12 @@ namespace CalfFluidEngine {
 
 		double GetClosestDistance(const Vector3D& otherPoint) const;
 
-		bool Intersects(const Ray3D& ray) const;
+		//**********************************************
+		// Check if ray Intersects the surface
+		//**********************************************
+		virtual bool Intersects(const Ray3D& ray) const;
 
-		virtual SurfaceRayIntersection3 GetClosestIntersection(const Ray3D& ray) const = 0;
+		virtual SurfaceRayIntersection3 GetClosestIntersection(const Ray3D& ray);
 
 		bool IsInside(const Vector3D& otherPoint) const;
 	protected:
