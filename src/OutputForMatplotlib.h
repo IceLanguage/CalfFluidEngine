@@ -6,7 +6,7 @@
 
 #include "../External/cnpy/cnpy.h"
 #include "../External/pystring/pystring.h"
-
+#include <ParticleSystemSolver3.h>
 class OutputForMatplotlib final{
 public:
 	OutputForMatplotlib(const std::string& testDemoName){
@@ -18,7 +18,7 @@ public:
 
 	template<typename T>
 	void SaveData(
-		const const std::vector<T>& data, 
+		const std::vector<T>& data, 
 		const std::string& name) {
 		std::string filename = getFullFilePath(name); 
 		unsigned int dim[1] = { 
@@ -29,13 +29,40 @@ public:
 
 	template<typename T>
 	void SaveData(
-		const const std::vector<T>& data,
+		const std::vector<T>& data,
 		size_t size, const std::string& name){
 		std::string filename = getFullFilePath(name);
 		unsigned int dim[1] = {
 			static_cast<unsigned int>(size)
 		};
 		cnpy::npy_save(filename, data.data(), dim, 1, "w");
+	}
+
+	template<typename ParticleSystem>
+	void SaveParticleDataXY(
+		const std::shared_ptr<ParticleSystem>& particles,
+		unsigned int frameNum) {
+			size_t n = particles->GetNumberOfParticles();
+			std::vector<double> x(n); 
+			std::vector<double> y(n);
+			auto positions = particles->GetPositions(); 
+			for (size_t i = 0; i < n; ++i) {
+					x[i] = positions[i].x;
+					y[i] = positions[i].y;
+			}
+			char filename[256]; 
+			snprintf(
+				filename, 
+				sizeof(filename), 
+				"data.#point2,%04d,x.npy", 
+				frameNum); 
+			SaveData(x, filename);
+			snprintf(
+				filename, 
+				sizeof(filename),
+				"data.#point2,%04d,y.npy", 
+				frameNum); 
+			SaveData(y, filename);
 	}
 private:
 	inline void createDirectory(const std::string& dirname) {

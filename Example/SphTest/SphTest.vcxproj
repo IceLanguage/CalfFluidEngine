@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{7A3A09D4-D5D1-4E63-9ECC-7C5DC3B0CFE3}</ProjectGuid>
+    <ProjectGuid>{AEBF8907-FC3B-44BD-BBB1-5B2696BF3606}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SphTest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
@@ -90,12 +90,17 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)src;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(SolutionDir)packages\tbb.4.2.3.1\build\native\lib\Win32\v120\Debug\tbb_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)packages\tbb.4.2.3.1\build\native\include;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -151,11 +156,23 @@
     <ClCompile Include="SphTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CalfFluidEngine.vcxproj">
+    <ProjectReference Include="..\..\CalfFluidEngine.vcxproj">
       <Project>{b049c3cc-e1b8-4559-b202-8d13b5a54020}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\packages\tbb.redist.4.2.3.1\build\native\tbb.redist.targets" Condition="Exists('..\..\packages\tbb.redist.4.2.3.1\build\native\tbb.redist.targets')" />
+    <Import Project="..\..\packages\tbb.4.2.3.1\build\native\tbb.targets" Condition="Exists('..\..\packages\tbb.4.2.3.1\build\native\tbb.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\tbb.redist.4.2.3.1\build\native\tbb.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\tbb.redist.4.2.3.1\build\native\tbb.redist.targets'))" />
+    <Error Condition="!Exists('..\..\packages\tbb.4.2.3.1\build\native\tbb.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\tbb.4.2.3.1\build\native\tbb.targets'))" />
+  </Target>
 </Project>

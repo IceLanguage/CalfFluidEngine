@@ -40,9 +40,11 @@ SphSystemSolver3::~SphSystemSolver3()
 {
 }
 
+
+
 std::shared_ptr<SphSystemData3> CalfFluidEngine::SphSystemSolver3::GetSphData() const
 {
-	std::dynamic_pointer_cast<SphSystemData3>(GetParticleSystemData())
+	return std::dynamic_pointer_cast<SphSystemData3>(GetParticleSystemData());
 }
 
 void CalfFluidEngine::SphSystemSolver3::accumulateForces(double timeIntervalInSeconds)

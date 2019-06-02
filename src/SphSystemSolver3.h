@@ -1,6 +1,9 @@
 #ifndef _CalfFluidEngine_SphSystemSolver3_
 #define _CalfFluidEngine_SphSystemSolver3_
 #include <ParticleSystemSolver3.h>
+#include <SphSystemData3.h>
+#include <tbb\parallel_for.h>
+#include <tbb\blocked_range.h>
 namespace CalfFluidEngine {
 	class SphSystemSolver3 : public ParticleSystemSolver3
 	{
