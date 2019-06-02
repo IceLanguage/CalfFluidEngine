@@ -78,6 +78,9 @@
     <ClCompile Include="src\Plane3.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sphere3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -153,6 +156,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\BoundingBox3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sphere3.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

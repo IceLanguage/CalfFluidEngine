@@ -6,7 +6,7 @@ namespace CalfFluidEngine {
 	{
 	public:
 		Plane3();
-		~Plane3();
+		virtual ~ Plane3();
 		Plane3(
 			const Transform3& transform_, 
 			bool isNormalFlipped_)

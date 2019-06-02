@@ -112,6 +112,12 @@ namespace CalfFluidEngine{
 			x = y = z = (T)0;
 		}
 
+		bool IsSimilar(const Vector3& other, T epsilon = std::numeric_limits<T>::epsilon()) const {
+			return (std::fabs(x - other.x) < epsilon) &&
+				(std::fabs(y - other.y) < epsilon) &&
+				(std::fabs(z - other.z) < epsilon);
+		}
+
 		static Vector3 Cross(const Vector3& lhsV, const Vector3& rhsV){
 			return Vector3(
 				lhsV.y * rhsV.z - lhsV.z * rhsV.y,
@@ -158,6 +164,8 @@ namespace CalfFluidEngine{
 	Vector3<T> operator*(float value, const Vector3<T>& v){
 		return v * value;
 	}
+
+	
 
 	typedef Vector3<float> Vector3F;
 

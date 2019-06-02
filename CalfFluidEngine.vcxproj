@@ -167,6 +167,7 @@
     <ClCompile Include="src\Plane3.cpp" />
     <ClCompile Include="src\PointNeighborSearcher3.cpp" />
     <ClCompile Include="src\Quaternion.cpp" />
+    <ClCompile Include="src\Sphere3.cpp" />
     <ClCompile Include="src\SphKernel.cpp" />
     <ClCompile Include="src\SphSystemData3.cpp" />
     <ClCompile Include="src\SphSystemSolver3.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="src\PointNeighborSearcher3.h" />
     <ClInclude Include="src\Quaternion.h" />
     <ClInclude Include="src\Ray3.h" />
+    <ClInclude Include="src\Sphere3.h" />
     <ClInclude Include="src\SphKernel.h" />
     <ClInclude Include="src\SphSystemData3.h" />
     <ClInclude Include="src\SphSystemSolver3.h" />

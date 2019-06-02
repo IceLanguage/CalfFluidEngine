@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 /Output/SineAnimation
 /Output/SimpleMassSpringAnimation
+/Output/SphSystemSolver3.SphTest
