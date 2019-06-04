@@ -31,6 +31,7 @@ namespace CalfFluidEngine {
 	inline Matrix3<T>::Matrix3()
 	{
 		for (int i = 0; i < 9; ++i) data[i] = 0;
+		data[0] = data[4] = data[8] = 1;
 	}
 
 	template<typename T>

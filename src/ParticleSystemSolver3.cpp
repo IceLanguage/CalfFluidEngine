@@ -6,7 +6,7 @@
 using namespace CalfFluidEngine;
 
 ParticleSystemSolver3::ParticleSystemSolver3() 
-	:ParticleSystemSolver3(kEpsilonD, kEpsilonD)
+	:ParticleSystemSolver3(1e-3, 1e-3)
 {
 }
 
