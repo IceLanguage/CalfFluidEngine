@@ -36,6 +36,7 @@ namespace CalfFluidEngine {
 		virtual Vector3D closestNormalLocal(const Vector3D& otherPoint) const;
 		virtual SurfaceRayIntersection3 closestIntersectionLocal(
 			const Ray3D& ray) const;
+		virtual BoundingBox3D getBoundingBoxLocal() const;
 		Vector3D _normal = Vector3D(0, 1, 0);
 		double _NormalDotPoint;
 	};

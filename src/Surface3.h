@@ -4,6 +4,7 @@
 #include <Ray3.h>
 #include <Constant.h>
 #include <Transform3.h>
+#include <BoundingBox3.h>
 namespace CalfFluidEngine {
 	struct SurfaceRayIntersection3 {
 		bool isIntersecting = false;
@@ -44,6 +45,8 @@ namespace CalfFluidEngine {
 		virtual SurfaceRayIntersection3 GetClosestIntersection(const Ray3D& ray);
 
 		bool IsInside(const Vector3D& otherPoint) const;
+
+		BoundingBox3D GetBoundingBox() const;
 	protected:
 		//**********************************************
 		// Returns the closest point from the given point
@@ -70,6 +73,11 @@ namespace CalfFluidEngine {
 		// Returns true if otherPoint in local is inside by given depth the volume
 		//**********************************************
 		virtual bool isInsideLocal(const Vector3D& otherPoint) const;
+
+		//**********************************************
+		// Returns the bounding box of this surface object in local frame.
+		//**********************************************
+		virtual BoundingBox3D getBoundingBoxLocal() const = 0;
 	};
 }
 #endif

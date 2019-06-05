@@ -3,6 +3,7 @@
 #include <Quaternion.h>
 #include <Matrix3.h>
 #include <Ray3.h>
+#include <BoundingBox3.h>
 namespace CalfFluidEngine {
 	class Transform3
 	{
@@ -21,6 +22,8 @@ namespace CalfFluidEngine {
 		Vector3D TransformPoint(const Vector3D& pointInLocal) const;
 		Vector3D TransformDirection(const Vector3D& dirInLocal) const;
 		Ray3D InverseTransformRay(const Ray3D& rayInWorld) const;
+		BoundingBox3D TransformBoundingBox(const BoundingBox3D& boxInLocal) const;
+		BoundingBox3D InverseTransformBoundingBox(const BoundingBox3D& boxInWorld) const;
 	private:
 		Vector3D _translation;
 		Quaternion _orientation;

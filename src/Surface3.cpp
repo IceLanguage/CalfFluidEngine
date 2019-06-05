@@ -59,6 +59,11 @@ bool CalfFluidEngine::Surface3::IsInside(const Vector3D & otherPoint) const
 		isInsideLocal(transform.InverseTransformPoint(otherPoint));
 }
 
+BoundingBox3D CalfFluidEngine::Surface3::GetBoundingBox() const
+{
+	return transform.TransformBoundingBox(getBoundingBoxLocal());
+}
+
 double CalfFluidEngine::Surface3::closestDistanceLocal(const Vector3D & otherPointLocal) const
 {
 	return Vector3D::Distance(

@@ -31,7 +31,7 @@ namespace CalfFluidEngine {
 			upperCorner.y = std::max(point1.y, point2.y);
 			upperCorner.z = std::max(point1.z, point2.z);
 		}
-		T GetWidth() const{ upperCorner.x - lowerCorner.x; }
+		T GetWidth() const{ return upperCorner.x - lowerCorner.x; }
 		T GetHeight() const{ return upperCorner.y - lowerCorner.y; }
 		T GetDepth() const { return upperCorner.z - lowerCorner.z; }
 		T GetLength(size_t axis) const{ return upperCorner[axis] - lowerCorner[axis]; }

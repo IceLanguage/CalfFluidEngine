@@ -11,13 +11,13 @@ namespace CalfFluidEngine{
 		Vector3(const T x, const T y, const T z)
 			: x(x), y(y), z(z) {}
 
-		float operator[](unsigned int i) const{
+		T operator[](unsigned int i) const{
 			if (i == 0) return x;
 			if (i == 1) return y;
 			return z;
 		}
 
-		float& operator[](unsigned int i){
+		T& operator[](unsigned int i){
 			if (i == 0) return x;
 			if (i == 1) return y;
 			return z;
@@ -144,7 +144,7 @@ namespace CalfFluidEngine{
 			return (lhsV - rhsV).Magnitude();
 		}
 
-		float x, y, z;
+		T x, y, z;
 
 		const static Vector3 right;
 		const static Vector3 up;
@@ -165,7 +165,21 @@ namespace CalfFluidEngine{
 		return v * value;
 	}
 
-	
+	template <typename T>
+	Vector3<T> min(const Vector3<T>& a, const Vector3<T>& b) {
+		return Vector3<T>(
+			std::min(a.x, b.x), 
+			std::min(a.y, b.y),
+			std::min(a.z, b.z));
+	}
+
+	template <typename T>
+	Vector3<T> max(const Vector3<T>& a, const Vector3<T>& b) {
+		return Vector3<T>(
+			std::max(a.x, b.x),
+			std::max(a.y, b.y),
+			std::max(a.z, b.z));
+	}
 
 	typedef Vector3<float> Vector3F;
 

@@ -1,5 +1,5 @@
 #include "Plane3.h"
-
+#include <Constant.h>
 using namespace CalfFluidEngine;
 
 Plane3::Plane3()
@@ -45,4 +45,45 @@ SurfaceRayIntersection3 CalfFluidEngine::Plane3::closestIntersectionLocal(const 
 	}
 
 	return intersection;
+}
+
+BoundingBox3D CalfFluidEngine::Plane3::getBoundingBoxLocal() const
+{
+	static const double eps = kEpsilonD;
+	static const double dmax = kMaxD;
+	
+	Vector3D point = Vector3D::zero;
+	if (_normal.x != 0)
+	{
+		point.x = _NormalDotPoint / _normal.x;
+	}
+	else if(_normal.y != 0)
+	{
+		point.y = _NormalDotPoint / _normal.y;
+	}
+	else if (_normal.z != 0)
+	{
+		point.z = _NormalDotPoint / _normal.z;
+	}
+
+	if (std::fabs(Vector3D::Dot(_normal,Vector3D::right) - 1.0) < eps) {
+		return BoundingBox3D(
+			point - Vector3D(0, dmax, dmax),
+			point + Vector3D(0, dmax, dmax));
+	}
+	else if (std::fabs(Vector3D::Dot(_normal, Vector3D::up) - 1.0) < eps) {
+		return BoundingBox3D(
+			point - Vector3D(dmax, 0, dmax),
+			point + Vector3D(dmax, 0, dmax));
+	}
+	else if (std::fabs(Vector3D::Dot(_normal, Vector3D::forward) - 1.0) < eps) {
+		return BoundingBox3D(
+			point - Vector3D(dmax, dmax, 0),
+			point + Vector3D(dmax, dmax, 0));
+	}
+	else {
+		return BoundingBox3D(
+			Vector3D(dmax, dmax, dmax),
+			Vector3D(dmax, dmax, dmax));
+	}
 }

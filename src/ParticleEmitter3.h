@@ -12,6 +12,7 @@ namespace CalfFluidEngine {
 		void Update(double currentTimeInSeconds, double timeIntervalInSeconds);
 		void SetTarget(const std::shared_ptr<ParticleSystemData3>& particles);
 		std::shared_ptr<ParticleSystemData3> GetTarget() const { return _particles; }
+		
 	protected:
 		//**********************************************
 		//the function is called from ParticleEmitter3:Update();
