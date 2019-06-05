@@ -47,6 +47,8 @@ namespace CalfFluidEngine {
 		bool IsInside(const Vector3D& otherPoint) const;
 
 		BoundingBox3D GetBoundingBox() const;
+
+		double SignedDistance(const Vector3D& otherPoint) const;
 	protected:
 		//**********************************************
 		// Returns the closest point from the given point
@@ -78,6 +80,11 @@ namespace CalfFluidEngine {
 		// Returns the bounding box of this surface object in local frame.
 		//**********************************************
 		virtual BoundingBox3D getBoundingBoxLocal() const = 0;
+
+		//**********************************************
+		//Returns signed distance from the given point
+		//**********************************************
+		virtual double signedDistanceLocal(const Vector3D& otherPoint) const;
 	};
 }
 #endif

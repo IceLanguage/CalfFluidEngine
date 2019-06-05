@@ -181,6 +181,11 @@ namespace CalfFluidEngine{
 			std::max(a.z, b.z));
 	}
 
+	template <typename T>
+	Vector3<T> operator-(const Vector3<T>& a) {
+		return Vector3<T>(-a.x, -a.y, -a.z);
+	}
+
 	typedef Vector3<float> Vector3F;
 
 	typedef Vector3<double> Vector3D;

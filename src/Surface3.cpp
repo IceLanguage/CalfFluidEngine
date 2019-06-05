@@ -64,6 +64,11 @@ BoundingBox3D CalfFluidEngine::Surface3::GetBoundingBox() const
 	return transform.TransformBoundingBox(getBoundingBoxLocal());
 }
 
+double CalfFluidEngine::Surface3::SignedDistance(const Vector3D & otherPoint) const
+{
+	return signedDistanceLocal(transform.InverseTransformPoint(otherPoint));
+}
+
 double CalfFluidEngine::Surface3::closestDistanceLocal(const Vector3D & otherPointLocal) const
 {
 	return Vector3D::Distance(
@@ -77,5 +82,18 @@ bool CalfFluidEngine::Surface3::isInsideLocal(const Vector3D & otherPoint) const
 	Vector3D cpLocal = closestPointLocal(otherPoint);
 	Vector3D normalLocal = closestNormalLocal(otherPoint);
 	return Vector3D::Dot((otherPoint - cpLocal),normalLocal) < 0.0;
+}
+
+double CalfFluidEngine::Surface3::signedDistanceLocal(const Vector3D & otherPoint) const
+{
+	Vector3D x = GetClosestPoint(otherPoint);
+	Vector3D n = GetClosestNormal(otherPoint);
+	n = (isNormalFlipped) ? -n : n;
+	if (Vector3D::Dot(n,otherPoint - x) < 0.0) {
+		return -Vector3D::Distance(x, otherPoint);
+	}
+	else {
+		return Vector3D::Distance(x,otherPoint);
+	}
 }
 

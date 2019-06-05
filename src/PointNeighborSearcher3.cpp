@@ -102,6 +102,47 @@ Vector3<size_t> CalfFluidEngine::PointHashGridSearcher3::GetBucketIndex(const Ve
 	return bucketIndex;
 }
 
+bool CalfFluidEngine::PointHashGridSearcher3::HasNearbyPoint(const Vector3D & origin, double radius) const
+{
+	if (_buckets.empty()) {
+		return false;
+	}
+
+	size_t nearbyKeys[8];
+	getNearbyKeys(origin, nearbyKeys);
+
+	const double queryRadiusSquared = radius * radius;
+
+	for (int i = 0; i < 8; i++) {
+		const auto& bucket = _buckets[nearbyKeys[i]];
+		size_t numberOfPointsInBucket = bucket.size();
+
+		for (size_t j = 0; j < numberOfPointsInBucket; ++j) {
+			size_t pointIndex = bucket[j];
+			double rSquared = (_points[pointIndex] - origin).SquareMagnitude();
+			if (rSquared <= queryRadiusSquared) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+void CalfFluidEngine::PointHashGridSearcher3::Add(const Vector3D & point)
+{
+	if (_buckets.empty()) {
+		std::vector<Vector3D> arr = { point };
+		Build(arr);
+	}
+	else {
+		size_t i = _points.size();
+		_points.push_back(point);
+		size_t key = GetHashKeyFromPosition(point);
+		_buckets[key].push_back(i);
+	}
+}
+
 void CalfFluidEngine::PointHashGridSearcher3::getNearbyKeys(const Vector3D & position, size_t * nearbyKeys) const
 {
 	Vector3<size_t> originIndex = GetBucketIndex(position), nearbyBucketIndices[8];

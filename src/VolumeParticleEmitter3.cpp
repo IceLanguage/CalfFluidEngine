@@ -6,6 +6,22 @@ using namespace CalfFluidEngine;
 
 static const size_t kDefaultHashGridResolution = 64;
 
+// Returns randomly a point on a sphere.
+template <typename T>
+inline Vector3<T> uniformSampleSphere(T u1, T u2) {
+	T y = 1 - 2 * u1;
+	T r = std::sqrt(std::max<T>(0, 1 - y * y));
+	T phi = static_cast<T>(2 * kPiD) * u2;
+	T x = r * std::cos(phi);
+	T z = r * std::sin(phi);
+	return Vector3<T>(x, y, z);
+}
+
+double random(std::mt19937 rng) {
+	std::uniform_real_distribution<> d(0.0, 1.0);
+	return d(rng);
+}
+
 VolumeParticleEmitter3::VolumeParticleEmitter3()
 {
 }
@@ -48,9 +64,26 @@ void CalfFluidEngine::VolumeParticleEmitter3::emit(const std::shared_ptr<Particl
 	}
 
 	const double j = GetJitter();
+	const double maxJitterDist = 0.5 * j * _spacing;
 
 	if (_allowOverlapping || _isOneShot) 
 	{
+		_pointGenerator->ForEachPoint(region, _spacing, [&](const Vector3D& point) {
+			Vector3D randomDir = uniformSampleSphere(random(_rng), random(_rng));
+			Vector3D offset = maxJitterDist * randomDir;
+			Vector3D candidate = point + offset;
+			if (_surface->SignedDistance(candidate) <= 0.0) {
+				if (_numberOfEmittedParticles < _maxNumberOfParticles) {
+					newPositions->push_back(candidate);
+					++_numberOfEmittedParticles;
+				}
+				else {
+					return false;
+				}
+			}
+
+			return true;
+		});
 	}
 	else 
 	{
@@ -63,6 +96,25 @@ void CalfFluidEngine::VolumeParticleEmitter3::emit(const std::shared_ptr<Particl
 		if (!_allowOverlapping) {
 			neighborSearcher.Build(particles->GetPositions());
 		}
+
+		_pointGenerator->ForEachPoint(region, _spacing, [&](const Vector3D& point) {
+			Vector3D randomDir = uniformSampleSphere(random(_rng), random(_rng));
+			Vector3D offset = maxJitterDist * randomDir;
+			Vector3D candidate = point + offset;
+			if (_surface->SignedDistance(candidate) <= 0.0 &&
+				(!_allowOverlapping &&!neighborSearcher.HasNearbyPoint(candidate, _spacing))) {
+				if (_numberOfEmittedParticles < _maxNumberOfParticles) {
+					newPositions->push_back(candidate);
+					neighborSearcher.Add(candidate);
+					++_numberOfEmittedParticles;
+				}
+				else {
+					return false;
+				}
+			}
+
+			return true;
+		});
 	}
 
 	newVelocities->resize(newPositions->size());

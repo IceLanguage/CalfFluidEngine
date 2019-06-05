@@ -2,6 +2,8 @@
 #define _CalfFluidEngine_VolumeParticleEmitter3_
 #include <ParticleEmitter3.h>
 #include <BoundingBox3.h>
+#include <PointGenerator3.h>
+#include <random>
 namespace CalfFluidEngine {
 	class VolumeParticleEmitter3 final : public ParticleEmitter3
 	{
@@ -16,7 +18,10 @@ namespace CalfFluidEngine {
 		double GetJitter() const { return _jitter; }
 		void SetJitter(double newJitter){ _jitter = Clamp(newJitter, 0.0, 1.0); }
 		double GetSpacing() const { return _spacing; }
-		void setSpacing(double newSpacing) { _spacing = newSpacing; }
+		void SetSpacing(double newSpacing) { _spacing = newSpacing; }
+		void SetPointGenerator(const std::shared_ptr<PointGenerator3>& newPointsGen) { _pointGenerator = newPointsGen; }
+		void SetMaxNumberOfParticles(size_t newMaxNumberOfParticles) { _maxNumberOfParticles = newMaxNumberOfParticles; }
+		size_t GetMaxNumberOfParticles() const { return _maxNumberOfParticles; }
 	private:
 		void onUpdate(
 			double currentTimeInSeconds,
@@ -37,6 +42,9 @@ namespace CalfFluidEngine {
 		Vector3D _initialVel;
 		Vector3D _linearVel;
 		Vector3D _angularVel;
+		size_t _maxNumberOfParticles = kMaxSize;
+		std::mt19937 _rng;
+		std::shared_ptr<PointGenerator3> _pointGenerator;
 	};
 }
 #endif
