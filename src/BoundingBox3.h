@@ -105,9 +105,10 @@ namespace CalfFluidEngine {
 		{
 			BoundingBoxRayIntersection3<T> intersection;
 
-			T tMin = 0;
+			/*T tMin = 0;
 			T tMax = std::numeric_limits<T>::max();
-			const Vector3<T>& rayInvDir = Vector3<T>(1,1,1) / ray.direction;
+			const Vector3<T>& rayInvDir = Vector3<T>(1,1,1) / 
+				Vector3<T>(ray.direction.x, ray.direction.y, ray.direction.z);
 
 			for (int i = 0; i < 3; ++i) {
 				T tNear = (lowerCorner[i] - ray.origin[i]) * rayInvDir[i];
@@ -125,14 +126,14 @@ namespace CalfFluidEngine {
 
 			intersection.isIntersecting = true;
 
-			if (contains(ray.origin)) {
+			if (Contains(ray.origin)) {
 				intersection.tNear = tMax;
 				intersection.tFar = std::numeric_limits<T>::max();
 			}
 			else {
 				intersection.tNear = tMin;
 				intersection.tFar = tMax;
-			}
+			}*/
 
 			return intersection;
 		}

@@ -63,6 +63,10 @@ namespace CalfFluidEngine{
 			return Vector3(x / value, y / value, z / value);
 		}
 
+		Vector3 operator/(const Vector3 value) const {
+			return Vector3(x / value.x, y / value.y, z / value.z);
+		}
+
 		void operator*=(const Vector3& v){
 			x *= v.x;
 			y *= v.y;
@@ -144,6 +148,10 @@ namespace CalfFluidEngine{
 			return (lhsV - rhsV).Magnitude();
 		}
 
+		static Vector3 Clamp(const Vector3& v,const Vector3& minV, const Vector3& maxV)
+		{
+			return max(min(v, maxV), minV);
+		}
 		T x, y, z;
 
 		const static Vector3 right;

@@ -49,5 +49,21 @@ namespace CalfFluidEngine {
 		
 		double _frictionCoeffient = 0.0;
 	};
+
+	class RigidBodyCollider3 : public Collider3
+	{
+	public:
+		Vector3D linearVelocity;
+		Vector3D angularVelocity;
+		explicit RigidBodyCollider3(const std::shared_ptr<Surface3>& surface)
+		{
+			_surface = surface;
+		}
+		Vector3D VelocityAt(const Vector3D& point) const override
+		{
+			Vector3D r = point - _surface->transform.GetTranslation();
+			return linearVelocity + Vector3D::Cross(angularVelocity, r);
+		}
+	};
 }
 #endif

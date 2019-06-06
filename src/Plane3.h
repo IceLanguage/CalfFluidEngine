@@ -31,6 +31,7 @@ namespace CalfFluidEngine {
 			_NormalDotPoint = Vector3D::Dot(_normal, point0);
 		}
 		virtual bool Intersects(const Ray3D& ray) const override;
+		Vector3D GetNormal() const { return _normal; }
 	protected:
 		virtual Vector3D closestPointLocal(const Vector3D& otherPoint) const;
 		virtual Vector3D closestNormalLocal(const Vector3D& otherPoint) const;
