@@ -24,6 +24,7 @@ double random(std::mt19937 rng) {
 
 VolumeParticleEmitter3::VolumeParticleEmitter3()
 {
+	_pointGenerator = std::make_shared<BccLatticePointGenerator>();
 }
 
 

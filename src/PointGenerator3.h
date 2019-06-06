@@ -26,5 +26,14 @@ namespace CalfFluidEngine {
 			double spacing,
 			const std::function<bool(const Vector3D&)>& callback) const = 0;
 	};
+
+	class BccLatticePointGenerator final: public PointGenerator3
+	{
+	public:
+		virtual void ForEachPoint(
+			const BoundingBox3D& boundingBox,
+			double spacing,
+			const std::function<bool(const Vector3D&)>& callback) const;
+	};
 }
 #endif
