@@ -38,6 +38,18 @@ public:
 		cnpy::npy_save(filename, data.data(), dim, 1, "w");
 	}
 
+	template<typename T>
+	void SaveData(
+		const std::vector<T>& data,
+		size_t sizeX,size_t sizeY, const std::string& name) {
+		std::string filename = getFullFilePath(name);
+		unsigned int dim[2] = {
+			static_cast<unsigned int>(sizeY),
+			static_cast<unsigned int>(sizeX)
+		};
+		cnpy::npy_save(filename, data.data(), dim, 2, "w");
+	}
+
 	template<typename ParticleSystem>
 	void SaveParticleDataXY(
 		const std::shared_ptr<ParticleSystem>& particles,

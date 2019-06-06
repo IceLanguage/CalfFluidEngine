@@ -72,9 +72,6 @@
     <ClCompile Include="src\ParticleEmitter3.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\VolumeParticleEmitter3.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\Plane3.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -82,6 +79,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\PointGenerator3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VolumeParticleEmitter3.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -13,8 +13,20 @@ PointNeighborSearcher3::~PointNeighborSearcher3()
 
 CalfFluidEngine::PointHashGridSearcher3::PointHashGridSearcher3(const Vector3<size_t>& resolution, double gridSpacing)
 	:
-	_gridSpacing(gridSpacing), _resolution(resolution)
+	PointHashGridSearcher3(
+		resolution.x,
+		resolution.y,
+		resolution.z,
+		gridSpacing)
 {
+}
+
+CalfFluidEngine::PointHashGridSearcher3::PointHashGridSearcher3(size_t resolutionX, size_t resolutionY, size_t resolutionZ, double gridSpacing)
+	: _gridSpacing(gridSpacing), _resolution(Vector3<size_t>(resolutionX, resolutionY, resolutionZ))
+{
+	if (_resolution.x < 1)_resolution.x = 1;
+	if (_resolution.y < 1)_resolution.y = 1;
+	if (_resolution.z < 1)_resolution.z = 1;
 }
 
 void CalfFluidEngine::PointHashGridSearcher3::Build(const std::vector<Vector3D>& points)
@@ -70,21 +82,9 @@ size_t CalfFluidEngine::PointHashGridSearcher3::GetHashKeyFromPosition(const Vec
 
 size_t CalfFluidEngine::PointHashGridSearcher3::GetHashKeyFromBucketIndex(const Vector3<size_t>& bucketIndex) const {
 	Vector3<size_t> wrappedIndex = bucketIndex;
-	wrappedIndex.x = bucketIndex.x / _resolution.x;
-	wrappedIndex.y = bucketIndex.y / _resolution.y;
-	wrappedIndex.z = bucketIndex.z / _resolution.z;
-	wrappedIndex.x = bucketIndex.x - _resolution.x * wrappedIndex.x;
-	wrappedIndex.y = bucketIndex.y - _resolution.y * wrappedIndex.y;
-	wrappedIndex.z = bucketIndex.z - _resolution.z * wrappedIndex.z;
-	if (wrappedIndex.x < 0) {
-		wrappedIndex.x += _resolution.x;
-	}
-	if (wrappedIndex.y < 0) {
-		wrappedIndex.y += _resolution.y;
-	}
-	if (wrappedIndex.z < 0) {
-		wrappedIndex.z += _resolution.z;
-	}
+	wrappedIndex.x = bucketIndex.x % _resolution.x;
+	wrappedIndex.y = bucketIndex.y % _resolution.y;
+	wrappedIndex.z = bucketIndex.z % _resolution.z;
 	return (wrappedIndex.z 
 		* _resolution.y + wrappedIndex.y) 
 		* _resolution.x + wrappedIndex.x;
