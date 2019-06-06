@@ -22,6 +22,7 @@ namespace CalfFluidEngine {
 		void SetPointGenerator(const std::shared_ptr<PointGenerator3>& newPointsGen) { _pointGenerator = newPointsGen; }
 		void SetMaxNumberOfParticles(size_t newMaxNumberOfParticles) { _maxNumberOfParticles = newMaxNumberOfParticles; }
 		size_t GetMaxNumberOfParticles() const { return _maxNumberOfParticles; }
+		void SetBoundingBox3D(BoundingBox3D maxRegion) { _bounds = maxRegion; }
 	private:
 		void onUpdate(
 			double currentTimeInSeconds,

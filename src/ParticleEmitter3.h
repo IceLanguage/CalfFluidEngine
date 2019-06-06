@@ -25,7 +25,7 @@ namespace CalfFluidEngine {
 		//**********************************************
 		//Called when ParticleEmitter3::setTarget is executed.
 		//**********************************************
-		virtual void onSetTarget(const std::shared_ptr<ParticleSystemData3>& particles) = 0;
+		virtual void onSetTarget(const std::shared_ptr<ParticleSystemData3>& particles) {}
 	private:
 		typedef std::function<void(ParticleEmitter3*, double, double)>
 			OnBeginUpdateCallback;

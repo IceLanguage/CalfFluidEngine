@@ -67,3 +67,9 @@ double CalfFluidEngine::Sphere3::closestDistanceLocal(const Vector3D & otherPoin
 {
 	return std::fabs(Vector3D::Distance(center, otherPointLocal) - radius);
 }
+
+BoundingBox3D CalfFluidEngine::Sphere3::getBoundingBoxLocal() const
+{
+	Vector3D r(radius, radius, radius);
+	return BoundingBox3D(center - r, center + r);
+}

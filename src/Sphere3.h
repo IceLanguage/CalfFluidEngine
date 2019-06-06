@@ -13,8 +13,8 @@ namespace CalfFluidEngine {
 		Sphere3(
 			const Vector3D& center_, 
 			double radius_,
-			const Transform3& transform_, 
-			bool isNormalFlipped_)
+			const Transform3& transform_ = Transform3(), 
+			bool isNormalFlipped_ = false)
 			: Surface3(transform_, isNormalFlipped_),
 			center(center_),
 			radius(radius_) {}
@@ -28,6 +28,7 @@ namespace CalfFluidEngine {
 		virtual SurfaceRayIntersection3 closestIntersectionLocal(
 			const Ray3D& ray) const;
 		virtual double closestDistanceLocal(const Vector3D& otherPointLocal) const override;
+		virtual BoundingBox3D getBoundingBoxLocal() const;
 	};
 
 }
