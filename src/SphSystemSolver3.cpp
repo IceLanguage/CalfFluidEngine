@@ -168,7 +168,7 @@ void CalfFluidEngine::SphSystemSolver3::computePressure()
 	});
 }
 
-void CalfFluidEngine::SphSystemSolver3::accumulatePressureForce(const std::vector<Vector3D>& positions, const std::vector<double>& densities, const std::vector<double>& pressures, std::vector<Vector3D> pressureForces)
+void CalfFluidEngine::SphSystemSolver3::accumulatePressureForce(const std::vector<Vector3D>& positions, const std::vector<double>& densities, const std::vector<double>& pressures, std::vector<Vector3D>& pressureForces)
 {
 	auto particles = GetSphData();
 	size_t numberOfParticles = particles->GetNumberOfParticles();

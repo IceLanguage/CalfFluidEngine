@@ -34,7 +34,7 @@ namespace CalfFluidEngine {
 			const std::vector<Vector3D>& positions,
 			const std::vector<double>& densities,
 			const std::vector<double>& pressures,
-			std::vector<Vector3D> pressureForces);
+			std::vector<Vector3D>& pressureForces);
 		void computePseudoViscosity(double timeStepInSeconds);
 
 		//! Exponent component of equation - of - state(or Tait's equation).
