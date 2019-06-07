@@ -3,6 +3,7 @@
 #include <tbb\parallel_for.h>
 #include <tbb\blocked_range.h>
 #include <Constant.h>
+#include <PointGenerator3.h>
 using namespace CalfFluidEngine;
 
 SphSystemData3::SphSystemData3() : SphSystemData3(0)
@@ -14,6 +15,7 @@ CalfFluidEngine::SphSystemData3::SphSystemData3(size_t numberOfParticles)
 	_densityIdx = AddScalarData();
 	_pressureIdx = AddScalarData();
 
+	SetTargetSpacing(_targetSpacing);
 }
 
 
@@ -150,6 +152,47 @@ double CalfFluidEngine::SphSystemData3::GetKernelRadius() const
 	return _kernelRadius;
 }
 
+void CalfFluidEngine::SphSystemData3::SetParticleMass(double newMass)
+{
+	double incRatio = newMass / GetParticleMass();
+	_density *= incRatio;
+	ParticleSystemData3::SetParticleMass(newMass);
+}
+
 void CalfFluidEngine::SphSystemData3::computeMass()
 {
+	std::vector<Vector3D> points;
+	BccLatticePointGenerator pointsGenerator;
+	BoundingBox3D sampleBound(
+		Vector3D(
+			-1.5 * _kernelRadius,
+			-1.5 * _kernelRadius,
+			-1.5 * _kernelRadius),
+		Vector3D(
+			1.5 * _kernelRadius, 
+			1.5 * _kernelRadius,
+			1.5 * _kernelRadius)
+	);
+
+	pointsGenerator.Generate(sampleBound, _targetSpacing, &points);
+
+	double maxNumberDensity = 0.0;
+	SphStandardKernel3 kernel(_kernelRadius);
+
+	for (size_t i = 0; i < points.size(); ++i) {
+		const Vector3D& point = points[i];
+		double sum = 0.0;
+
+		for (size_t j = 0; j < points.size(); ++j) {
+			const Vector3D& neighborPoint = points[j];
+			sum += kernel(Vector3D::Distance(neighborPoint, point));
+		}
+
+		maxNumberDensity = std::max(maxNumberDensity, sum);
+	}
+
+
+	double newMass = _density / maxNumberDensity;
+
+	ParticleSystemData3::SetParticleMass(newMass);
 }

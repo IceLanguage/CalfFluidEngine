@@ -32,6 +32,8 @@ namespace CalfFluidEngine {
 
 		double GetDensity() const;
 		double GetKernelRadius() const;
+
+		void SetParticleMass(double newMass) override;
 	private:
 		//! Computes the mass based on the target density and spacing.
 		void computeMass();
@@ -39,7 +41,7 @@ namespace CalfFluidEngine {
 		size_t _pressureIdx;
 		size_t _densityIdx;
 		double _kernelRadius;
-		double _density;
+		double _density = 1000.0;
 		double _targetSpacing = 0.1;
 
 		//! Relative radius of SPH kernel.

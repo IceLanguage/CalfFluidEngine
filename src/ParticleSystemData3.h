@@ -46,7 +46,7 @@ namespace CalfFluidEngine {
 		double GetParticleRadius() const;
 		void SetParticleRadius(double newRadius);
 		double GetParticleMass() const;
-		void SetParticleMass(double newMass);
+		virtual void SetParticleMass(double newMass);
 
 		void BuildNeighborSearcher(double maxSearchRadius);
 		void BuildNeighborLists(double maxSearchRadius);
