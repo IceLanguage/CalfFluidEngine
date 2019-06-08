@@ -105,7 +105,7 @@ namespace CalfFluidEngine {
 		{
 			BoundingBoxRayIntersection3<T> intersection;
 
-			/*T tMin = 0;
+			T tMin = 0;
 			T tMax = std::numeric_limits<T>::max();
 			const Vector3<T>& rayInvDir = Vector3<T>(1,1,1) / 
 				Vector3<T>(ray.direction.x, ray.direction.y, ray.direction.z);
@@ -133,7 +133,7 @@ namespace CalfFluidEngine {
 			else {
 				intersection.tNear = tMin;
 				intersection.tFar = tMax;
-			}*/
+			}
 
 			return intersection;
 		}
@@ -196,7 +196,11 @@ namespace CalfFluidEngine {
 		//! Returns the clamped point.
 		Vector3<T> Clamp(const Vector3<T>& pt) const
 		{
-			return Clamp(pt, lowerCorner, upperCorner);
+			Vector3<T> res;
+			res.x = std::max(std::min(pt.x, upperCorner.x), lowerCorner.x);
+			res.y = std::max(std::min(pt.y, upperCorner.y), lowerCorner.y);
+			res.z = std::max(std::min(pt.z, upperCorner.z), lowerCorner.z);
+			return res; 
 		}
 
 	};

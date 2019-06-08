@@ -87,6 +87,9 @@
     <ClCompile Include="src\Box3.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\SurfaceSet3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -171,6 +174,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Box3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SurfaceSet3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BVH.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
