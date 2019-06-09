@@ -28,6 +28,11 @@ bool CalfFluidEngine::SurfaceSet3::Intersects(const Ray3D & ray) const
 	return result;
 }
 
+void CalfFluidEngine::SurfaceSet3::Update()
+{
+	buildBVH();
+}
+
 Vector3D CalfFluidEngine::SurfaceSet3::closestPointLocal(const Vector3D & otherPoint) const
 {
 	buildBVH();
@@ -119,6 +124,16 @@ bool CalfFluidEngine::SurfaceSet3::isInsideLocal(const Vector3D & otherPoint) co
 	}
 
 	return false;
+}
+
+double CalfFluidEngine::SurfaceSet3::signedDistanceLocal(const Vector3D & otherPoint) const
+{
+	double sdf = kMaxD;
+	for (const auto& surface : _surfaces) {
+		sdf = std::min(sdf, surface->SignedDistance(otherPoint));
+	}
+
+	return sdf;
 }
 
 void CalfFluidEngine::SurfaceSet3::buildBVH() const

@@ -14,6 +14,8 @@ namespace CalfFluidEngine {
 		std::vector<double>& GetPressures();
 		double GetTargetSpacing() const { return _targetSpacing; }
 		void SetTargetSpacing(double spacing);
+		void SetTargetDensity(double targetDensity);
+		void SetKernelRadius(double kernelRadius);
 		Vector3D Interpolate(
 			const Vector3D& origin,
 			const std::vector<Vector3D>& values) const;

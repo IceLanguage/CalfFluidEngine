@@ -45,9 +45,24 @@ std::vector<double>& CalfFluidEngine::SphSystemData3::GetPressures()
 
 void CalfFluidEngine::SphSystemData3::SetTargetSpacing(double spacing)
 {
-	SetParticleRadius(spacing);
+	ParticleSystemData3::SetParticleRadius(spacing);
 	_targetSpacing = spacing;
 	_kernelRadius = _kernelRadiusOverTargetSpacing * _targetSpacing;
+	computeMass();
+}
+
+void CalfFluidEngine::SphSystemData3::SetTargetDensity(double targetDensity)
+{
+	_density = targetDensity;
+
+	computeMass();
+}
+
+void CalfFluidEngine::SphSystemData3::SetKernelRadius(double kernelRadius)
+{
+	_kernelRadius = kernelRadius;
+	_targetSpacing = kernelRadius / _kernelRadiusOverTargetSpacing;
+
 	computeMass();
 }
 

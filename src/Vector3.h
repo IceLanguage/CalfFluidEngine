@@ -106,9 +106,9 @@ namespace CalfFluidEngine{
 		}
 
 		void Normalize(){
-			float l = Magnitude();
+			T l = Magnitude();
 			if (l > 0){
-				(*this) *= ((float)1) / l;
+				(*this) *= ((T)1) / l;
 			}
 		}
 
@@ -129,7 +129,7 @@ namespace CalfFluidEngine{
 				lhsV.x * rhsV.y - lhsV.y * rhsV.x);
 		}
 
-		static float Dot(const Vector3& lhsV, const Vector3& rhsV){
+		static T Dot(const Vector3& lhsV, const Vector3& rhsV){
 			return lhsV.x * rhsV.x + lhsV.y * rhsV.y + lhsV.z * rhsV.z;
 		}
 

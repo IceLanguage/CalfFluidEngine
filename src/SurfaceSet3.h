@@ -18,6 +18,7 @@ namespace CalfFluidEngine {
 			return _surfaces[i];
 		}
 		virtual bool Intersects(const Ray3D& ray) const override;
+		void Update() override;
 	private:
 		virtual Vector3D closestPointLocal(const Vector3D& otherPoint) const;
 		virtual Vector3D closestNormalLocal(const Vector3D& otherPoint) const;
@@ -26,6 +27,7 @@ namespace CalfFluidEngine {
 		virtual BoundingBox3D getBoundingBoxLocal() const;
 		virtual double closestDistanceLocal(const Vector3D& otherPointLocal) const override;
 		virtual bool isInsideLocal(const Vector3D& otherPoint) const override;
+		double signedDistanceLocal(const Vector3D& otherPoint) const override;
 		void buildBVH() const;
 		std::vector<std::shared_ptr<Surface3>> _surfaces;
 		mutable BVH3<std::shared_ptr<Surface3>> _bvh;

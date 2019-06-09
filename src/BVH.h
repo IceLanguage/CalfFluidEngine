@@ -365,7 +365,8 @@ namespace CalfFluidEngine {
 			size_t d1 = build(_nodes[nodeIndex].child, itemIndices + midPoint,
 				nItems - midPoint, currentDepth + 1);
 
-			return std::max(d0, d1);
+
+			return d0 > d1 ? d0 : d1;
 		}
 	};
 }

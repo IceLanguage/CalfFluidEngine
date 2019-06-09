@@ -19,6 +19,9 @@ namespace CalfFluidEngine {
 			_pseudoViscosityCoefficient
 				= std::max(newPseudoViscosityCoefficient, 0.0);
 		}
+		void SetTimeStepLimitScale(double newScale) {
+			_timeStepLimitScale = std::max(newScale, 0.0);
+		}
 		std::shared_ptr<SphSystemData3> GetSphData() const;
 	protected:
 		virtual void accumulateForces(double timeIntervalInSeconds) override;
