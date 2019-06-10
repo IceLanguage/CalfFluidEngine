@@ -50,6 +50,8 @@ namespace CalfFluidEngine {
 		BoundingBox3D GetBoundingBox() const;
 
 		double SignedDistance(const Vector3D& otherPoint) const;
+		
+		virtual bool IsBounded() const { return true; }
 	protected:
 		//**********************************************
 		// Returns the closest point from the given point

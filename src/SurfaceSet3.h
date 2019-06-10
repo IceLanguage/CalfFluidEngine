@@ -19,6 +19,7 @@ namespace CalfFluidEngine {
 		}
 		virtual bool Intersects(const Ray3D& ray) const override;
 		void Update() override;
+		virtual bool IsBounded() const override;
 	private:
 		virtual Vector3D closestPointLocal(const Vector3D& otherPoint) const;
 		virtual Vector3D closestNormalLocal(const Vector3D& otherPoint) const;
@@ -30,6 +31,7 @@ namespace CalfFluidEngine {
 		double signedDistanceLocal(const Vector3D& otherPoint) const override;
 		void buildBVH() const;
 		std::vector<std::shared_ptr<Surface3>> _surfaces;
+		std::vector<std::shared_ptr<Surface3>> _unboundedSurfaces;
 		mutable BVH3<std::shared_ptr<Surface3>> _bvh;
 	};
 }

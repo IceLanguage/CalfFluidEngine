@@ -58,7 +58,7 @@ void CalfFluidEngine::VolumeParticleEmitter3::emit(const std::shared_ptr<Particl
 	_surface->Update();
 
 	BoundingBox3D region = _bounds;
-	if (_surface != nullptr) {
+	if (_surface->IsBounded()) {
 		BoundingBox3D surfaceBox = _surface->GetBoundingBox();
 		region.lowerCorner = max(region.lowerCorner, surfaceBox.lowerCorner);
 		region.upperCorner = min(region.upperCorner, surfaceBox.upperCorner);

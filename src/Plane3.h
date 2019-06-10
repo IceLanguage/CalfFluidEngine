@@ -32,6 +32,7 @@ namespace CalfFluidEngine {
 		}
 		virtual bool Intersects(const Ray3D& ray) const override;
 		Vector3D GetNormal() const { return _normal; }
+		virtual bool IsBounded() const override { return false; }
 	protected:
 		virtual Vector3D closestPointLocal(const Vector3D& otherPoint) const;
 		virtual Vector3D closestNormalLocal(const Vector3D& otherPoint) const;
