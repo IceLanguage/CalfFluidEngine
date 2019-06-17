@@ -28,7 +28,7 @@ namespace CalfFluidEngine{
 		virtual void onUpdate(const Frame& frame) override final;
 
 		//**********************************************
-		//the function is called from Animation:imeStep(double);
+		//the function is called from Animation:timeStep(double);
 		//This function is called for each time-step;
 		//**********************************************
 		virtual void onTimeStep(double timeIntervalInSeconds) = 0;

@@ -121,7 +121,7 @@ Vector3D CalfFluidEngine::SphSystemData3::GradientAt(size_t i, const std::vector
 	auto& d = GetDensities();
 	const auto& neighbors = GetNeighborLists()[i];
 	Vector3D origin = p[i];
-	SphStandardKernel3 kernel(_kernelRadius);
+	SphSpikyKernel3 kernel(_kernelRadius);
 	const double m = GetParticleMass();
 
 	for (size_t j : neighbors) {
@@ -145,7 +145,7 @@ double CalfFluidEngine::SphSystemData3::LaplacianAt(size_t i, const std::vector<
 	auto& d = GetDensities();
 	const auto& neighbors = GetNeighborLists()[i];
 	Vector3D origin = p[i];
-	SphStandardKernel3 kernel(_kernelRadius);
+	SphSpikyKernel3 kernel(_kernelRadius);
 	const double m = GetParticleMass();
 
 	for (size_t j : neighbors) {
