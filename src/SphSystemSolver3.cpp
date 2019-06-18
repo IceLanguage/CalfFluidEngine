@@ -175,7 +175,7 @@ void CalfFluidEngine::SphSystemSolver3::accumulatePressureForce(const std::vecto
 
 	double mass = particles->GetParticleMass();
 	const double massSquared = mass * mass;
-	const SphStandardKernel3 kernel(particles->GetKernelRadius());
+	const SphSpikyKernel3 kernel(particles->GetKernelRadius());
 
 	tbb::parallel_for(
 		tbb::blocked_range<size_t>(0, numberOfParticles),
