@@ -29,15 +29,20 @@ namespace CalfFluidEngine {
 		virtual void onTimeStepEnd(double timeStepInSeconds) override;
 		virtual unsigned int getNumberOfSubTimeSteps(
 			double timeIntervalInSeconds) const override;
-	private:
-		void accumulateViscosityForce();
-		void accumulatePressureForce(double timeStepInSeconds);
-		void computePressure();
+		virtual void accumulatePressureForce(double timeStepInSeconds);
 		void accumulatePressureForce(
 			const std::vector<Vector3D>& positions,
 			const std::vector<double>& densities,
 			const std::vector<double>& pressures,
 			std::vector<Vector3D>& pressureForces);
+		//! Negative pressure scaling factor.
+		//! Zero means clamping. One means do nothing.
+		double _negativePressureScale = 0.0;
+	private:
+		void accumulateViscosityForce();
+		
+		void computePressure();
+		
 		void computePseudoViscosity(double timeStepInSeconds);
 
 		//! Exponent component of equation - of - state(or Tait's equation).
@@ -47,10 +52,6 @@ namespace CalfFluidEngine {
 		//! Ideally, it should be the actual speed of sound in the fluid, but in
 		//! practice, use lower value to trace-off performance and compressibility.
 		double _speedOfSound = 100.0;
-
-		//! Negative pressure scaling factor.
-		//! Zero means clamping. One means do nothing.
-		double _negativePressureScale = 0.0;
 
 		double _viscosityCoefficient = 0.01;
 

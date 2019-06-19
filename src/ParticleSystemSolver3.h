@@ -32,7 +32,10 @@ namespace CalfFluidEngine {
 		void onTimeStep(double timeIntervalInSeconds) override;
 		virtual void onInitialize() override;
 		void setParticleSystemData(const std::shared_ptr<ParticleSystemData3>& newParticles);
-		
+		void resolveCollision(
+			std::vector<Vector3D> newPositions,
+			std::vector<Vector3D> newVelocities);
+
 		//**********************************************
 		//the function is called in ParticleSystemSolver3:timeStepStart(double);
 		// Called when a time-step is about to begin;

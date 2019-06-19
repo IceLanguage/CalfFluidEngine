@@ -135,24 +135,7 @@ void CalfFluidEngine::ParticleSystemSolver3::timeIntegration(double timeInterval
 
 void CalfFluidEngine::ParticleSystemSolver3::resolveCollision()
 {
-	if (_collider != nullptr) {
-		size_t numberOfParticles = _particleSystemData->GetNumberOfParticles();
-		const double radius = _particleSystemData->GetParticleRadius();
-
-		tbb::parallel_for(
-			tbb::blocked_range<size_t>(size_t(0), numberOfParticles),
-			[&](const tbb::blocked_range<size_t> & b) {
-			for (size_t i = b.begin(); i != b.end(); ++i)
-			{
-				_collider->ResolveCollision(
-					radius,
-					_restitutionCoefficient,
-					&_newPositions[i],
-					&_newVelocities[i]);
-			}
-				
-		});
-	}
+	resolveCollision(_newPositions, _newVelocities);
 }
 
 void CalfFluidEngine::ParticleSystemSolver3::updateCollider(double timeStepInSeconds)
@@ -205,5 +188,26 @@ void CalfFluidEngine::ParticleSystemSolver3::onInitialize()
 void CalfFluidEngine::ParticleSystemSolver3::setParticleSystemData(const std::shared_ptr<ParticleSystemData3>& newParticles)
 {
 	_particleSystemData = newParticles;
+}
+
+void CalfFluidEngine::ParticleSystemSolver3::resolveCollision(std::vector<Vector3D> newPositions, std::vector<Vector3D> newVelocities)
+{
+	if (_collider != nullptr) {
+		size_t numberOfParticles = _particleSystemData->GetNumberOfParticles();
+		const double radius = _particleSystemData->GetParticleRadius();
+
+		tbb::parallel_for(
+			tbb::blocked_range<size_t>(size_t(0), numberOfParticles),
+			[&](const tbb::blocked_range<size_t> & b) {
+			for (size_t i = b.begin(); i != b.end(); ++i)
+			{
+				_collider->ResolveCollision(
+					radius,
+					_restitutionCoefficient,
+					&newPositions[i],
+					&newVelocities[i]);
+			}
+		});
+	}
 }
 

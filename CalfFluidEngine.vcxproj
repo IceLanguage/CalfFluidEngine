@@ -165,6 +165,7 @@
     <ClCompile Include="src\ParticleEmitter3.cpp" />
     <ClCompile Include="src\ParticleSystemData3.cpp" />
     <ClCompile Include="src\ParticleSystemSolver3.cpp" />
+    <ClCompile Include="src\PCISPHSolver3.cpp" />
     <ClCompile Include="src\PhysicsAnimation.cpp" />
     <ClCompile Include="src\Plane3.cpp" />
     <ClCompile Include="src\PointGenerator3.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="src\ParticleEmitter3.h" />
     <ClInclude Include="src\ParticleSystemData3.h" />
     <ClInclude Include="src\ParticleSystemSolver3.h" />
+    <ClInclude Include="src\PCISPHSolver3.h" />
     <ClInclude Include="src\PhysicsAnimation.h" />
     <ClInclude Include="src\Plane3.h" />
     <ClInclude Include="src\PointGenerator3.h" />
