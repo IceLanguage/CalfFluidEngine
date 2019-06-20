@@ -190,7 +190,7 @@ void CalfFluidEngine::ParticleSystemSolver3::setParticleSystemData(const std::sh
 	_particleSystemData = newParticles;
 }
 
-void CalfFluidEngine::ParticleSystemSolver3::resolveCollision(std::vector<Vector3D> newPositions, std::vector<Vector3D> newVelocities)
+void CalfFluidEngine::ParticleSystemSolver3::resolveCollision(std::vector<Vector3D>& newPositions, std::vector<Vector3D>& newVelocities)
 {
 	if (_collider != nullptr) {
 		size_t numberOfParticles = _particleSystemData->GetNumberOfParticles();

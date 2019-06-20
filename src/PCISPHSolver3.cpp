@@ -129,6 +129,18 @@ void CalfFluidEngine::PCISPHSolver3::accumulatePressureForce(double timeStepInSe
 	});
 }
 
+void CalfFluidEngine::PCISPHSolver3::onTimeStepStart(double timeStepInSeconds)
+{
+	SphSystemSolver3::onTimeStepStart(timeStepInSeconds);
+
+	// Allocate temp buffers
+	size_t numberOfParticles = GetSphData()->GetNumberOfParticles();
+	_tempPositions.resize(numberOfParticles);
+	_tempVelocities.resize(numberOfParticles);
+	_pressureForces.resize(numberOfParticles);
+	_densityErrors.resize(numberOfParticles);
+}
+
 double CalfFluidEngine::PCISPHSolver3::computeDelta(double timeStepInSeconds)
 {
 	auto particles = GetSphData();

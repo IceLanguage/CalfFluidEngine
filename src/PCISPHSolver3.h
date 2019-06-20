@@ -9,6 +9,7 @@ namespace CalfFluidEngine {
 		virtual ~PCISPHSolver3();
 	protected:
 		virtual void accumulatePressureForce(double timeStepInSeconds) override;
+		virtual void onTimeStepStart(double timeStepInSeconds) override;
 	private:
 		double computeDelta(double timeStepInSeconds);
 		double computeBeta(double timeStepInSeconds);
