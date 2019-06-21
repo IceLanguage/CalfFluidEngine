@@ -1,11 +1,32 @@
 #include "Grid3.h"
 
+using namespace CalfFluidEngine;
+
 CalfFluidEngine::Grid3::Grid3()
 {
 }
 
 CalfFluidEngine::Grid3::~Grid3()
 {
+}
+
+const double & CalfFluidEngine::Grid3::operator()(size_t i, size_t j, size_t k) const
+{
+	return _data(i, j, k);
+}
+
+double & CalfFluidEngine::Grid3::operator()(size_t i, size_t j, size_t k)
+{
+	return _data(i, j, k);
+}
+
+std::function<Vector3D(size_t, size_t, size_t)> CalfFluidEngine::Grid3::GetCellCenterPosition() const
+{
+	Vector3D h = _gridSpacing;
+	Vector3D o = _origin;
+	return [h, o](size_t i, size_t j, size_t k) {
+		return o + h * Vector3D(i + 0.5, j + 0.5, k + 0.5);
+	};
 }
 
 void CalfFluidEngine::Grid3::setSizeParameters(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & origin)
@@ -23,6 +44,10 @@ void CalfFluidEngine::Grid3::setSizeParameters(const Vector3<size_t>& resolution
 	_boundingBox = BoundingBox3D(origin, origin + gridSpacing * resolutionD);
 }
 
+CalfFluidEngine::ScalarGrid3::ScalarGrid3()
+{
+}
+
 CalfFluidEngine::ScalarGrid3::~ScalarGrid3()
 {
 }
@@ -37,19 +62,6 @@ void CalfFluidEngine::ScalarGrid3::Resize(size_t resolutionX, size_t resolutionY
 void CalfFluidEngine::ScalarGrid3::Resize(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & origin, double initialValue)
 {
 	setSizeParameters(resolution, gridSpacing, origin);
-
-	std::vector<double> grid;
-	grid.resize(size.x * size.y * size.z, initialValue);
-	grid._size = size;
-	size_t iMin = std::min(size.x, _size.x);
-	size_t jMin = std::min(size.y, _size.y);
-	size_t kMin = std::min(size.z, _size.z);
-	for (size_t k = 0; k < kMin; ++k) {
-		for (size_t j = 0; j < jMin; ++j) {
-			for (size_t i = 0; i < iMin; ++i) {
-				grid(i, j, k) = at(i, j, k);
-			}
-		}
-	}
-	resetSampler();
+	Vector3<size_t> size = GetDataSize();
+	_data.Resize(size, initialValue);
 }

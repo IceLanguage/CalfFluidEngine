@@ -194,6 +194,9 @@
     <ClInclude Include="src\Grid3.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Array3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

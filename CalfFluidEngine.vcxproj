@@ -185,6 +185,7 @@
     <ClInclude Include="External\cnpy\cnpy.h" />
     <ClInclude Include="External\pystring\pystring.h" />
     <ClInclude Include="src\Animation.h" />
+    <ClInclude Include="src\Array3.h" />
     <ClInclude Include="src\BoundingBox3.h" />
     <ClInclude Include="src\Box3.h" />
     <ClInclude Include="src\BVH.h" />

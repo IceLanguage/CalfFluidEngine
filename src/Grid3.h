@@ -3,7 +3,7 @@
 #include <Vector3.h>
 #include <BoundingBox3.h>
 #include <Field3.h>
-#include <vector>
+#include <Array3.h>
 namespace CalfFluidEngine {
 	class Grid3
 	{
@@ -14,12 +14,15 @@ namespace CalfFluidEngine {
 		const Vector3D& GetOrigin() const { return _origin; }
 		const Vector3D& GetGridSpacing() const { return _gridSpacing; }
 		const BoundingBox3D& GetBoundingBox() const { return _boundingBox; }
+		const double& operator()(size_t i, size_t j, size_t k) const;
+		double& operator()(size_t i, size_t j, size_t k);
+		std::function<Vector3D(size_t, size_t, size_t)> GetCellCenterPosition() const;
 	protected:
 		void setSizeParameters(
 			const Vector3<size_t>& resolution, 
 			const Vector3D& gridSpacing,
 			const Vector3D& origin);
-		std::vector<double> _data;
+		Array3<double> _data;
 	private:
 		Vector3<size_t> _resolution;
 		Vector3D _gridSpacing = Vector3D(1.0, 1.0, 1.0);
@@ -32,6 +35,12 @@ namespace CalfFluidEngine {
 	public:
 		ScalarGrid3();
 		virtual ~ScalarGrid3();
+
+		//**********************************************
+		//Returns the size of the grid data.
+		//equal to the grid resolution if the data is not stored at cell-center.
+		//**********************************************
+		virtual Vector3<size_t> GetDataSize() const = 0;
 
 		void Resize(
 			size_t resolutionX,
