@@ -4,6 +4,7 @@
 #include <BoundingBox3.h>
 #include <Field3.h>
 #include <Array3.h>
+#include <memory>
 namespace CalfFluidEngine {
 	class Grid3
 	{
@@ -262,6 +263,36 @@ namespace CalfFluidEngine {
 			const Vector3D& initialValue = Vector3D::zero);
 		virtual Vector3<size_t> GetDataSize() const override;
 		virtual Vector3D GetDataOrigin() const override;
+	};
+
+	class ScalarGridBuilder3 {
+	public:
+		ScalarGridBuilder3();
+		virtual ~ScalarGridBuilder3();
+
+		//**********************************************
+		//Returns 3-D scalar grid with given parameters.
+		//**********************************************
+		virtual std::shared_ptr<ScalarGrid3> Build(
+			const Vector3<size_t>& resolution,
+			const Vector3D& gridSpacing,
+			const Vector3D& gridOrigin,
+			double initialVal) const = 0;
+	};
+
+	class VectorGridBuilder3 {
+	public:
+		VectorGridBuilder3();
+		virtual ~VectorGridBuilder3();
+
+		//**********************************************
+		//Returns 3-D Vector grid with given parameters.
+		//**********************************************
+		virtual std::shared_ptr<VectorGrid3> Build(
+			const Vector3<size_t>& resolution,
+			const Vector3D& gridSpacing,
+			const Vector3D& gridOrigin,
+			const Vector3D& initialVal) const = 0;
 	};
 }
 #endif

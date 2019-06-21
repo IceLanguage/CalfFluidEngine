@@ -310,3 +310,19 @@ Vector3D CalfFluidEngine::VertexCenteredVectorGrid3::GetDataOrigin() const
 {
 	return GetOrigin();
 }
+
+CalfFluidEngine::ScalarGridBuilder3::ScalarGridBuilder3()
+{
+}
+
+CalfFluidEngine::ScalarGridBuilder3::~ScalarGridBuilder3()
+{
+}
+
+CalfFluidEngine::VectorGridBuilder3::VectorGridBuilder3()
+{
+}
+
+CalfFluidEngine::VectorGridBuilder3::~VectorGridBuilder3()
+{
+}
