@@ -42,6 +42,11 @@ namespace CalfFluidEngine {
 		//**********************************************
 		virtual Vector3<size_t> GetDataSize() const = 0;
 
+		//**********************************************
+		//Returns the origin of the grid data.
+		//**********************************************
+		virtual Vector3D GetDataOrigin() const = 0;
+
 		void Resize(
 			size_t resolutionX,
 			size_t resolutionY,
@@ -57,8 +62,206 @@ namespace CalfFluidEngine {
 		void Resize(
 			const Vector3<size_t>& resolution,
 			const Vector3D& gridSpacing = Vector3D(1, 1, 1),
-			const Vector3D& origin = Vector3D(),
+			const Vector3D& origin = Vector3D::zero,
 			double initialValue = 0.0);
+	};
+
+	class VectorGrid3 : public VectorField3, public Grid3 
+	{
+	public:
+		VectorGrid3();
+		virtual ~VectorGrid3();
+		void Resize(
+			size_t resolutionX,
+			size_t resolutionY,
+			size_t resolutionZ,
+			double gridSpacingX = 1.0,
+			double gridSpacingY = 1.0,
+			double gridSpacingZ = 1.0,
+			double originX = 0.0,
+			double originY = 0.0,
+			double originZ = 0.0,
+			double initialValueX = 0.0,
+			double initialValueY = 0.0,
+			double initialValueZ = 0.0);
+
+		void Resize(
+			const Vector3<size_t>& resolution,
+			const Vector3D& gridSpacing = Vector3D(1, 1, 1),
+			const Vector3D& origin = Vector3D::zero,
+			const Vector3D& initialValue = Vector3D::zero);
+	protected:
+		//**********************************************
+		//Invoked when the resizing happens.
+		//The overriding class should allocate the internal storage based on its data layout scheme.
+		//**********************************************
+		virtual void onResize(
+			const Vector3<size_t>& resolution,
+			const Vector3D& gridSpacing,
+			const Vector3D& origin,
+			const Vector3D& initialValue) = 0;
+	};
+
+	// the class defines the data point at the
+	// center of a grid cell
+	class CellCenteredScalarGrid3 final : public ScalarGrid3
+	{
+	public:
+		CellCenteredScalarGrid3();
+		CellCenteredScalarGrid3(
+			size_t resolutionX,
+			size_t resolutionY,
+			size_t resolutionZ,
+			double gridSpacingX = 1.0,
+			double gridSpacingY = 1.0,
+			double gridSpacingZ = 1.0,
+			double originX = 0.0,
+			double originY = 0.0,
+			double originZ = 0.0,
+			double initialValue = 0.0);
+		CellCenteredScalarGrid3(
+			const Vector3<size_t>& resolution,
+			const Vector3D& gridSpacing = Vector3D(1.0, 1.0, 1.0),
+			const Vector3D& origin = Vector3D::zero,
+			double initialValue = 0.0);
+		virtual Vector3<size_t> GetDataSize() const override;
+		virtual Vector3D GetDataOrigin() const override;
+	};
+
+	//the class defines the data point at the grid vertices (corners). 
+	//Thus, A x B x C grid resolution will have (A+1) x (B+1) x (C+1) data points.
+	class VertexCenteredScalarGrid3 final : public ScalarGrid3 {
+	public:
+		VertexCenteredScalarGrid3();
+		VertexCenteredScalarGrid3(
+			size_t resolutionX,
+			size_t resolutionY,
+			size_t resolutionZ,
+			double gridSpacingX = 1.0,
+			double gridSpacingY = 1.0,
+			double gridSpacingZ = 1.0,
+			double originX = 0.0,
+			double originY = 0.0,
+			double originZ = 0.0,
+			double initialValue = 0.0);
+		VertexCenteredScalarGrid3(
+			const Vector3<size_t>& resolution,
+			const Vector3D& gridSpacing = Vector3D(1.0, 1.0, 1.0),
+			const Vector3D& origin = Vector3D::zero,
+			double initialValue = 0.0);
+		virtual Vector3<size_t> GetDataSize() const override;
+		virtual Vector3D GetDataOrigin() const override;
+	};
+
+
+	//This class implements face-centered grid which is also known as
+	//marker-and-cell (MAC) or staggered grid. This vector grid stores 
+	//each vector component at face center.
+	class FaceCenteredGrid3 final : public VectorGrid3 {
+	public:
+		FaceCenteredGrid3();
+		FaceCenteredGrid3(size_t resolutionX, size_t resolutionY,
+			size_t resolutionZ, double gridSpacingX = 1.0,
+			double gridSpacingY = 1.0, double gridSpacingZ = 1.0,
+			double originX = 0.0, double originY = 0.0,
+			double originZ = 0.0, double initialValueU = 0.0,
+			double initialValueV = 0.0, double initialValueW = 0.0);
+		FaceCenteredGrid3(const Vector3<size_t>& resolution,
+			const Vector3D& gridSpacing = Vector3D(1.0, 1.0, 1.0),
+			const Vector3D& origin = Vector3D::zero,
+			const Vector3D& initialValue = Vector3D::zero);
+		double& u(size_t i, size_t j, size_t k);
+		const double& u(size_t i, size_t j, size_t k) const;
+		double& v(size_t i, size_t j, size_t k);
+		const double& v(size_t i, size_t j, size_t k) const;
+		double& w(size_t i, size_t j, size_t k);
+		const double& w(size_t i, size_t j, size_t k) const;
+	protected:
+		void onResize(const Vector3<size_t>& resolution, const Vector3D& gridSpacing,
+			const Vector3D& origin, const Vector3D& initialValue) final;
+	private:
+		Array3<double> _dataU;
+		Array3<double> _dataV;
+		Array3<double> _dataW;
+		Vector3D _dataOriginU;
+		Vector3D _dataOriginV;
+		Vector3D _dataOriginW;
+	};
+
+	class CollocatedVectorGrid3 : public VectorGrid3 {
+	public:
+		CollocatedVectorGrid3();
+		virtual ~CollocatedVectorGrid3();
+		//**********************************************
+		//Returns the actual data point size.
+		//**********************************************
+		virtual Vector3<size_t> GetDataSize() const = 0;
+
+		//**********************************************
+		//Returns the origin of the grid data.
+		//**********************************************
+		virtual Vector3D GetDataOrigin() const = 0;
+
+		const Vector3D& operator()(size_t i, size_t j, size_t k) const;
+		Vector3D& operator()(size_t i, size_t j, size_t k);
+	protected:
+		void onResize(
+			const Vector3<size_t>& resolution,
+			const Vector3D& gridSpacing,
+			const Vector3D& origin,
+			const Vector3D& initialValue) final;
+	private:
+		Array3<Vector3D> _data;
+	};
+
+	class CellCenteredVectorGrid3 final : public CollocatedVectorGrid3 {
+	public:
+		CellCenteredVectorGrid3();
+		CellCenteredVectorGrid3(
+			size_t resolutionX,
+			size_t resolutionY,
+			size_t resolutionZ,
+			double gridSpacingX = 1.0,
+			double gridSpacingY = 1.0,
+			double gridSpacingZ = 1.0,
+			double originX = 0.0,
+			double originY = 0.0,
+			double originZ = 0.0,
+			double initialValueU = 0.0,
+			double initialValueV = 0.0,
+			double initialValueW = 0.0);
+		CellCenteredVectorGrid3(
+			const Vector3<size_t>& resolution,
+			const Vector3D& gridSpacing = Vector3D(1.0, 1.0, 1.0),
+			const Vector3D& origin = Vector3D::zero,
+			const Vector3D& initialValue = Vector3D::zero);
+		virtual Vector3<size_t> GetDataSize() const override;
+		virtual Vector3D GetDataOrigin() const override;
+	};
+
+	class VertexCenteredVectorGrid3 final : public CollocatedVectorGrid3 {
+	public:
+		VertexCenteredVectorGrid3();
+		VertexCenteredVectorGrid3(
+			size_t resolutionX,
+			size_t resolutionY,
+			size_t resolutionZ,
+			double gridSpacingX = 1.0,
+			double gridSpacingY = 1.0,
+			double gridSpacingZ = 1.0,
+			double originX = 0.0,
+			double originY = 0.0,
+			double originZ = 0.0,
+			double initialValueU = 0.0,
+			double initialValueV = 0.0,
+			double initialValueW = 0.0);
+		VertexCenteredVectorGrid3(
+			const Vector3<size_t>& resolution,
+			const Vector3D& gridSpacing = Vector3D(1.0, 1.0, 1.0),
+			const Vector3D& origin = Vector3D::zero,
+			const Vector3D& initialValue = Vector3D::zero);
+		virtual Vector3<size_t> GetDataSize() const override;
+		virtual Vector3D GetDataOrigin() const override;
 	};
 }
 #endif
