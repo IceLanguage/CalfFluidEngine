@@ -66,6 +66,16 @@ void CalfFluidEngine::ScalarGrid3::Resize(const Vector3<size_t>& resolution, con
 	_data.Resize(size, initialValue);
 }
 
+Vector3D CalfFluidEngine::ScalarGrid3::GradientAtDataPoint(size_t i, size_t j, size_t k) const
+{
+	return Gradient3(_data, GetGridSpacing(), i, j, k);
+}
+
+Vector3D CalfFluidEngine::ScalarGrid3::Gradient(const Vector3D & x) const
+{
+	return Vector3D();
+}
+
 CalfFluidEngine::VectorGrid3::VectorGrid3()
 {
 }

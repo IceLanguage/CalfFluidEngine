@@ -203,6 +203,9 @@
     <ClInclude Include="src\GridSystemData3.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\ArraySampler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

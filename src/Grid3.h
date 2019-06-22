@@ -65,6 +65,9 @@ namespace CalfFluidEngine {
 			const Vector3D& gridSpacing = Vector3D(1, 1, 1),
 			const Vector3D& origin = Vector3D::zero,
 			double initialValue = 0.0);
+
+		Vector3D GradientAtDataPoint(size_t i, size_t j, size_t k) const;
+		virtual Vector3D Gradient(const Vector3D& x) const override;
 	};
 
 	class VectorGrid3 : public VectorField3, public Grid3 

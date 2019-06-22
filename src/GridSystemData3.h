@@ -24,6 +24,12 @@ namespace CalfFluidEngine {
 		const std::shared_ptr<VectorGrid3>& VectorDataAt(size_t idx) const;
 		size_t GetNumberOfScalarData() const;
 		size_t GetNnumberOfVectorData() const;
+		size_t AddScalarData(
+			const  std::shared_ptr<ScalarGridBuilder3>& builder,
+			double initialVal = 0.0);
+		size_t AddVectorData(
+			const std::shared_ptr<VectorGridBuilder3>& builder,
+			const Vector3D& initialVal = Vector3D::zero);
 	private:
 		Vector3<size_t> _resolution;
 		Vector3D _gridSpacing;

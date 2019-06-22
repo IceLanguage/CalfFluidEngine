@@ -51,6 +51,9 @@ namespace CalfFluidEngine {
 			std::swap(other._data, _data);
 			std::swap(other._size, _size);
 		}
+		Vector3<size_t> Size() const {
+			return _size;
+		}
 	private:
 		Vector3<size_t> _size;
 		std::vector<T> _data;
