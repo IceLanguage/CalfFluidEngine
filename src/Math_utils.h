@@ -8,12 +8,43 @@ using namespace CalfFluidEngine;
 template<typename T>
 inline T Clamp(T v, T minV, T maxV)
 {
-	return std::max(std::min(v, maxV), minV);
+	if (v < minV) {
+		return minV;
+	}
+	else if (v > maxV) {
+		return maxV;
+	}
+	else {
+		return v;
+	}
 }
 
 template<typename S, typename T>
 inline S Lerp(const S& value0, const S& value1, T f) {
 	return (1 - f) * value0 + f * value1;
+}
+
+//Computes bilinear interpolation.
+template <typename S, typename T>
+inline S Bilinearlerp(const S& f00, const S& f10, const S& f01, const S& f11, T tx,
+	T ty)
+{
+	return Lerp(
+		Lerp(f00, f10, tx),
+		Lerp(f01, f11, tx),
+		ty);
+}
+
+//Computes trilinear interpolation.
+template <typename S, typename T>
+inline S Trilinearlerp(const S& f000, const S& f100, const S& f010, const S& f110,
+	const S& f001, const S& f101, const S& f011, const S& f111,
+	T tx, T ty, T tz)
+{
+	return Lerp(
+		Bilinearlerp(f000, f100, f010, f110, tx, ty),
+		Bilinearlerp(f001, f101, f011, f111, tx, ty),
+		fz);
 }
 
 template <typename T>
