@@ -248,6 +248,54 @@ const double & CalfFluidEngine::FaceCenteredGrid3::w(size_t i, size_t j, size_t 
 	return _dataW(i, j, k);
 }
 
+double CalfFluidEngine::FaceCenteredGrid3::GetDivergenceAtCellCenter(size_t i, size_t j, size_t k) const
+{
+	return Divergence3(_dataU, _dataV, _dataW, GetGridSpacing(), i, j, k);
+}
+
+double CalfFluidEngine::FaceCenteredGrid3::Divergence(const Vector3D & x) const
+{
+	Vector3<size_t> res = GetResolution();
+	size_t i, j, k;
+	double fx, fy, fz;
+	Vector3D cellCenterOrigin = GetOrigin() + 0.5 * GetGridSpacing();
+
+	Vector3D normalizedX = (x - cellCenterOrigin) / GetGridSpacing();
+
+	GetBarycentric(normalizedX.x, 0, res.x - 1, &i, &fx);
+	GetBarycentric(normalizedX.y, 0, res.y - 1, &j, &fy);
+	GetBarycentric(normalizedX.z, 0, res.z - 1, &k, &fz);
+
+	std::array<Vector3<size_t>, 8> indices;
+	std::array<double, 8> weights;
+	indices[0] = Vector3<size_t>(i, j, k);
+	indices[1] = Vector3<size_t>(i + 1, j, k);
+	indices[2] = Vector3<size_t>(i, j + 1, k);
+	indices[3] = Vector3<size_t>(i + 1, j + 1, k);
+	indices[4] = Vector3<size_t>(i, j, k + 1);
+	indices[5] = Vector3<size_t>(i + 1, j, k + 1);
+	indices[6] = Vector3<size_t>(i, j + 1, k + 1);
+	indices[7] = Vector3<size_t>(i + 1, j + 1, k + 1);
+
+	weights[0] = (1.0 - fx) * (1.0 - fy) * (1.0 - fz);
+	weights[1] = fx * (1.0 - fy) * (1.0 - fz);
+	weights[2] = (1.0 - fx) * fy * (1.0 - fz);
+	weights[3] = fx * fy * (1.0 - fz);
+	weights[4] = (1.0 - fx) * (1.0 - fy) * fz;
+	weights[5] = fx * (1.0 - fy) * fz;
+	weights[6] = (1.0 - fx) * fy * fz;
+	weights[7] = fx * fy * fz;
+
+	double result = 0.0;
+
+	for (int n = 0; n < 8; ++n) {
+		result += weights[n] * GetDivergenceAtCellCenter(
+			indices[n].x, indices[n].y, indices[n].z);
+	}
+
+	return result;
+}
+
 void CalfFluidEngine::FaceCenteredGrid3::onResize(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & origin, const Vector3D & initialValue)
 {
 	if (resolution != Vector3<size_t>(0, 0, 0)) {
@@ -284,6 +332,27 @@ const Vector3D & CalfFluidEngine::CollocatedVectorGrid3::operator()(size_t i, si
 Vector3D & CalfFluidEngine::CollocatedVectorGrid3::operator()(size_t i, size_t j, size_t k)
 {
 	return _data(i, j, k);
+}
+
+double CalfFluidEngine::CollocatedVectorGrid3::GetDivergenceAtDataPoint(size_t i, size_t j, size_t k) const
+{
+	return Divergence3(_data, GetGridSpacing(), i, j, k);
+}
+
+double CalfFluidEngine::CollocatedVectorGrid3::Divergence(const Vector3D & x) const
+{
+	std::array<Vector3<size_t>, 8> indices;
+	std::array<double, 8> weights;
+	_linearSampler.GetCoordinatesAndWeights(x, &indices, &weights);
+
+	double result = 0.0;
+
+	for (int i = 0; i < 8; ++i) {
+		result += weights[i] * GetDivergenceAtDataPoint(
+			indices[i].x, indices[i].y, indices[i].z);
+	}
+
+	return result;
 }
 
 void CalfFluidEngine::CollocatedVectorGrid3::onResize(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & origin, const Vector3D & initialValue)

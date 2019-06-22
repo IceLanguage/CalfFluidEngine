@@ -91,13 +91,13 @@ namespace CalfFluidEngine {
 			(*indices)[6] = Vector3<size_t>(i, jp1, kp1);
 			(*indices)[7] = Vector3<size_t>(ip1, jp1, kp1);
 
-			(*weights)[0] = (1 - fx) * (1 - fy) * (1 - fz);
-			(*weights)[1] = fx * (1 - fy) * (1 - fz);
-			(*weights)[2] = (1 - fx) * fy * (1 - fz);
-			(*weights)[3] = fx * fy * (1 - fz);
-			(*weights)[4] = (1 - fx) * (1 - fy) * fz;
-			(*weights)[5] = fx * (1 - fy) * fz;
-			(*weights)[6] = (1 - fx) * fy * fz;
+			(*weights)[0] = (1.0 - fx) * (1.0 - fy) * (1.0 - fz);
+			(*weights)[1] = fx * (1.0 - fy) * (1.0 - fz);
+			(*weights)[2] = (1.0 - fx) * fy * (1.0 - fz);
+			(*weights)[3] = fx * fy * (1.0 - fz);
+			(*weights)[4] = (1.0 - fx) * (1.0 - fy) * fz;
+			(*weights)[5] = fx * (1.0 - fy) * fz;
+			(*weights)[6] = (1.0 - fx) * fy * fz;
 			(*weights)[7] = fx * fy * fz;
 		}
 	private:

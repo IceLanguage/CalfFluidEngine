@@ -81,7 +81,7 @@ inline void GetBarycentric(T x, size_t iLow, size_t iHigh, size_t* i, T* f)
 	*i += iLow;
 }
 
-Vector3D Gradient3(
+inline Vector3D Gradient3(
 	const Array3<double>& data,
 	const Vector3D& gridSpacing,
 	size_t i,
@@ -97,5 +97,48 @@ Vector3D Gradient3(
 	double front = data(i, j, (k + 1 < ds.z) ? k + 1 : k);
 
 	return 0.5 * Vector3D(right - left, up - down, front - back) / gridSpacing;
+}
+
+inline double Divergence3(
+	const Array3<Vector3D>& data,
+	const Vector3D& gridSpacing,
+	size_t i,
+	size_t j,
+	size_t k)
+{
+	const Vector3<size_t> ds = data.Size();
+
+	double left = data((i > 0) ? i - 1 : i, j, k).x;
+	double right = data((i + 1 < ds.x) ? i + 1 : i, j, k).x;
+	double down = data(i, (j > 0) ? j - 1 : j, k).y;
+	double up = data(i, (j + 1 < ds.y) ? j + 1 : j, k).y;
+	double back = data(i, j, (k > 0) ? k - 1 : k).z;
+	double front = data(i, j, (k + 1 < ds.z) ? k + 1 : k).z;
+
+	return 0.5 * (right - left) / gridSpacing.x
+		+ 0.5 * (up - down) / gridSpacing.y
+		+ 0.5 * (front - back) / gridSpacing.z;
+}
+
+inline double Divergence3(
+	const Array3<double>& dataU,
+	const Array3<double>& dataV,
+	const Array3<double>& dataW,
+	const Vector3D& gridSpacing,
+	size_t i,
+	size_t j,
+	size_t k)
+{
+	double leftU = dataU(i, j, k);
+	double rightU = dataU(i + 1, j, k);
+	double bottomV = dataV(i, j, k);
+	double topV = dataV(i, j + 1, k);
+	double backW = dataW(i, j, k);
+	double frontW = dataW(i, j, k + 1);
+
+	return
+		(rightU - leftU) / gridSpacing.x +
+		(topV - bottomV) / gridSpacing.y +
+		(frontW - backW) / gridSpacing.z;
 }
 #endif
