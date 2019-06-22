@@ -26,7 +26,7 @@ inline S Lerp(const S& value0, const S& value1, T f) {
 
 //Computes bilinear interpolation.
 template <typename S, typename T>
-inline S Bilinearlerp(const S& f00, const S& f10, const S& f01, const S& f11, T tx,
+inline S BilinearLerp(const S& f00, const S& f10, const S& f01, const S& f11, T tx,
 	T ty)
 {
 	return Lerp(
@@ -37,19 +37,48 @@ inline S Bilinearlerp(const S& f00, const S& f10, const S& f01, const S& f11, T 
 
 //Computes trilinear interpolation.
 template <typename S, typename T>
-inline S Trilinearlerp(const S& f000, const S& f100, const S& f010, const S& f110,
+inline S TrilinearLerp(const S& f000, const S& f100, const S& f010, const S& f110,
 	const S& f001, const S& f101, const S& f011, const S& f111,
 	T tx, T ty, T tz)
 {
 	return Lerp(
-		Bilinearlerp(f000, f100, f010, f110, tx, ty),
-		Bilinearlerp(f001, f101, f011, f111, tx, ty),
+		BilinearLerp(f000, f100, f010, f110, tx, ty),
+		BilinearLerp(f001, f101, f011, f111, tx, ty),
 		fz);
 }
 
 template <typename T>
 inline T AbsMax(T x, T y) {
 	return (x*x > y*y) ? x : y;
+}
+
+// Gets the barycentric coordinate.
+template <class T>
+inline void GetBarycentric(T x, size_t iLow, size_t iHigh, size_t* i, T* f)
+{
+	T s = std::floor(x);
+	*i = static_cast<size_t>(s);
+
+	iLow -= iLow;
+	iHigh -= iLow;
+
+	if (iLow == iHigh) {
+		*i = iLow;
+		*f = 0;
+	}
+	else if (*i < iLow) {
+		*i = iLow;
+		*f = 0;
+	}
+	else if (*i > iHigh - 1) {
+		*i = iHigh - 1;
+		*f = 1;
+	}
+	else {
+		*f = static_cast<T>(x - s);
+	}
+
+	*i += iLow;
 }
 
 Vector3D Gradient3(

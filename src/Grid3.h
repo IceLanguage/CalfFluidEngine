@@ -5,6 +5,7 @@
 #include <Field3.h>
 #include <Array3.h>
 #include <memory>
+#include <ArraySampler.h>
 namespace CalfFluidEngine {
 	class Grid3
 	{
@@ -15,15 +16,12 @@ namespace CalfFluidEngine {
 		const Vector3D& GetOrigin() const { return _origin; }
 		const Vector3D& GetGridSpacing() const { return _gridSpacing; }
 		const BoundingBox3D& GetBoundingBox() const { return _boundingBox; }
-		const double& operator()(size_t i, size_t j, size_t k) const;
-		double& operator()(size_t i, size_t j, size_t k);
 		std::function<Vector3D(size_t, size_t, size_t)> GetCellCenterPosition() const;
 	protected:
 		void setSizeParameters(
 			const Vector3<size_t>& resolution, 
 			const Vector3D& gridSpacing,
 			const Vector3D& origin);
-		Array3<double> _data;
 	private:
 		Vector3<size_t> _resolution;
 		Vector3D _gridSpacing = Vector3D(1.0, 1.0, 1.0);
@@ -36,6 +34,8 @@ namespace CalfFluidEngine {
 	public:
 		ScalarGrid3();
 		virtual ~ScalarGrid3();
+		const double& operator()(size_t i, size_t j, size_t k) const;
+		double& operator()(size_t i, size_t j, size_t k);
 
 		//**********************************************
 		//Returns the size of the grid data.
@@ -68,6 +68,10 @@ namespace CalfFluidEngine {
 
 		Vector3D GradientAtDataPoint(size_t i, size_t j, size_t k) const;
 		virtual Vector3D Gradient(const Vector3D& x) const override;
+	private:
+		LinearArraySampler3<double, double> _linearSampler;
+		std::function<double(const Vector3D&)> _sampler;
+		Array3<double> _data;
 	};
 
 	class VectorGrid3 : public VectorField3, public Grid3 
@@ -190,12 +194,19 @@ namespace CalfFluidEngine {
 		Vector3D _dataOriginU;
 		Vector3D _dataOriginV;
 		Vector3D _dataOriginW;
+		LinearArraySampler3<double, double> _uLinearSampler;
+		LinearArraySampler3<double, double> _vLinearSampler;
+		LinearArraySampler3<double, double> _wLinearSampler;
+		std::function<Vector3D(const Vector3D&)> _sampler;
 	};
 
 	class CollocatedVectorGrid3 : public VectorGrid3 {
 	public:
 		CollocatedVectorGrid3();
 		virtual ~CollocatedVectorGrid3();
+		const Vector3D& operator()(size_t i, size_t j, size_t k) const;
+		Vector3D& operator()(size_t i, size_t j, size_t k);
+
 		//**********************************************
 		//Returns the actual data point size.
 		//**********************************************
@@ -205,9 +216,6 @@ namespace CalfFluidEngine {
 		//Returns the origin of the grid data.
 		//**********************************************
 		virtual Vector3D GetDataOrigin() const = 0;
-
-		const Vector3D& operator()(size_t i, size_t j, size_t k) const;
-		Vector3D& operator()(size_t i, size_t j, size_t k);
 	protected:
 		void onResize(
 			const Vector3<size_t>& resolution,
@@ -215,6 +223,8 @@ namespace CalfFluidEngine {
 			const Vector3D& origin,
 			const Vector3D& initialValue) final;
 	private:
+		LinearArraySampler3<Vector3D, double> _linearSampler;
+		std::function<Vector3D(const Vector3D&)> _sampler;
 		Array3<Vector3D> _data;
 	};
 

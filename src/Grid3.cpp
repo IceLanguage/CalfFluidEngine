@@ -10,16 +10,6 @@ CalfFluidEngine::Grid3::~Grid3()
 {
 }
 
-const double & CalfFluidEngine::Grid3::operator()(size_t i, size_t j, size_t k) const
-{
-	return _data(i, j, k);
-}
-
-double & CalfFluidEngine::Grid3::operator()(size_t i, size_t j, size_t k)
-{
-	return _data(i, j, k);
-}
-
 std::function<Vector3D(size_t, size_t, size_t)> CalfFluidEngine::Grid3::GetCellCenterPosition() const
 {
 	Vector3D h = _gridSpacing;
@@ -44,12 +34,24 @@ void CalfFluidEngine::Grid3::setSizeParameters(const Vector3<size_t>& resolution
 	_boundingBox = BoundingBox3D(origin, origin + gridSpacing * resolutionD);
 }
 
-CalfFluidEngine::ScalarGrid3::ScalarGrid3()
+CalfFluidEngine::ScalarGrid3::ScalarGrid3() : 
+	_linearSampler(LinearArraySampler3<double, double>(
+	_data, Vector3D(1, 1, 1), Vector3D::zero)) 
 {
 }
 
 CalfFluidEngine::ScalarGrid3::~ScalarGrid3()
 {
+}
+
+const double & CalfFluidEngine::ScalarGrid3::operator()(size_t i, size_t j, size_t k) const
+{
+	return _data(i, j, k);
+}
+
+double & CalfFluidEngine::ScalarGrid3::operator()(size_t i, size_t j, size_t k)
+{
+	return _data(i, j, k);
 }
 
 void CalfFluidEngine::ScalarGrid3::Resize(size_t resolutionX, size_t resolutionY, size_t resolutionZ, double gridSpacingX, double gridSpacingY, double gridSpacingZ, double originX, double originY, double originZ, double initialValue)
@@ -175,11 +177,18 @@ Vector3D CalfFluidEngine::VertexCenteredScalarGrid3::GetDataOrigin() const
 CalfFluidEngine::FaceCenteredGrid3::FaceCenteredGrid3() :
 _dataOriginU(0.0, 0.5, 0.5),
 _dataOriginV(0.5, 0.0, 0.5),
-_dataOriginW(0.5, 0.5, 0.0)
+_dataOriginW(0.5, 0.5, 0.0),
+_uLinearSampler(LinearArraySampler3<double, double>(
+_dataU, Vector3D(1, 1, 1), _dataOriginU)),
+_vLinearSampler(LinearArraySampler3<double, double>(
+_dataV, Vector3D(1, 1, 1), _dataOriginV)),
+_wLinearSampler(LinearArraySampler3<double, double>(
+_dataW, Vector3D(1, 1, 1), _dataOriginW))
 {
 }
 
 CalfFluidEngine::FaceCenteredGrid3::FaceCenteredGrid3(size_t resolutionX, size_t resolutionY, size_t resolutionZ, double gridSpacingX, double gridSpacingY, double gridSpacingZ, double originX, double originY, double originZ, double initialValueU, double initialValueV, double initialValueW)
+
 	: FaceCenteredGrid3(
 		Vector3<size_t>(resolutionX, resolutionY, resolutionZ),
 		Vector3D(gridSpacingX, gridSpacingY, gridSpacingZ),
@@ -188,7 +197,13 @@ CalfFluidEngine::FaceCenteredGrid3::FaceCenteredGrid3(size_t resolutionX, size_t
 {
 }
 
-CalfFluidEngine::FaceCenteredGrid3::FaceCenteredGrid3(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & origin, const Vector3D & initialValue)
+CalfFluidEngine::FaceCenteredGrid3::FaceCenteredGrid3(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & origin, const Vector3D & initialValue):
+	_uLinearSampler(LinearArraySampler3<double, double>(
+		_dataU, Vector3D(1, 1, 1), _dataOriginU)),
+	_vLinearSampler(LinearArraySampler3<double, double>(
+		_dataV, Vector3D(1, 1, 1), _dataOriginV)),
+	_wLinearSampler(LinearArraySampler3<double, double>(
+		_dataW, Vector3D(1, 1, 1), _dataOriginW))
 {
 	Resize(resolution, gridSpacing, origin, initialValue);
 }
@@ -241,7 +256,9 @@ void CalfFluidEngine::FaceCenteredGrid3::onResize(const Vector3<size_t>& resolut
 
 }
 
-CalfFluidEngine::CollocatedVectorGrid3::CollocatedVectorGrid3()
+CalfFluidEngine::CollocatedVectorGrid3::CollocatedVectorGrid3():
+	_linearSampler(LinearArraySampler3<Vector3D, double>(
+	_data, Vector3D(1, 1, 1), Vector3D::zero))
 {
 }
 
