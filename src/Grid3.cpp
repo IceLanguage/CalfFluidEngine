@@ -1,5 +1,5 @@
 #include "Grid3.h"
-
+#include <array>
 using namespace CalfFluidEngine;
 
 CalfFluidEngine::Grid3::Grid3()
@@ -75,7 +75,17 @@ Vector3D CalfFluidEngine::ScalarGrid3::GradientAtDataPoint(size_t i, size_t j, s
 
 Vector3D CalfFluidEngine::ScalarGrid3::Gradient(const Vector3D & x) const
 {
-	return Vector3D();
+	std::array<Vector3<size_t>, 8> indices;
+	std::array<double, 8> weights;
+	_linearSampler.GetCoordinatesAndWeights(x, &indices, &weights);
+	Vector3D result;
+
+	for (int i = 0; i < 8; ++i) {
+		result += weights[i] *
+			GradientAtDataPoint(indices[i].x, indices[i].y, indices[i].z);
+	}
+
+	return result;
 }
 
 CalfFluidEngine::VectorGrid3::VectorGrid3()

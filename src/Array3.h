@@ -8,6 +8,11 @@ namespace CalfFluidEngine {
 	{
 	public:
 		Array3() {};
+		Array3(const Array3& other)
+		{
+			_size = other._size;
+			_data = other._data;
+		}
 		void Resize(const Vector3<size_t>& size, const T& initVal = T())
 		{
 			Array3 grid;
