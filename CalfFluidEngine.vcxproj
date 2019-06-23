@@ -163,6 +163,7 @@
     <ClCompile Include="src\Collider3.cpp" />
     <ClCompile Include="src\Field3.cpp" />
     <ClCompile Include="src\Grid3.cpp" />
+    <ClCompile Include="src\GridFluidSolver3.cpp" />
     <ClCompile Include="src\GridSystemData3.cpp" />
     <ClCompile Include="src\ParticleEmitter3.cpp" />
     <ClCompile Include="src\ParticleSystemData3.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="src\Constant.h" />
     <ClInclude Include="src\Field3.h" />
     <ClInclude Include="src\Grid3.h" />
+    <ClInclude Include="src\GridFluidSolver3.h" />
     <ClInclude Include="src\GridSystemData3.h" />
     <ClInclude Include="src\Math_utils.h" />
     <ClInclude Include="src\Matrix3.h" />
