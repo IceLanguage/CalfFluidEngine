@@ -66,8 +66,10 @@ namespace CalfFluidEngine {
 			const Vector3D& origin = Vector3D::zero,
 			double initialValue = 0.0);
 
-		Vector3D GradientAtDataPoint(size_t i, size_t j, size_t k) const;
+		Vector3D GetGradientAtDataPoint(size_t i, size_t j, size_t k) const;
+		double GetLaplacianAtDataPoint(size_t i, size_t j, size_t k) const;
 		virtual Vector3D Gradient(const Vector3D& x) const override;
+		virtual double Laplacian(const Vector3D& x) const override;
 	private:
 		LinearArraySampler3<double, double> _linearSampler;
 		std::function<double(const Vector3D&)> _sampler;

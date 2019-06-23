@@ -68,9 +68,14 @@ void CalfFluidEngine::ScalarGrid3::Resize(const Vector3<size_t>& resolution, con
 	_data.Resize(size, initialValue);
 }
 
-Vector3D CalfFluidEngine::ScalarGrid3::GradientAtDataPoint(size_t i, size_t j, size_t k) const
+Vector3D CalfFluidEngine::ScalarGrid3::GetGradientAtDataPoint(size_t i, size_t j, size_t k) const
 {
 	return Gradient3(_data, GetGridSpacing(), i, j, k);
+}
+
+double CalfFluidEngine::ScalarGrid3::GetLaplacianAtDataPoint(size_t i, size_t j, size_t k) const
+{
+	return Laplacian3(_data, GetGridSpacing(), i, j, k);
 }
 
 Vector3D CalfFluidEngine::ScalarGrid3::Gradient(const Vector3D & x) const
@@ -82,7 +87,23 @@ Vector3D CalfFluidEngine::ScalarGrid3::Gradient(const Vector3D & x) const
 
 	for (int i = 0; i < 8; ++i) {
 		result += weights[i] *
-			GradientAtDataPoint(indices[i].x, indices[i].y, indices[i].z);
+			GetGradientAtDataPoint(indices[i].x, indices[i].y, indices[i].z);
+	}
+
+	return result;
+}
+
+double CalfFluidEngine::ScalarGrid3::Laplacian(const Vector3D & x) const
+{
+	std::array<Vector3<size_t>, 8> indices;
+	std::array<double, 8> weights;
+	_linearSampler.GetCoordinatesAndWeights(x, &indices, &weights);
+
+	double result = 0.0;
+
+	for (int i = 0; i < 8; ++i) {
+		result += weights[i] * GetLaplacianAtDataPoint(indices[i].x, indices[i].y,
+			indices[i].z);
 	}
 
 	return result;

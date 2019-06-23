@@ -177,4 +177,46 @@ inline Vector3D Curl3(const Array3<Vector3D>& data,
 		0.5 * (Fx_zp - Fx_zm) / gridSpacing.z - 0.5 * (Fz_xp - Fz_xm) / gridSpacing.x,
 		0.5 * (Fy_xp - Fy_xm) / gridSpacing.x - 0.5 * (Fx_yp - Fx_ym) / gridSpacing.y);
 }
+
+inline double Laplacian3(
+	const Array3<double>& data,
+	const Vector3D& gridSpacing,
+	size_t i,
+	size_t j,
+	size_t k) {
+	const double center = data(i, j, k);
+	const Vector3<size_t> ds = data.Size();
+
+	double dleft = 0.0;
+	double dright = 0.0;
+	double ddown = 0.0;
+	double dup = 0.0;
+	double dback = 0.0;
+	double dfront = 0.0;
+
+	if (i > 0) {
+		dleft = center - data(i - 1, j, k);
+	}
+	if (i + 1 < ds.x) {
+		dright = data(i + 1, j, k) - center;
+	}
+
+	if (j > 0) {
+		ddown = center - data(i, j - 1, k);
+	}
+	if (j + 1 < ds.y) {
+		dup = data(i, j + 1, k) - center;
+	}
+
+	if (k > 0) {
+		dback = center - data(i, j, k - 1);
+	}
+	if (k + 1 < ds.z) {
+		dfront = data(i, j, k + 1) - center;
+	}
+
+	return (dright - dleft) / (gridSpacing.x * gridSpacing.x)
+		+ (dup - ddown) / (gridSpacing.y * gridSpacing.y)
+		+ (dfront - dback) / (gridSpacing.z * gridSpacing.z);
+}
 #endif
