@@ -70,7 +70,9 @@ namespace CalfFluidEngine {
 		double GetLaplacianAtDataPoint(size_t i, size_t j, size_t k) const;
 		virtual Vector3D Gradient(const Vector3D& x) const override;
 		virtual double Laplacian(const Vector3D& x) const override;
+		virtual double Sample(const Vector3D& x) const override;
 	private:
+		void resetSampler();
 		LinearArraySampler3<double, double> _linearSampler;
 		std::function<double(const Vector3D&)> _sampler;
 		Array3<double> _data;
@@ -193,10 +195,13 @@ namespace CalfFluidEngine {
 		Vector3D GetValueAtCellCenter(size_t i, size_t j, size_t k) const;
 		virtual double Divergence(const Vector3D& x) const override;
 		virtual Vector3D Curl(const Vector3D& x) const override;
+		std::function<Vector3D(const Vector3D&)> Sampler() const override;
+		Vector3D Sample(const Vector3D& x) const override;
 	protected:
 		void onResize(const Vector3<size_t>& resolution, const Vector3D& gridSpacing,
 			const Vector3D& origin, const Vector3D& initialValue) final;
 	private:
+		void resetSampler();
 		Array3<double> _dataU;
 		Array3<double> _dataV;
 		Array3<double> _dataW;
@@ -230,6 +235,7 @@ namespace CalfFluidEngine {
 
 		virtual double Divergence(const Vector3D& x) const override;
 		virtual Vector3D Curl(const Vector3D& x) const override;
+		virtual Vector3D Sample(const Vector3D& x) const override;
 	protected:
 		void onResize(
 			const Vector3<size_t>& resolution,
@@ -237,6 +243,7 @@ namespace CalfFluidEngine {
 			const Vector3D& origin,
 			const Vector3D& initialValue) final;
 	private:
+		void resetSampler();
 		LinearArraySampler3<Vector3D, double> _linearSampler;
 		std::function<Vector3D(const Vector3D&)> _sampler;
 		Array3<Vector3D> _data;

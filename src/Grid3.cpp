@@ -66,6 +66,7 @@ void CalfFluidEngine::ScalarGrid3::Resize(const Vector3<size_t>& resolution, con
 	setSizeParameters(resolution, gridSpacing, origin);
 	Vector3<size_t> size = GetDataSize();
 	_data.Resize(size, initialValue);
+	resetSampler();
 }
 
 Vector3D CalfFluidEngine::ScalarGrid3::GetGradientAtDataPoint(size_t i, size_t j, size_t k) const
@@ -107,6 +108,18 @@ double CalfFluidEngine::ScalarGrid3::Laplacian(const Vector3D & x) const
 	}
 
 	return result;
+}
+
+double CalfFluidEngine::ScalarGrid3::Sample(const Vector3D & x) const
+{
+	return _sampler(x);
+}
+
+void CalfFluidEngine::ScalarGrid3::resetSampler()
+{
+	_linearSampler = LinearArraySampler3<double, double>(
+		_data, GetGridSpacing(), GetDataOrigin());
+	_sampler = _linearSampler.GetFunctor();
 }
 
 CalfFluidEngine::VectorGrid3::VectorGrid3()
@@ -401,6 +414,16 @@ Vector3D CalfFluidEngine::FaceCenteredGrid3::Curl(const Vector3D & x) const
 	return result;
 }
 
+std::function<Vector3D(const Vector3D&)> CalfFluidEngine::FaceCenteredGrid3::Sampler() const
+{
+	return _sampler;
+}
+
+Vector3D CalfFluidEngine::FaceCenteredGrid3::Sample(const Vector3D & x) const
+{
+	return _sampler(x);
+}
+
 void CalfFluidEngine::FaceCenteredGrid3::onResize(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & origin, const Vector3D & initialValue)
 {
 	if (resolution != Vector3<size_t>(0, 0, 0)) {
@@ -417,6 +440,28 @@ void CalfFluidEngine::FaceCenteredGrid3::onResize(const Vector3<size_t>& resolut
 	_dataOriginV = origin + 0.5 * Vector3D(gridSpacing.x, 0.0, gridSpacing.z);
 	_dataOriginW = origin + 0.5 * Vector3D(gridSpacing.x, gridSpacing.y, 0.0);
 
+	resetSampler();
+}
+
+void CalfFluidEngine::FaceCenteredGrid3::resetSampler()
+{
+	LinearArraySampler3<double, double> uSampler(_dataU,
+		GetGridSpacing(), _dataOriginU);
+	LinearArraySampler3<double, double> vSampler(_dataV,
+		GetGridSpacing(), _dataOriginV);
+	LinearArraySampler3<double, double> wSampler(_dataW,
+		GetGridSpacing(), _dataOriginW);
+
+	_uLinearSampler = uSampler;
+	_vLinearSampler = vSampler;
+	_wLinearSampler = wSampler;
+
+	_sampler = [uSampler, vSampler, wSampler](const Vector3D& x) -> Vector3D {
+		double u = uSampler(x);
+		double v = vSampler(x);
+		double w = wSampler(x);
+		return Vector3D(u, v, w);
+	};
 }
 
 CalfFluidEngine::CollocatedVectorGrid3::CollocatedVectorGrid3():
@@ -481,9 +526,22 @@ Vector3D CalfFluidEngine::CollocatedVectorGrid3::Curl(const Vector3D & x) const
 	return result;
 }
 
+Vector3D CalfFluidEngine::CollocatedVectorGrid3::Sample(const Vector3D & x) const
+{
+	return _sampler(x);
+}
+
 void CalfFluidEngine::CollocatedVectorGrid3::onResize(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & origin, const Vector3D & initialValue)
 {
 	_data.Resize(GetDataSize(), initialValue);
+	resetSampler();
+}
+
+void CalfFluidEngine::CollocatedVectorGrid3::resetSampler()
+{
+	_linearSampler = LinearArraySampler3<Vector3D, double>(
+		_data, GetGridSpacing(), GetDataOrigin());
+	_sampler = _linearSampler.GetFunctor();
 }
 
 CalfFluidEngine::CellCenteredVectorGrid3::CellCenteredVectorGrid3()

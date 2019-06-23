@@ -55,6 +55,8 @@ namespace CalfFluidEngine{
 		virtual double Laplacian(const Vector3D& x) const = 0;
 
 		virtual std::function<double(const Vector3D&)> Sampler() const;
+	private:
+		std::function<double(const Vector3D&)> _sampler;
 	};
 
 	class ConstantVectorField3 final : public VectorField3 {

@@ -25,7 +25,7 @@ namespace CalfFluidEngine {
 			_gridSpacing = other._gridSpacing;
 			_invGridSpacing = other._invGridSpacing;
 			_origin = other._origin;
-			_accessor = std::make_shared<Array3<T>>(other._accessor);
+			_accessor = std::make_shared<Array3<T>>(*other._accessor);
 		}
 		T operator()(const Vector3<R>& x) const
 		{
@@ -48,14 +48,14 @@ namespace CalfFluidEngine {
 			size_t kp1 = std::min(k + 1, kSize - 1);
 
 			return TrilinearLerp(
-				*_accessor(i, j, k),
-				*_accessor(ip1, j, k),
-				*_accessor(i, jp1, k),
-				*_accessor(ip1, jp1, k),
-				*_accessor(i, j, kp1),
-				*_accessor(ip1, j, kp1),
-				*_accessor(i, jp1, kp1),
-				*_accessor(ip1, jp1, kp1),
+				_accessor->at(i, j, k),
+				_accessor->at(ip1, j, k),
+				_accessor->at(i, jp1, k),
+				_accessor->at(ip1, jp1, k),
+				_accessor->at(i, j, kp1),
+				_accessor->at(ip1, j, kp1),
+				_accessor->at(i, jp1, kp1),
+				_accessor->at(ip1, jp1, kp1),
 				fx,
 				fy,
 				fz);
@@ -99,6 +99,12 @@ namespace CalfFluidEngine {
 			(*weights)[5] = fx * (1.0 - fy) * fz;
 			(*weights)[6] = (1.0 - fx) * fy * fz;
 			(*weights)[7] = fx * fy * fz;
+		}
+		std::function<T(const Vector3<R>&)> GetFunctor() const
+		{
+			LinearArraySampler3 sampler(*this);
+			return std::bind(
+				&LinearArraySampler3::operator(), sampler, std::placeholders::_1);
 		}
 	private:
 		Vector3<R> _gridSpacing;

@@ -44,7 +44,7 @@ inline S TrilinearLerp(const S& f000, const S& f100, const S& f010, const S& f11
 	return Lerp(
 		BilinearLerp(f000, f100, f010, f110, tx, ty),
 		BilinearLerp(f001, f101, f011, f111, tx, ty),
-		fz);
+		tz);
 }
 
 template <typename T>
