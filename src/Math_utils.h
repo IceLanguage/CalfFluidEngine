@@ -141,4 +141,40 @@ inline double Divergence3(
 		(topV - bottomV) / gridSpacing.y +
 		(frontW - backW) / gridSpacing.z;
 }
+
+inline Vector3D Curl3(const Array3<Vector3D>& data,
+	const Vector3D& gridSpacing,
+	size_t i,
+	size_t j,
+	size_t k)
+{
+	const Vector3<size_t> ds = data.Size();
+
+	Vector3D left = data((i > 0) ? i - 1 : i, j, k);
+	Vector3D right = data((i + 1 < ds.x) ? i + 1 : i, j, k);
+	Vector3D down = data(i, (j > 0) ? j - 1 : j, k);
+	Vector3D up = data(i, (j + 1 < ds.y) ? j + 1 : j, k);
+	Vector3D back = data(i, j, (k > 0) ? k - 1 : k);
+	Vector3D front = data(i, j, (k + 1 < ds.z) ? k + 1 : k);
+
+	double Fx_ym = down.x;
+	double Fx_yp = up.x;
+	double Fx_zm = back.x;
+	double Fx_zp = front.x;
+
+	double Fy_xm = left.y;
+	double Fy_xp = right.y;
+	double Fy_zm = back.y;
+	double Fy_zp = front.y;
+
+	double Fz_xm = left.z;
+	double Fz_xp = right.z;
+	double Fz_ym = down.z;
+	double Fz_yp = up.z;
+
+	return Vector3D(
+		0.5 * (Fz_yp - Fz_ym) / gridSpacing.y - 0.5 * (Fy_zp - Fy_zm) / gridSpacing.z,
+		0.5 * (Fx_zp - Fx_zm) / gridSpacing.z - 0.5 * (Fz_xp - Fz_xm) / gridSpacing.x,
+		0.5 * (Fy_xp - Fy_xm) / gridSpacing.x - 0.5 * (Fx_yp - Fx_ym) / gridSpacing.y);
+}
 #endif

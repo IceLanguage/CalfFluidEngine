@@ -253,6 +253,46 @@ double CalfFluidEngine::FaceCenteredGrid3::GetDivergenceAtCellCenter(size_t i, s
 	return Divergence3(_dataU, _dataV, _dataW, GetGridSpacing(), i, j, k);
 }
 
+Vector3D CalfFluidEngine::FaceCenteredGrid3::GetCurlAtCellCenter(size_t i, size_t j, size_t k) const
+{
+	const Vector3<size_t>& res = GetResolution();
+	const Vector3D& gs = GetGridSpacing();
+
+	Vector3D left = GetValueAtCellCenter((i > 0) ? i - 1 : i, j, k);
+	Vector3D right = GetValueAtCellCenter((i + 1 < res.x) ? i + 1 : i, j, k);
+	Vector3D down = GetValueAtCellCenter(i, (j > 0) ? j - 1 : j, k);
+	Vector3D up = GetValueAtCellCenter(i, (j + 1 < res.y) ? j + 1 : j, k);
+	Vector3D back = GetValueAtCellCenter(i, j, (k > 0) ? k - 1 : k);
+	Vector3D front = GetValueAtCellCenter(i, j, (k + 1 < res.z) ? k + 1 : k);
+
+	double Fx_ym = down.x;
+	double Fx_yp = up.x;
+	double Fx_zm = back.x;
+	double Fx_zp = front.x;
+
+	double Fy_xm = left.y;
+	double Fy_xp = right.y;
+	double Fy_zm = back.y;
+	double Fy_zp = front.y;
+
+	double Fz_xm = left.z;
+	double Fz_xp = right.z;
+	double Fz_ym = down.z;
+	double Fz_yp = up.z;
+
+	return Vector3D(
+		0.5 * (Fz_yp - Fz_ym) / gs.y - 0.5 * (Fy_zp - Fy_zm) / gs.z,
+		0.5 * (Fx_zp - Fx_zm) / gs.z - 0.5 * (Fz_xp - Fz_xm) / gs.x,
+		0.5 * (Fy_xp - Fy_xm) / gs.x - 0.5 * (Fx_yp - Fx_ym) / gs.y);
+}
+
+Vector3D CalfFluidEngine::FaceCenteredGrid3::GetValueAtCellCenter(size_t i, size_t j, size_t k) const
+{
+	return 0.5 * Vector3D(_dataU(i, j, k) + _dataU(i + 1, j, k),
+		_dataV(i, j, k) + _dataV(i, j + 1, k),
+		_dataW(i, j, k) + _dataW(i, j, k + 1));
+}
+
 double CalfFluidEngine::FaceCenteredGrid3::Divergence(const Vector3D & x) const
 {
 	Vector3<size_t> res = GetResolution();
@@ -291,6 +331,50 @@ double CalfFluidEngine::FaceCenteredGrid3::Divergence(const Vector3D & x) const
 	for (int n = 0; n < 8; ++n) {
 		result += weights[n] * GetDivergenceAtCellCenter(
 			indices[n].x, indices[n].y, indices[n].z);
+	}
+
+	return result;
+}
+
+Vector3D CalfFluidEngine::FaceCenteredGrid3::Curl(const Vector3D & x) const
+{
+	Vector3<size_t> res = GetResolution();
+	size_t i, j, k;
+	double fx, fy, fz;
+	Vector3D cellCenterOrigin = GetOrigin() + 0.5 * GetGridSpacing();
+
+	Vector3D normalizedX = (x - cellCenterOrigin) / GetGridSpacing();
+
+	GetBarycentric(normalizedX.x, 0, res.x - 1, &i, &fx);
+	GetBarycentric(normalizedX.y, 0, res.y - 1, &j, &fy);
+	GetBarycentric(normalizedX.z, 0, res.z - 1, &k, &fz);
+
+	std::array<Vector3<size_t>, 8> indices;
+	std::array<double, 8> weights;
+
+	indices[0] = Vector3<size_t>(i, j, k);
+	indices[1] = Vector3<size_t>(i + 1, j, k);
+	indices[2] = Vector3<size_t>(i, j + 1, k);
+	indices[3] = Vector3<size_t>(i + 1, j + 1, k);
+	indices[4] = Vector3<size_t>(i, j, k + 1);
+	indices[5] = Vector3<size_t>(i + 1, j, k + 1);
+	indices[6] = Vector3<size_t>(i, j + 1, k + 1);
+	indices[7] = Vector3<size_t>(i + 1, j + 1, k + 1);
+
+	weights[0] = (1.0 - fx) * (1.0 - fy) * (1.0 - fz);
+	weights[1] = fx * (1.0 - fy) * (1.0 - fz);
+	weights[2] = (1.0 - fx) * fy * (1.0 - fz);
+	weights[3] = fx * fy * (1.0 - fz);
+	weights[4] = (1.0 - fx) * (1.0 - fy) * fz;
+	weights[5] = fx * (1.0 - fy) * fz;
+	weights[6] = (1.0 - fx) * fy * fz;
+	weights[7] = fx * fy * fz;
+
+	Vector3D result;
+
+	for (int n = 0; n < 8; ++n) {
+		result += weights[n] *
+			GetCurlAtCellCenter(indices[n].x, indices[n].y, indices[n].z);
 	}
 
 	return result;
@@ -339,6 +423,11 @@ double CalfFluidEngine::CollocatedVectorGrid3::GetDivergenceAtDataPoint(size_t i
 	return Divergence3(_data, GetGridSpacing(), i, j, k);
 }
 
+Vector3D CalfFluidEngine::CollocatedVectorGrid3::GetCurlAtDataPoint(size_t i, size_t j, size_t k) const
+{	
+	return Curl3(_data, GetGridSpacing(), i, j, k);
+}
+
 double CalfFluidEngine::CollocatedVectorGrid3::Divergence(const Vector3D & x) const
 {
 	std::array<Vector3<size_t>, 8> indices;
@@ -349,6 +438,22 @@ double CalfFluidEngine::CollocatedVectorGrid3::Divergence(const Vector3D & x) co
 
 	for (int i = 0; i < 8; ++i) {
 		result += weights[i] * GetDivergenceAtDataPoint(
+			indices[i].x, indices[i].y, indices[i].z);
+	}
+
+	return result;
+}
+
+Vector3D CalfFluidEngine::CollocatedVectorGrid3::Curl(const Vector3D & x) const
+{
+	std::array<Vector3<size_t>, 8> indices;
+	std::array<double, 8> weights;
+	_linearSampler.GetCoordinatesAndWeights(x, &indices, &weights);
+
+	Vector3D result;
+
+	for (int i = 0; i < 8; ++i) {
+		result += weights[i] * GetCurlAtDataPoint(
 			indices[i].x, indices[i].y, indices[i].z);
 	}
 

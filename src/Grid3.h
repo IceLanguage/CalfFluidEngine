@@ -187,8 +187,10 @@ namespace CalfFluidEngine {
 		double& w(size_t i, size_t j, size_t k);
 		const double& w(size_t i, size_t j, size_t k) const;
 		double GetDivergenceAtCellCenter(size_t i, size_t j, size_t k) const;
-
+		Vector3D GetCurlAtCellCenter(size_t i, size_t j, size_t k) const;
+		Vector3D GetValueAtCellCenter(size_t i, size_t j, size_t k) const;
 		virtual double Divergence(const Vector3D& x) const override;
+		virtual Vector3D Curl(const Vector3D& x) const override;
 	protected:
 		void onResize(const Vector3<size_t>& resolution, const Vector3D& gridSpacing,
 			const Vector3D& origin, const Vector3D& initialValue) final;
@@ -212,6 +214,7 @@ namespace CalfFluidEngine {
 		const Vector3D& operator()(size_t i, size_t j, size_t k) const;
 		Vector3D& operator()(size_t i, size_t j, size_t k);
 		double GetDivergenceAtDataPoint(size_t i, size_t j, size_t k) const;
+		Vector3D GetCurlAtDataPoint(size_t i, size_t j, size_t k) const;
 
 		//**********************************************
 		//Returns the actual data point size.
@@ -224,6 +227,7 @@ namespace CalfFluidEngine {
 		virtual Vector3D GetDataOrigin() const = 0;
 
 		virtual double Divergence(const Vector3D& x) const override;
+		virtual Vector3D Curl(const Vector3D& x) const override;
 	protected:
 		void onResize(
 			const Vector3<size_t>& resolution,
