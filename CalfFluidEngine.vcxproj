@@ -158,6 +158,7 @@
   <ItemGroup>
     <ClCompile Include="External\cnpy\cnpy.cpp" />
     <ClCompile Include="External\pystring\pystring.cpp" />
+    <ClCompile Include="src\AdvectionSolver3.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Box3.cpp" />
     <ClCompile Include="src\Collider3.cpp" />
@@ -186,6 +187,7 @@
   <ItemGroup>
     <ClInclude Include="External\cnpy\cnpy.h" />
     <ClInclude Include="External\pystring\pystring.h" />
+    <ClInclude Include="src\AdvectionSolver3.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Array3.h" />
     <ClInclude Include="src\ArraySampler.h" />

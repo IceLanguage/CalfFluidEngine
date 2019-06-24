@@ -52,3 +52,31 @@ Vector3D CalfFluidEngine::ConstantVectorField3::Curl(const Vector3D & x) const
 {
 	return Vector3D::zero;
 }
+
+CalfFluidEngine::ConstantScalarField3::ConstantScalarField3(double value):
+_value(value)
+{
+}
+
+double CalfFluidEngine::ConstantScalarField3::Sample(const Vector3D & x) const
+{
+	return _value;
+}
+
+std::function<double(const Vector3D&)> CalfFluidEngine::ConstantScalarField3::Sampler() const
+{
+	double value = _value;
+	return [value](const Vector3D&) -> double {
+		return value;
+	};
+}
+
+Vector3D CalfFluidEngine::ConstantScalarField3::Gradient(const Vector3D & x) const
+{
+	return Vector3D::zero;
+}
+
+double CalfFluidEngine::ConstantScalarField3::Laplacian(const Vector3D & x) const
+{
+	return 0.0;
+}

@@ -282,6 +282,63 @@ const double & CalfFluidEngine::FaceCenteredGrid3::w(size_t i, size_t j, size_t 
 	return _dataW(i, j, k);
 }
 
+Array3<double>& CalfFluidEngine::FaceCenteredGrid3::UArray3()
+{
+	return _dataU;
+}
+
+const Array3<double>& CalfFluidEngine::FaceCenteredGrid3::UArray3() const
+{
+	return _dataU;
+}
+
+Array3<double>& CalfFluidEngine::FaceCenteredGrid3::VArray3()
+{
+	return _dataV;
+}
+
+const Array3<double>& CalfFluidEngine::FaceCenteredGrid3::VArray3() const
+{
+	return _dataV;
+}
+
+Array3<double>& CalfFluidEngine::FaceCenteredGrid3::WArray3()
+{
+	return _dataW;
+}
+
+const Array3<double>& CalfFluidEngine::FaceCenteredGrid3::WArray3() const
+{
+	return _dataW;
+}
+
+std::function<Vector3D(size_t, size_t, size_t)> CalfFluidEngine::FaceCenteredGrid3::UPosition() const
+{
+	Vector3D h = GetGridSpacing();
+
+	return [this, h](size_t i, size_t j, size_t k) -> Vector3D {
+		return _dataOriginU + h * Vector3D({ i, j, k });
+	};
+}
+
+std::function<Vector3D(size_t, size_t, size_t)> CalfFluidEngine::FaceCenteredGrid3::VPosition() const
+{
+	Vector3D h = GetGridSpacing();
+
+	return [this, h](size_t i, size_t j, size_t k) -> Vector3D {
+		return _dataOriginV + h * Vector3D({ i, j, k });
+	};
+}
+
+std::function<Vector3D(size_t, size_t, size_t)> CalfFluidEngine::FaceCenteredGrid3::WPosition() const
+{
+	Vector3D h = GetGridSpacing();
+
+	return [this, h](size_t i, size_t j, size_t k) -> Vector3D {
+		return _dataOriginW + h * Vector3D({ i, j, k });
+	};
+}
+
 double CalfFluidEngine::FaceCenteredGrid3::GetDivergenceAtCellCenter(size_t i, size_t j, size_t k) const
 {
 	return Divergence3(_dataU, _dataV, _dataW, GetGridSpacing(), i, j, k);

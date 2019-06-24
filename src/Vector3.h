@@ -11,6 +11,14 @@ namespace CalfFluidEngine{
 		Vector3(const T x, const T y, const T z)
 			: x(x), y(y), z(z) {}
 
+		template <typename U>
+		Vector3(const std::initializer_list<U> & lst)
+		{
+			auto inputElem = lst.begin();
+			x = static_cast<T>(*inputElem);
+			y = static_cast<T>(*(++inputElem));
+			z = static_cast<T>(*(++inputElem));
+		}
 		T operator[](unsigned int i) const{
 			if (i == 0) return x;
 			if (i == 1) return y;

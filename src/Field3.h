@@ -68,6 +68,17 @@ namespace CalfFluidEngine{
 	private:
 		Vector3D _value;
 	};
+
+	class ConstantScalarField3 final : public ScalarField3 {
+	public:
+		explicit ConstantScalarField3(double value);
+		double Sample(const Vector3D& x) const override;
+		std::function<double(const Vector3D&)> Sampler() const override;
+		virtual Vector3D Gradient(const Vector3D& x) const override;
+		virtual double Laplacian(const Vector3D& x) const override;
+	private:
+		double _value = 0.0;
+	};
 }
 
 

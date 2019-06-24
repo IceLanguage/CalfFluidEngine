@@ -190,6 +190,15 @@ namespace CalfFluidEngine {
 		const double& v(size_t i, size_t j, size_t k) const;
 		double& w(size_t i, size_t j, size_t k);
 		const double& w(size_t i, size_t j, size_t k) const;
+		Array3<double>& UArray3();
+		const Array3<double>& UArray3() const;
+		Array3<double>& VArray3();
+		const Array3<double>& VArray3() const;
+		Array3<double>& WArray3();
+		const Array3<double>& WArray3() const;
+		std::function<Vector3D(size_t, size_t, size_t)> UPosition() const;
+		std::function<Vector3D(size_t, size_t, size_t)> VPosition() const;
+		std::function<Vector3D(size_t, size_t, size_t)> WPosition() const;
 		double GetDivergenceAtCellCenter(size_t i, size_t j, size_t k) const;
 		Vector3D GetCurlAtCellCenter(size_t i, size_t j, size_t k) const;
 		Vector3D GetValueAtCellCenter(size_t i, size_t j, size_t k) const;

@@ -5,6 +5,16 @@
 
 using namespace CalfFluidEngine;
 
+template <typename T>
+inline T min3(T x, T y, T z) {
+	return std::min(std::min(x, y), z);
+}
+
+template <typename T>
+inline T max3(T x, T y, T z) {
+	return std::max(std::max(x, y), z);
+}
+
 template<typename T>
 inline T Clamp(T v, T minV, T maxV)
 {
