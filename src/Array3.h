@@ -4,6 +4,7 @@
 #include <vector>
 #include <tbb\parallel_for.h>
 #include <tbb\blocked_range.h>
+#include <functional>
 namespace CalfFluidEngine {
 	template <typename T>
 	class Array3 final
@@ -61,8 +62,8 @@ namespace CalfFluidEngine {
 		Vector3<size_t> Size() const {
 			return _size;
 		}
-		template <typename Callback>
-		void ParallelForEach(Callback func)
+
+		void ParallelForEach(std::function<void(size_t, size_t, size_t)> func)
 		{
 			tbb::parallel_for(tbb::blocked_range<size_t>(size_t(0), _size.z),
 				[&](const tbb::blocked_range<size_t> & b) {
@@ -70,6 +71,18 @@ namespace CalfFluidEngine {
 					for (size_t j = size_t(0); j < _size.y; ++j) {
 						for (size_t i = size_t(0); i < _size.x; ++i) {
 							func(i, j, k);
+						}
+					}
+			});
+		}
+		void ParallelForEach(std::function<void(const T&)> func)
+		{
+			tbb::parallel_for(tbb::blocked_range<size_t>(size_t(0), _size.z),
+				[&](const tbb::blocked_range<size_t> & b) {
+				for (size_t k = b.begin(); k != b.end(); ++k)
+					for (size_t j = size_t(0); j < _size.y; ++j) {
+						for (size_t i = size_t(0); i < _size.x; ++i) {
+							func(at(i, j, k));
 						}
 					}
 			});
