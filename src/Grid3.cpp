@@ -481,6 +481,15 @@ Vector3D CalfFluidEngine::FaceCenteredGrid3::Sample(const Vector3D & x) const
 	return _sampler(x);
 }
 
+std::shared_ptr<VectorGrid3> CalfFluidEngine::FaceCenteredGrid3::Clone() const
+{
+	return std::shared_ptr<FaceCenteredGrid3>(
+		new FaceCenteredGrid3(*this), 
+		[](FaceCenteredGrid3* obj) { 
+		delete obj; 
+	});
+}
+
 void CalfFluidEngine::FaceCenteredGrid3::onResize(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & origin, const Vector3D & initialValue)
 {
 	if (resolution != Vector3<size_t>(0, 0, 0)) {

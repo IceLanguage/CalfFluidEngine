@@ -56,6 +56,12 @@ namespace CalfFluidEngine {
 			FaceCenteredGrid3* output,
 			const ScalarField3& boundarySignedDistance = ConstantScalarField3(
 				std::numeric_limits<double>::max())) override final;
+	private:
+		Vector3D backTrace(
+			const VectorField3& flow, 
+			double dt, double h,
+			const Vector3D& pt0, 
+			const ScalarField3& boundarySignedDistance);
 	};
 }
 #endif

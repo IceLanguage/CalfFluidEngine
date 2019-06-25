@@ -1,5 +1,5 @@
 #include "GridFluidSolver3.h"
-
+#include <memory>
 CalfFluidEngine::GridFluidSolver3::GridFluidSolver3()
 	: GridFluidSolver3({ 1, 1, 1 }, { 1, 1, 1 }, { 0, 0, 0 })
 {
@@ -37,6 +37,18 @@ void CalfFluidEngine::GridFluidSolver3::computePressure(double timeIntervalInSec
 
 void CalfFluidEngine::GridFluidSolver3::computeAdvection(double timeIntervalInSeconds)
 {
+	std::shared_ptr<FaceCenteredGrid3> vel = _grids->GetVelocity();
+	if (_advectionSolver != nullptr) 
+	{
+		auto vel0 = std::dynamic_pointer_cast<FaceCenteredGrid3>(vel->Clone());
+		_advectionSolver->Advect(*vel0, *vel0, timeIntervalInSeconds, vel.get(),
+			*GetColliderSignedDistance());
+	}
+}
+
+std::shared_ptr<ScalarField3> CalfFluidEngine::GridFluidSolver3::GetColliderSignedDistance() const
+{
+	return std::shared_ptr<ScalarField3>();
 }
 
 void CalfFluidEngine::GridFluidSolver3::timeStepStart(double timeStepInSeconds)

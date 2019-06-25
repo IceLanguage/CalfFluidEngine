@@ -3,6 +3,8 @@
 
 #include <PhysicsAnimation.h>
 #include <Vector3.h>
+#include <GridSystemData3.h>
+#include <AdvectionSolver3.h>
 namespace CalfFluidEngine {
 	class GridFluidSolver3 : public PhysicsAnimation
 	{
@@ -17,9 +19,13 @@ namespace CalfFluidEngine {
 		virtual void computeViscosity(double timeIntervalInSeconds);
 		virtual void computePressure(double timeIntervalInSeconds);
 		virtual void computeAdvection(double timeIntervalInSeconds);
+		std::shared_ptr<ScalarField3> GetColliderSignedDistance() const;
 	private:
 		void timeStepStart(double timeStepInSeconds);
 		void timeStepEnd(double timeStepInSeconds);
+		std::shared_ptr<GridSystemData3> _grids;
+		std::shared_ptr<IAdvectionSolver3> _advectionSolver;
+		
 	};
 }
 #endif

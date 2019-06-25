@@ -102,6 +102,11 @@ namespace CalfFluidEngine {
 			const Vector3D& gridSpacing = Vector3D(1, 1, 1),
 			const Vector3D& origin = Vector3D::zero,
 			const Vector3D& initialValue = Vector3D::zero);
+
+		//**********************************************
+		//Returns the copy of the grid instance.
+		//**********************************************
+		virtual std::shared_ptr<VectorGrid3> Clone() const = 0;
 	protected:
 		//**********************************************
 		//Invoked when the resizing happens.
@@ -206,6 +211,7 @@ namespace CalfFluidEngine {
 		virtual Vector3D Curl(const Vector3D& x) const override;
 		std::function<Vector3D(const Vector3D&)> Sampler() const override;
 		Vector3D Sample(const Vector3D& x) const override;
+		virtual std::shared_ptr<VectorGrid3> Clone() const override;
 	protected:
 		void onResize(const Vector3<size_t>& resolution, const Vector3D& gridSpacing,
 			const Vector3D& origin, const Vector3D& initialValue) final;
