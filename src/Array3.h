@@ -59,11 +59,17 @@ namespace CalfFluidEngine {
 			std::swap(other._data, _data);
 			std::swap(other._size, _size);
 		}
+		void Set(const Array3& other)
+		{
+			_data.resize(other._data.size());
+			std::copy(other._data.begin(), other._data.end(), _data.begin());
+			_size = other._size;
+		}
 		Vector3<size_t> Size() const {
 			return _size;
 		}
 
-		void ParallelForEach(std::function<void(size_t, size_t, size_t)> func)
+		void ParallelForEach(const std::function<void(size_t, size_t, size_t)>& func) const
 		{
 			tbb::parallel_for(tbb::blocked_range<size_t>(size_t(0), _size.z),
 				[&](const tbb::blocked_range<size_t> & b) {
@@ -75,7 +81,31 @@ namespace CalfFluidEngine {
 					}
 			});
 		}
-		void ParallelForEach(std::function<void(const T&)> func)
+		void ParallelForEach(const std::function<void(const T&)>& func) const
+		{
+			tbb::parallel_for(tbb::blocked_range<size_t>(size_t(0), _size.z),
+				[&](const tbb::blocked_range<size_t> & b) {
+				for (size_t k = b.begin(); k != b.end(); ++k)
+					for (size_t j = size_t(0); j < _size.y; ++j) {
+						for (size_t i = size_t(0); i < _size.x; ++i) {
+							func(at(i, j, k));
+						}
+					}
+			});
+		}
+		void ParallelForEach(const std::function<void(size_t, size_t, size_t)>& func)
+		{
+			tbb::parallel_for(tbb::blocked_range<size_t>(size_t(0), _size.z),
+				[&](const tbb::blocked_range<size_t> & b) {
+				for (size_t k = b.begin(); k != b.end(); ++k)
+					for (size_t j = size_t(0); j < _size.y; ++j) {
+						for (size_t i = size_t(0); i < _size.x; ++i) {
+							func(i, j, k);
+						}
+					}
+			});
+		}
+		void ParallelForEach(const std::function<void(const T&)>& func)
 		{
 			tbb::parallel_for(tbb::blocked_range<size_t>(size_t(0), _size.z),
 				[&](const tbb::blocked_range<size_t> & b) {

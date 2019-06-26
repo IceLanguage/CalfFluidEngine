@@ -19,6 +19,14 @@ std::function<Vector3D(size_t, size_t, size_t)> CalfFluidEngine::Grid3::GetCellC
 	};
 }
 
+void CalfFluidEngine::Grid3::SetGrid(const Grid3 & other)
+{
+	_resolution = other._resolution;
+	_gridSpacing = other._gridSpacing;
+	_origin = other._origin;
+	_boundingBox = other._boundingBox;
+}
+
 void CalfFluidEngine::Grid3::setSizeParameters(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & origin)
 {
 	_resolution = resolution;
@@ -113,6 +121,11 @@ double CalfFluidEngine::ScalarGrid3::Laplacian(const Vector3D & x) const
 double CalfFluidEngine::ScalarGrid3::Sample(const Vector3D & x) const
 {
 	return _sampler(x);
+}
+
+void CalfFluidEngine::ScalarGrid3::ParallelForEach(const std::function<void(size_t, size_t, size_t)>& func) const
+{
+	_data.ParallelForEach(func);
 }
 
 void CalfFluidEngine::ScalarGrid3::resetSampler()
@@ -250,6 +263,24 @@ CalfFluidEngine::FaceCenteredGrid3::FaceCenteredGrid3(const Vector3<size_t>& res
 		_dataW, Vector3D(1, 1, 1), _dataOriginW))
 {
 	Resize(resolution, gridSpacing, origin, initialValue);
+}
+
+CalfFluidEngine::FaceCenteredGrid3::FaceCenteredGrid3(const FaceCenteredGrid3 & other) : _uLinearSampler(LinearArraySampler3<double, double>(
+	_dataU, Vector3D(1, 1, 1), _dataOriginU)),
+	_vLinearSampler(LinearArraySampler3<double, double>(
+		_dataV, Vector3D(1, 1, 1), _dataOriginV)),
+	_wLinearSampler(LinearArraySampler3<double, double>(
+		_dataW, Vector3D(1, 1, 1), _dataOriginW)) {
+	SetGrid(other);
+
+	_dataU.Set(other._dataU);
+	_dataV.Set(other._dataV);
+	_dataW.Set(other._dataW);
+	_dataOriginU = other._dataOriginU;
+	_dataOriginV = other._dataOriginV;
+	_dataOriginW = other._dataOriginW;
+
+	resetSampler();
 }
 
 double & CalfFluidEngine::FaceCenteredGrid3::u(size_t i, size_t j, size_t k)

@@ -17,6 +17,7 @@ namespace CalfFluidEngine {
 		const Vector3D& GetGridSpacing() const { return _gridSpacing; }
 		const BoundingBox3D& GetBoundingBox() const { return _boundingBox; }
 		std::function<Vector3D(size_t, size_t, size_t)> GetCellCenterPosition() const;
+		void SetGrid(const Grid3& other);
 	protected:
 		void setSizeParameters(
 			const Vector3<size_t>& resolution, 
@@ -71,6 +72,7 @@ namespace CalfFluidEngine {
 		virtual Vector3D Gradient(const Vector3D& x) const override;
 		virtual double Laplacian(const Vector3D& x) const override;
 		virtual double Sample(const Vector3D& x) const override;
+		void ParallelForEach(const std::function<void(size_t, size_t, size_t)>& func) const;
 	private:
 		void resetSampler();
 		LinearArraySampler3<double, double> _linearSampler;
@@ -189,6 +191,7 @@ namespace CalfFluidEngine {
 			const Vector3D& gridSpacing = Vector3D(1.0, 1.0, 1.0),
 			const Vector3D& origin = Vector3D::zero,
 			const Vector3D& initialValue = Vector3D::zero);
+		FaceCenteredGrid3(const FaceCenteredGrid3& other);
 		double& u(size_t i, size_t j, size_t k);
 		const double& u(size_t i, size_t j, size_t k) const;
 		double& v(size_t i, size_t j, size_t k);

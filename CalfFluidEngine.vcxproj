@@ -165,6 +165,7 @@
     <ClCompile Include="src\Field3.cpp" />
     <ClCompile Include="src\Grid3.cpp" />
     <ClCompile Include="src\GridBoundaryConditionSolver3.cpp" />
+    <ClCompile Include="src\GridDiffusionSolver3.cpp" />
     <ClCompile Include="src\GridFluidSolver3.cpp" />
     <ClCompile Include="src\GridSystemData3.cpp" />
     <ClCompile Include="src\ParticleEmitter3.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="src\Field3.h" />
     <ClInclude Include="src\Grid3.h" />
     <ClInclude Include="src\GridBoundaryConditionSolver3.h" />
+    <ClInclude Include="src\GridDiffusionSolver3.h" />
     <ClInclude Include="src\GridFluidSolver3.h" />
     <ClInclude Include="src\GridSystemData3.h" />
     <ClInclude Include="src\Math_utils.h" />

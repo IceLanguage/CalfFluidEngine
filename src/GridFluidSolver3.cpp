@@ -56,6 +56,15 @@ void CalfFluidEngine::GridFluidSolver3::computeExternalForces(double timeInterva
 
 void CalfFluidEngine::GridFluidSolver3::computeViscosity(double timeIntervalInSeconds)
 {
+	if (_diffusionSolver != nullptr && _viscosityCoefficient > kEpsilonD) {
+		std::shared_ptr<FaceCenteredGrid3> vel = _grids->GetVelocity();
+		auto vel0 = std::dynamic_pointer_cast<FaceCenteredGrid3>(vel->Clone());
+
+		_diffusionSolver->Solve(*vel0, _viscosityCoefficient,
+			timeIntervalInSeconds, vel.get(),
+			*GetColliderSignedDistance(), *GetFluidSignedDistance());
+		applyBoundaryCondition();
+	}
 }
 
 void CalfFluidEngine::GridFluidSolver3::computePressure(double timeIntervalInSeconds)
@@ -87,6 +96,11 @@ void CalfFluidEngine::GridFluidSolver3::applyBoundaryCondition()
 	if (vel != nullptr && _boundaryConditionSolver != nullptr) {
 		
 	}
+}
+
+std::shared_ptr<ScalarField3> CalfFluidEngine::GridFluidSolver3::GetFluidSignedDistance() const
+{
+	return std::make_shared<ConstantScalarField3>(-kMaxD);
 }
 
 void CalfFluidEngine::GridFluidSolver3::timeStepStart(double timeStepInSeconds)
