@@ -48,7 +48,7 @@ void CalfFluidEngine::GridFluidSolver3::computeAdvection(double timeIntervalInSe
 
 std::shared_ptr<ScalarField3> CalfFluidEngine::GridFluidSolver3::GetColliderSignedDistance() const
 {
-	return std::shared_ptr<ScalarField3>();
+	return _boundaryConditionSolver->GetColliderSignedDistance();
 }
 
 void CalfFluidEngine::GridFluidSolver3::timeStepStart(double timeStepInSeconds)

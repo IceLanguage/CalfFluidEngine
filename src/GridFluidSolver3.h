@@ -5,6 +5,7 @@
 #include <Vector3.h>
 #include <GridSystemData3.h>
 #include <AdvectionSolver3.h>
+#include <GridBoundaryConditionSolver3.h>
 namespace CalfFluidEngine {
 	class GridFluidSolver3 : public PhysicsAnimation
 	{
@@ -25,7 +26,7 @@ namespace CalfFluidEngine {
 		void timeStepEnd(double timeStepInSeconds);
 		std::shared_ptr<GridSystemData3> _grids;
 		std::shared_ptr<IAdvectionSolver3> _advectionSolver;
-		
+		std::shared_ptr<GridBoundaryConditionSolver3> _boundaryConditionSolver;
 	};
 }
 #endif
