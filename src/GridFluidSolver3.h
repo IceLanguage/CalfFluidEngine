@@ -21,12 +21,16 @@ namespace CalfFluidEngine {
 		virtual void computePressure(double timeIntervalInSeconds);
 		virtual void computeAdvection(double timeIntervalInSeconds);
 		std::shared_ptr<ScalarField3> GetColliderSignedDistance() const;
+
+		//Applies the boundary condition to the velocity field.
+		void applyBoundaryCondition();
 	private:
 		void timeStepStart(double timeStepInSeconds);
 		void timeStepEnd(double timeStepInSeconds);
 		std::shared_ptr<GridSystemData3> _grids;
 		std::shared_ptr<IAdvectionSolver3> _advectionSolver;
 		std::shared_ptr<GridBoundaryConditionSolver3> _boundaryConditionSolver;
+		Vector3D _gravity = Vector3D(0.0, -9.8, 0.0);
 	};
 }
 #endif
