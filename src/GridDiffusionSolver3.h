@@ -53,5 +53,16 @@ namespace CalfFluidEngine {
 			const ScalarField3& boundarySignedDistance,
 			const ScalarField3& fluidSignedDistance) override;
 	};
+
+	class GridBackwardEulerDiffusionSolver3 final :public IGridDiffusionSolver3 {
+	public:
+		void Solve(
+			const ScalarGrid3& source,
+			double diffusionCoefficient,
+			double timeIntervalInSeconds,
+			ScalarGrid3* dest,
+			const ScalarField3& boundarySignedDistance,
+			const ScalarField3& fluidSignedDistance) override;
+	};
 }
 #endif

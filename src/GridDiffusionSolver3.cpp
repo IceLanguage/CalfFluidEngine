@@ -27,3 +27,13 @@ void CalfFluidEngine::GridForwardEulerDiffusionSolver3::Solve(
 			* source.GetLaplacianAtDataPoint(i, j, k);
 	});
 }
+
+void CalfFluidEngine::GridBackwardEulerDiffusionSolver3::Solve(
+	const ScalarGrid3 & source, 
+	double diffusionCoefficient, 
+	double timeIntervalInSeconds, 
+	ScalarGrid3 * dest, 
+	const ScalarField3 & boundarySignedDistance, 
+	const ScalarField3 & fluidSignedDistance)
+{
+}
