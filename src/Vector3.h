@@ -202,6 +202,11 @@ namespace CalfFluidEngine{
 		return Vector3<T>(-a.x, -a.y, -a.z);
 	}
 
+	template <typename T>
+	Vector<T> operator/(T a, const Vector<T>& b) {
+		return Vector<T>(a / b.x, a / b.y, a / b.z);
+	}
+
 	typedef Vector3<float> Vector3F;
 
 	typedef Vector3<double> Vector3D;

@@ -128,6 +128,16 @@ void CalfFluidEngine::ScalarGrid3::ParallelForEach(const std::function<void(size
 	_data.ParallelForEach(func);
 }
 
+Array3<double>& CalfFluidEngine::ScalarGrid3::GetArray3Data()
+{
+	return _data;
+}
+
+const Array3<double>& CalfFluidEngine::ScalarGrid3::GetArray3Data() const
+{
+	return _data;
+}
+
 void CalfFluidEngine::ScalarGrid3::resetSampler()
 {
 	_linearSampler = LinearArraySampler3<double, double>(

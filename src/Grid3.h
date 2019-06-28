@@ -73,6 +73,9 @@ namespace CalfFluidEngine {
 		virtual double Laplacian(const Vector3D& x) const override;
 		virtual double Sample(const Vector3D& x) const override;
 		void ParallelForEach(const std::function<void(size_t, size_t, size_t)>& func) const;
+
+		Array3<double>& GetArray3Data();
+		const Array3<double>& GetArray3Data() const;
 	private:
 		void resetSampler();
 		LinearArraySampler3<double, double> _linearSampler;

@@ -2,6 +2,7 @@
 #define _CalfFluidEngine_GridDiffusionSolver3_
 #include <Grid3.h>
 #include <Constant.h>
+#include <FDMLinearSystem3.h>
 namespace CalfFluidEngine {
 	class IGridDiffusionSolver3
 	{
@@ -63,6 +64,16 @@ namespace CalfFluidEngine {
 			ScalarGrid3* dest,
 			const ScalarField3& boundarySignedDistance,
 			const ScalarField3& fluidSignedDistance) override;
+	private:
+		void buildMatrix(
+			const Vector3<size_t>& size,
+			const Vector3D& c);
+
+		void buildVectors(
+			const Array3<double>& f,
+			const Vector3D& c);
+		FDMLinearSystem3 _system;
+		std::shared_ptr<IFDMLinearSystemSolver3> _systemSolver;
 	};
 }
 #endif
