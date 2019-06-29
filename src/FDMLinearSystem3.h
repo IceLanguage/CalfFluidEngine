@@ -98,5 +98,8 @@ namespace CalfFluidEngine {
 		Array3<double> _xTemp;
 		Array3<double> _residual;
 	};
+
+	//Gauss Seidel method is programmatically consistent with the Jacobi method 
+	typename FDMJacobiSolver3 FDMGaussSeidelSolver3;
 }
 #endif
