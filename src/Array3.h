@@ -86,10 +86,6 @@ namespace CalfFluidEngine {
 		Vector3<size_t> Size() const {
 			return _size;
 		}
-		void Swap(Array3& other) {
-			std::swap(other._data, _data);
-			std::swap(other._size, _size);
-		}
 		void ParallelForEach(const std::function<void(size_t, size_t, size_t)>& func) const
 		{
 			tbb::parallel_for(tbb::blocked_range<size_t>(size_t(0), _size.z),
