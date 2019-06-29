@@ -65,6 +65,16 @@ namespace CalfFluidEngine {
 			std::copy(other._data.begin(), other._data.end(), _data.begin());
 			_size = other._size;
 		}
+		void Set(const T& value) {
+			//for (auto& v : _data) {
+			//	v = value;
+			//}
+			tbb::parallel_for(tbb::blocked_range<size_t>(size_t(0), _size.x * _size.y * _size.z),
+				[&](const tbb::blocked_range<size_t> & b) {
+				for (size_t k = b.begin(); k != b.end(); ++k)
+					_data[k] = value;
+			});
+		}
 		Vector3<size_t> Size() const {
 			return _size;
 		}

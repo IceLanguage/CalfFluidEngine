@@ -16,7 +16,7 @@ bool CalfFluidEngine::FDMJacobiSolver3::Solve(FDMLinearSystem3 * system)
 
 		if (iter != 0 && iter % _residualCheckInterval == 0) {
 
-			Residual(system->A, system->x, system->b, &_residual);
+			FDMLinearSystem3::Residual(system->A, system->x, system->b, &_residual);
 
 			if (std::sqrt(FDMLinearSystem3::Dot(_residual, _residual)) < _maxResidualTolerance)
 			{
@@ -25,7 +25,7 @@ bool CalfFluidEngine::FDMJacobiSolver3::Solve(FDMLinearSystem3 * system)
 			}
 		}
 	}
-	Residual(system->A, system->x, system->b, &_residual);
+	FDMLinearSystem3::Residual(system->A, system->x, system->b, &_residual);
 
 	return std::sqrt(FDMLinearSystem3::Dot(_residual, _residual)) < _maxResidualTolerance;
 }
@@ -53,3 +53,75 @@ void CalfFluidEngine::FDMJacobiSolver3::relax(
 	});
 }
 
+bool CalfFluidEngine::FDMConjugateGradientSolver3::Solve(FDMLinearSystem3 * system)
+{
+	Vector3<size_t> size = system->A.Size();
+	_r.Resize(size, 0.0);
+	_d.Resize(size, 0.0);
+	_q.Resize(size, 0.0);
+	_s.Resize(size, 0.0);
+
+	system->x.Set(0.0);
+	_r.Set(0.0);
+	_d.Set(0.0);
+	_q.Set(0.0);
+	_s.Set(0.0);
+
+	// r = b - Ax
+	FDMLinearSystem3::Residual(system->A, system->x, system->b, &_r);
+
+	// d = r
+	_d.Set(_r);
+
+	// sigmaNew = r.d
+	double sigmaNew = FDMLinearSystem3::Dot(_r, _d);
+
+	unsigned int iter = 0; bool trigger = false;
+
+	while (sigmaNew > _maxResidualTolerance * _maxResidualTolerance && iter < _maxNumberOfIterations) {
+		
+		FDMLinearSystem3::MVM(system->A, _d, &_q);
+
+		// alpha = sigmaNew/d.q
+		double alpha = sigmaNew / FDMLinearSystem3::Dot(_d, _q);
+
+		// x = x + alpha*d
+		FDMLinearSystem3::Axpy(alpha, _d, system->x, &system->x);
+
+		// if i is divisible by 50...
+		if (trigger || (iter % 50 == 0 && iter > 0)) {
+			// r = b - Ax
+			FDMLinearSystem3::Residual(system->A, system->x, system->b, &_r);
+			trigger = false;
+		}
+		else {
+			// r = r - alpha*q
+			FDMLinearSystem3::Axpy(-alpha, _q, _r, &_r);
+		}
+
+		// s = r
+		_s.Set(_r);
+
+		// sigmaOld = sigmaNew
+		double sigmaOld = sigmaNew;
+
+		// sigmaNew = r.s
+		sigmaNew = FDMLinearSystem3::Dot(_r, _s);
+
+		if (sigmaNew > sigmaOld) {
+			trigger = true;
+		}
+
+		// beta = sigmaNew/sigmaOld
+		double beta = sigmaNew / sigmaOld;
+
+		// d = s + beta*d
+		FDMLinearSystem3::Axpy(beta, _d, _s, &_d);
+
+		++iter;
+	}
+
+	return 
+		std::sqrt(std::fabs(sigmaNew)) <= _maxResidualTolerance ||
+		iter < _maxNumberOfIterations;
+}

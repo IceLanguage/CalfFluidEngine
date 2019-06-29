@@ -28,43 +28,56 @@ namespace CalfFluidEngine {
 
 			return result;
 		}
+
+		// res = m * v
+		static void MVM(const Array3<FDMMatrixRow3>& matrix, const Array3<double>& vector, Array3<double>* result)
+		{
+			Vector3<size_t> size = matrix.Size();
+			matrix.ParallelForEach([&](size_t i, size_t j, size_t k) {
+				(*result)(i, j, k) =
+					matrix(i, j, k).center * vector(i, j, k) +
+					((i > 0) ? matrix(i - 1, j, k).right * vector(i - 1, j, k) : 0.0) +
+					((i + 1 < size.x) ? matrix(i, j, k).right * vector(i + 1, j, k) : 0.0) +
+					((j > 0) ? matrix(i, j - 1, k).up * vector(i, j - 1, k) : 0.0) +
+					((j + 1 < size.y) ? matrix(i, j, k).up * vector(i, j + 1, k) : 0.0) +
+					((k > 0) ? matrix(i, j, k - 1).front * vector(i, j, k - 1) : 0.0) +
+					((k + 1 < size.z) ? matrix(i, j, k).front * vector(i, j, k + 1) : 0.0);
+			});
+		}
+
+		//res = x + y
+		static void Axpy(double a, const Array3<double>& x, const Array3<double>& y,
+			Array3<double>* result)
+		{
+			Vector3<size_t> size = x.Size();
+
+			x.ParallelForEach([&](size_t i, size_t j, size_t k) {
+				(*result)(i, j, k) = a * x(i, j, k) + y(i, j, k);
+			});
+		}
+
+		// res = A - bx
+		static void Residual(
+			const Array3<FDMMatrixRow3>& A,
+			const Array3<double>& x,
+			const Array3<double>& b,
+			Array3<double>* result)
+		{
+			Vector3<size_t> size = A.Size();
+			A.ParallelForEach([&](size_t i, size_t j, size_t k) {
+				(*result)(i, j, k) =
+					b(i, j, k) - A(i, j, k).center * x(i, j, k) -
+					((i > 0) ? A(i - 1, j, k).right * x(i - 1, j, k) : 0.0) -
+					((i + 1 < size.x) ? A(i, j, k).right * x(i + 1, j, k) : 0.0) -
+					((j > 0) ? A(i, j - 1, k).up * x(i, j - 1, k) : 0.0) -
+					((j + 1 < size.y) ? A(i, j, k).up * x(i, j + 1, k) : 0.0) -
+					((k > 0) ? A(i, j, k - 1).front * x(i, j, k - 1) : 0.0) -
+					((k + 1 < size.z) ? A(i, j, k).front * x(i, j, k + 1) : 0.0);
+			});
+		}
 	};
 
-	// res = m * v
-	inline void MVM(const Array3<FDMMatrixRow3>& matrix, const Array3<double>& vector, Array3<double>* result)
-	{
-		Vector3<size_t> size = matrix.Size();
-		matrix.ParallelForEach([&](size_t i, size_t j, size_t k) {
-			(*result)(i, j, k) =
-				matrix(i, j, k).center * vector(i, j, k) +
-				((i > 0) ? matrix(i - 1, j, k).right * vector(i - 1, j, k) : 0.0) +
-				((i + 1 < size.x) ? matrix(i, j, k).right * vector(i + 1, j, k) : 0.0) +
-				((j > 0) ? matrix(i, j - 1, k).up * vector(i, j - 1, k) : 0.0) +
-				((j + 1 < size.y) ? matrix(i, j, k).up * vector(i, j + 1, k) : 0.0) +
-				((k > 0) ? matrix(i, j, k - 1).front * vector(i, j, k - 1) : 0.0) +
-				((k + 1 < size.z) ? matrix(i, j, k).front * vector(i, j, k + 1) : 0.0);
-		});
-	}
-
-	// res = A - bx
-	inline void Residual(
-		const Array3<FDMMatrixRow3>& A, 
-		const Array3<double>& x, 
-		const Array3<double>& b, 
-		Array3<double>* result)
-	{
-		Vector3<size_t> size = A.Size();
-		A.ParallelForEach([&](size_t i, size_t j, size_t k) {
-			(*result)(i, j, k) =
-				b(i, j, k) - A(i, j, k).center * x(i, j, k) -
-				((i > 0) ? A(i - 1, j, k).right * x(i - 1, j, k) : 0.0) -
-				((i + 1 < size.x) ? A(i, j, k).right * x(i + 1, j, k) : 0.0) -
-				((j > 0) ? A(i, j - 1, k).up * x(i, j - 1, k) : 0.0) -
-				((j + 1 < size.y) ? A(i, j, k).up * x(i, j + 1, k) : 0.0) -
-				((k > 0) ? A(i, j, k - 1).front * x(i, j, k - 1) : 0.0) -
-				((k + 1 < size.z) ? A(i, j, k).front * x(i, j, k + 1) : 0.0);
-		});
-	}
+	
 
 	class IFDMLinearSystemSolver3
 	{
@@ -101,5 +114,17 @@ namespace CalfFluidEngine {
 
 	//Gauss Seidel method is programmatically consistent with the Jacobi method 
 	typename FDMJacobiSolver3 FDMGaussSeidelSolver3;
+
+	class FDMConjugateGradientSolver3 : public IFDMLinearSystemSolver3 {
+	public:
+		virtual bool Solve(FDMLinearSystem3* system) override;
+	private:
+		Array3<double> _r;
+		Array3<double> _d;
+		Array3<double> _q;
+		Array3<double> _s;
+		double _maxResidualTolerance;
+		unsigned int _maxNumberOfIterations;
+	};
 }
 #endif
