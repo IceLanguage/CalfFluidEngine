@@ -65,6 +65,16 @@ namespace CalfFluidEngine {
 			const ScalarField3& boundarySignedDistance,
 			const ScalarField3& fluidSignedDistance) override;
 	private:
+		enum Marker {
+			Fluid = 0,
+			Boundary = 1
+		};
+		void buildMarkers(
+			const Vector3<size_t>& size,
+			const std::function<Vector3D(size_t, size_t, size_t)>& pos,
+			const ScalarField3& boundarySignedDistance,
+			const ScalarField3& fluidSignedDistance);
+
 		void buildMatrix(
 			const Vector3<size_t>& size,
 			const Vector3D& c);
@@ -74,6 +84,7 @@ namespace CalfFluidEngine {
 			const Vector3D& c);
 		FDMLinearSystem3 _system;
 		std::shared_ptr<IFDMLinearSystemSolver3> _systemSolver;
+		Array3<Marker> _markers;
 	};
 }
 #endif

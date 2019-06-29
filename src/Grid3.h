@@ -76,6 +76,7 @@ namespace CalfFluidEngine {
 
 		Array3<double>& GetArray3Data();
 		const Array3<double>& GetArray3Data() const;
+		std::function<Vector3D(size_t, size_t, size_t)> Position() const;
 	private:
 		void resetSampler();
 		LinearArraySampler3<double, double> _linearSampler;

@@ -138,6 +138,15 @@ const Array3<double>& CalfFluidEngine::ScalarGrid3::GetArray3Data() const
 	return _data;
 }
 
+std::function<Vector3D(size_t, size_t, size_t)> CalfFluidEngine::ScalarGrid3::Position() const
+{
+	Vector3D o = GetDataOrigin();
+	Vector3D gs = GetGridSpacing();
+	return [o, gs](size_t i, size_t j, size_t k) -> Vector3D {
+		return o + gs * Vector3D({ i, j, k });
+	};
+}
+
 void CalfFluidEngine::ScalarGrid3::resetSampler()
 {
 	_linearSampler = LinearArraySampler3<double, double>(
