@@ -24,14 +24,22 @@ namespace CalfFluidEngine {
 			size_t iMin = std::min(size.x, _size.x);
 			size_t jMin = std::min(size.y, _size.y);
 			size_t kMin = std::min(size.z, _size.z);
-			for (size_t k = 0; k < kMin; ++k) {
+			/*for (size_t k = 0; k < kMin; ++k) {
 				for (size_t j = 0; j < jMin; ++j) {
 					for (size_t i = 0; i < iMin; ++i) {
 						grid(i, j, k) = at(i, j, k);
 					}
 				}
-			}
-
+			}*/
+			tbb::parallel_for(tbb::blocked_range<size_t>(size_t(0), kMin),
+				[&](const tbb::blocked_range<size_t> & b) {
+				for (size_t k = b.begin(); k != b.end(); ++k)
+					for (size_t j = size_t(0); j < jMin; ++j) {
+						for (size_t i = size_t(0); i < iMin; ++i) {
+							grid(i, j, k) = at(i, j, k);
+						}
+					}
+			});
 			Swap(grid);
 		}
 		T& at(size_t i, size_t j, size_t k) {

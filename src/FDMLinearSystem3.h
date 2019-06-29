@@ -126,5 +126,28 @@ namespace CalfFluidEngine {
 		double _maxResidualTolerance;
 		unsigned int _maxNumberOfIterations;
 	};
+
+	// incomplete Cholesky conjugate gradient (ICCG).
+	class FDM_ICCGSolver3 : public IFDMLinearSystemSolver3 {
+	public:
+		virtual bool Solve(FDMLinearSystem3* system) override;
+	private:
+		struct Preconditioner final {
+			Array3<FDMMatrixRow3> A;
+			Array3<double> d;
+			Array3<double> y;
+
+			void Build(const Array3<FDMMatrixRow3>& matrix);
+
+			void Solve(const Array3<double>& b, Array3<double>* x);
+		};
+		Array3<double> _r;
+		Array3<double> _d;
+		Array3<double> _q;
+		Array3<double> _s;
+		double _maxResidualTolerance;
+		unsigned int _maxNumberOfIterations;
+		Preconditioner _precond;
+	};
 }
 #endif
