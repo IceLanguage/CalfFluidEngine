@@ -168,6 +168,7 @@
     <ClCompile Include="src\GridBoundaryConditionSolver3.cpp" />
     <ClCompile Include="src\GridDiffusionSolver3.cpp" />
     <ClCompile Include="src\GridFluidSolver3.cpp" />
+    <ClCompile Include="src\GridPressureSolver3.cpp" />
     <ClCompile Include="src\GridSystemData3.cpp" />
     <ClCompile Include="src\ParticleEmitter3.cpp" />
     <ClCompile Include="src\ParticleSystemData3.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="src\GridBoundaryConditionSolver3.h" />
     <ClInclude Include="src\GridDiffusionSolver3.h" />
     <ClInclude Include="src\GridFluidSolver3.h" />
+    <ClInclude Include="src\GridPressureSolver3.h" />
     <ClInclude Include="src\GridSystemData3.h" />
     <ClInclude Include="src\Math_utils.h" />
     <ClInclude Include="src\Matrix3.h" />
