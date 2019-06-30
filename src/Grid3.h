@@ -18,6 +18,11 @@ namespace CalfFluidEngine {
 		const BoundingBox3D& GetBoundingBox() const { return _boundingBox; }
 		std::function<Vector3D(size_t, size_t, size_t)> GetCellCenterPosition() const;
 		void SetGrid(const Grid3& other);
+
+		//**********************************************
+		//Swaps the data with other grid.
+		//**********************************************
+		virtual void Swap(Grid3* other) = 0;
 	protected:
 		void setSizeParameters(
 			const Vector3<size_t>& resolution, 
@@ -77,6 +82,9 @@ namespace CalfFluidEngine {
 		Array3<double>& GetArray3Data();
 		const Array3<double>& GetArray3Data() const;
 		std::function<Vector3D(size_t, size_t, size_t)> Position() const;
+
+		void Fill(double value);
+		void Fill(const std::function<double(const Vector3D&)>& func);
 	private:
 		void resetSampler();
 		LinearArraySampler3<double, double> _linearSampler;

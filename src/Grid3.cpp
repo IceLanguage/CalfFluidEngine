@@ -147,6 +147,22 @@ std::function<Vector3D(size_t, size_t, size_t)> CalfFluidEngine::ScalarGrid3::Po
 	};
 }
 
+void CalfFluidEngine::ScalarGrid3::Fill(double value)
+{
+	_data.ParallelForEach([this, value](size_t i, size_t j, size_t k) {
+		_data(i, j, k) = value;
+	});
+}
+
+void CalfFluidEngine::ScalarGrid3::Fill(const std::function<double(const Vector3D&)>& func)
+{
+	std::function<Vector3D(size_t, size_t, size_t)> pos = Position();
+
+	_data.ParallelForEach([this, &func, &pos](size_t i, size_t j, size_t k) {
+		_data(i, j, k) = func(pos(i, j, k));;
+	});
+}
+
 void CalfFluidEngine::ScalarGrid3::resetSampler()
 {
 	_linearSampler = LinearArraySampler3<double, double>(
