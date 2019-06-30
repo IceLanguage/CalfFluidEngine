@@ -27,6 +27,14 @@ void CalfFluidEngine::Grid3::SetGrid(const Grid3 & other)
 	_boundingBox = other._boundingBox;
 }
 
+void CalfFluidEngine::Grid3::Swap(Grid3 * other)
+{
+	std::swap(_resolution, other->_resolution);
+	std::swap(_gridSpacing, other->_gridSpacing);
+	std::swap(_origin, other->_origin);
+	std::swap(_boundingBox, other->_boundingBox);
+}
+
 void CalfFluidEngine::Grid3::setSizeParameters(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & origin)
 {
 	_resolution = resolution;
@@ -163,6 +171,18 @@ void CalfFluidEngine::ScalarGrid3::Fill(const std::function<double(const Vector3
 	});
 }
 
+void CalfFluidEngine::ScalarGrid3::Swap(Grid3 * other)
+{
+	Grid3::Swap(other);
+
+	ScalarGrid3* sameType
+		= dynamic_cast<ScalarGrid3*>(other);
+
+	_data.Swap(sameType->_data);
+	std::swap(_linearSampler, sameType->_linearSampler);
+	std::swap(_sampler, sameType->_sampler);
+}
+
 void CalfFluidEngine::ScalarGrid3::resetSampler()
 {
 	_linearSampler = LinearArraySampler3<double, double>(
@@ -227,6 +247,24 @@ Vector3D CalfFluidEngine::CellCenteredScalarGrid3::GetDataOrigin() const
 	return GetOrigin() + 0.5 * GetGridSpacing();
 }
 
+std::shared_ptr<ScalarGrid3> CalfFluidEngine::CellCenteredScalarGrid3::Clone() const
+{
+	return std::shared_ptr<CellCenteredScalarGrid3>(
+		new CellCenteredScalarGrid3(*this),
+		[](CellCenteredScalarGrid3* obj) {
+		delete obj;
+	});
+}
+
+//void CalfFluidEngine::CellCenteredScalarGrid3::Swap(Grid3 * other)
+//{
+//	CellCenteredScalarGrid3* sameType
+//		= dynamic_cast<CellCenteredScalarGrid3*>(other);
+//	if (sameType != nullptr) {
+//		ScalarGrid3::Swap(sameType);
+//	}
+//}
+
 CalfFluidEngine::VertexCenteredScalarGrid3::VertexCenteredScalarGrid3()
 {
 }
@@ -264,6 +302,15 @@ Vector3<size_t> CalfFluidEngine::VertexCenteredScalarGrid3::GetDataSize() const
 Vector3D CalfFluidEngine::VertexCenteredScalarGrid3::GetDataOrigin() const
 {
 	return GetOrigin();
+}
+
+std::shared_ptr<ScalarGrid3> CalfFluidEngine::VertexCenteredScalarGrid3::Clone() const
+{
+	return std::shared_ptr<VertexCenteredScalarGrid3>(
+		new VertexCenteredScalarGrid3(*this),
+		[](VertexCenteredScalarGrid3* obj) {
+		delete obj;
+	});
 }
 
 CalfFluidEngine::FaceCenteredGrid3::FaceCenteredGrid3() :
@@ -556,6 +603,58 @@ std::shared_ptr<VectorGrid3> CalfFluidEngine::FaceCenteredGrid3::Clone() const
 	});
 }
 
+void CalfFluidEngine::FaceCenteredGrid3::Fill(Vector3D value)
+{
+	_dataU.ParallelForEach([this, value](size_t i, size_t j, size_t k) {
+		_dataU(i, j, k) = value.x;
+	});
+	_dataV.ParallelForEach([this, value](size_t i, size_t j, size_t k) {
+		_dataV(i, j, k) = value.y;
+	});
+	_dataW.ParallelForEach([this, value](size_t i, size_t j, size_t k) {
+		_dataW(i, j, k) = value.z;
+	});
+}
+
+void CalfFluidEngine::FaceCenteredGrid3::Fill(const std::function<Vector3D(const Vector3D&)>& func)
+{
+	std::function<Vector3D(size_t, size_t, size_t)> UPos = UPosition();
+
+	_dataU.ParallelForEach([this, &func, &UPos](size_t i, size_t j, size_t k) {
+		_dataU(i, j, k) = func(UPos(i, j, k)).x;;
+	});
+	std::function<Vector3D(size_t, size_t, size_t)> VPos = VPosition();
+
+	_dataV.ParallelForEach([this, &func, &VPos](size_t i, size_t j, size_t k) {
+		_dataV(i, j, k) = func(VPos(i, j, k)).y;;
+	});
+	std::function<Vector3D(size_t, size_t, size_t)> WPos = UPosition();
+
+	_dataW.ParallelForEach([this, &func, &WPos](size_t i, size_t j, size_t k) {
+		_dataW(i, j, k) = func(WPos(i, j, k)).z;;
+	});
+}
+
+void CalfFluidEngine::FaceCenteredGrid3::Swap(Grid3 * other)
+{
+	FaceCenteredGrid3* sameType = dynamic_cast<FaceCenteredGrid3*>(other);
+
+	if (sameType != nullptr) {
+		Grid3::Swap(sameType);
+
+		_dataU.Swap(sameType->_dataU);
+		_dataV.Swap(sameType->_dataV);
+		_dataW.Swap(sameType->_dataW);
+		std::swap(_dataOriginU, sameType->_dataOriginU);
+		std::swap(_dataOriginV, sameType->_dataOriginV);
+		std::swap(_dataOriginW, sameType->_dataOriginW);
+		std::swap(_uLinearSampler, sameType->_uLinearSampler);
+		std::swap(_vLinearSampler, sameType->_vLinearSampler);
+		std::swap(_wLinearSampler, sameType->_wLinearSampler);
+		std::swap(_sampler, sameType->_sampler);
+	}
+}
+
 void CalfFluidEngine::FaceCenteredGrid3::onResize(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & origin, const Vector3D & initialValue)
 {
 	if (resolution != Vector3<size_t>(0, 0, 0)) {
@@ -663,6 +762,41 @@ Vector3D CalfFluidEngine::CollocatedVectorGrid3::Sample(const Vector3D & x) cons
 	return _sampler(x);
 }
 
+void CalfFluidEngine::CollocatedVectorGrid3::Swap(Grid3 * other)
+{
+	Grid3::Swap(other);
+	CollocatedVectorGrid3* sameType =
+		dynamic_cast<CollocatedVectorGrid3*>(other);
+	_data.Swap(sameType->_data);
+	std::swap(_linearSampler, sameType->_linearSampler);
+	std::swap(_sampler, sameType->_sampler);
+}
+
+void CalfFluidEngine::CollocatedVectorGrid3::Fill(Vector3D value)
+{
+	_data.ParallelForEach([this, value](size_t i, size_t j, size_t k) {
+		_data(i, j, k) = value;
+	});
+}
+
+void CalfFluidEngine::CollocatedVectorGrid3::Fill(const std::function<Vector3D(const Vector3D&)>& func)
+{
+	std::function<Vector3D(size_t, size_t, size_t)> pos = Position();
+
+	_data.ParallelForEach([this, &func, &pos](size_t i, size_t j, size_t k) {
+		_data(i, j, k) = func(pos(i, j, k));;
+	});
+}
+
+std::function<Vector3D(size_t, size_t, size_t)> CalfFluidEngine::CollocatedVectorGrid3::Position() const
+{
+	Vector3D o = GetDataOrigin();
+	Vector3D gs = GetGridSpacing();
+	return [this, o, gs](size_t i, size_t j, size_t k) -> Vector3D {
+		return o + gs * Vector3D({ i, j, k });
+	};
+}
+
 void CalfFluidEngine::CollocatedVectorGrid3::onResize(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & origin, const Vector3D & initialValue)
 {
 	_data.Resize(GetDataSize(), initialValue);
@@ -702,6 +836,15 @@ Vector3D CalfFluidEngine::CellCenteredVectorGrid3::GetDataOrigin() const
 	return GetOrigin() + 0.5 * GetGridSpacing();
 }
 
+std::shared_ptr<VectorGrid3> CalfFluidEngine::CellCenteredVectorGrid3::Clone() const
+{
+	return std::shared_ptr<CellCenteredVectorGrid3>(
+		new CellCenteredVectorGrid3(*this),
+		[](CellCenteredVectorGrid3* obj) {
+		delete obj;
+	});
+}
+
 CalfFluidEngine::VertexCenteredVectorGrid3::VertexCenteredVectorGrid3()
 {
 }
@@ -731,6 +874,15 @@ Vector3<size_t> CalfFluidEngine::VertexCenteredVectorGrid3::GetDataSize() const
 Vector3D CalfFluidEngine::VertexCenteredVectorGrid3::GetDataOrigin() const
 {
 	return GetOrigin();
+}
+
+std::shared_ptr<VectorGrid3> CalfFluidEngine::VertexCenteredVectorGrid3::Clone() const
+{
+	return std::shared_ptr<VertexCenteredVectorGrid3>(
+		new VertexCenteredVectorGrid3(*this),
+		[](VertexCenteredVectorGrid3* obj) {
+		delete obj;
+	});
 }
 
 CalfFluidEngine::ScalarGridBuilder3::ScalarGridBuilder3()

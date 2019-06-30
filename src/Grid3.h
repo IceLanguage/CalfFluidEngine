@@ -22,7 +22,7 @@ namespace CalfFluidEngine {
 		//**********************************************
 		//Swaps the data with other grid.
 		//**********************************************
-		virtual void Swap(Grid3* other) = 0;
+		virtual void Swap(Grid3* other);
 	protected:
 		void setSizeParameters(
 			const Vector3<size_t>& resolution, 
@@ -53,6 +53,11 @@ namespace CalfFluidEngine {
 		//Returns the origin of the grid data.
 		//**********************************************
 		virtual Vector3D GetDataOrigin() const = 0;
+
+		//**********************************************
+		//Returns the copy of the grid instance.
+		//**********************************************
+		virtual std::shared_ptr<ScalarGrid3> Clone() const = 0;
 
 		void Resize(
 			size_t resolutionX,
@@ -85,6 +90,8 @@ namespace CalfFluidEngine {
 
 		void Fill(double value);
 		void Fill(const std::function<double(const Vector3D&)>& func);
+
+		virtual void Swap(Grid3* other) override;
 	private:
 		void resetSampler();
 		LinearArraySampler3<double, double> _linearSampler;
@@ -121,6 +128,16 @@ namespace CalfFluidEngine {
 		//Returns the copy of the grid instance.
 		//**********************************************
 		virtual std::shared_ptr<VectorGrid3> Clone() const = 0;
+
+		//**********************************************
+		//Fills the grid with given value.
+		//**********************************************
+		virtual void Fill(Vector3D value) = 0;
+
+		//**********************************************
+		//Fills the grid with given position-to-value mapping function.
+		//**********************************************
+		virtual void Fill(const std::function<Vector3D(const Vector3D&)>& func) = 0;
 	protected:
 		//**********************************************
 		//Invoked when the resizing happens.
@@ -157,8 +174,8 @@ namespace CalfFluidEngine {
 			double initialValue = 0.0);
 		virtual Vector3<size_t> GetDataSize() const override;
 		virtual Vector3D GetDataOrigin() const override;
-		
-
+		std::shared_ptr<ScalarGrid3> Clone() const override;
+		//void Swap(Grid3* other) override;
 	};
 
 	//the class defines the data point at the grid vertices (corners). 
@@ -184,6 +201,7 @@ namespace CalfFluidEngine {
 			double initialValue = 0.0);
 		virtual Vector3<size_t> GetDataSize() const override;
 		virtual Vector3D GetDataOrigin() const override;
+		std::shared_ptr<ScalarGrid3> Clone() const override;
 	};
 
 
@@ -227,6 +245,9 @@ namespace CalfFluidEngine {
 		std::function<Vector3D(const Vector3D&)> Sampler() const override;
 		Vector3D Sample(const Vector3D& x) const override;
 		virtual std::shared_ptr<VectorGrid3> Clone() const override;
+		virtual void Fill(Vector3D value) override;
+		virtual void Fill(const std::function<Vector3D(const Vector3D&)>& func) override;
+		void Swap(Grid3* other) override;
 	protected:
 		void onResize(const Vector3<size_t>& resolution, const Vector3D& gridSpacing,
 			const Vector3D& origin, const Vector3D& initialValue) final;
@@ -266,6 +287,10 @@ namespace CalfFluidEngine {
 		virtual double Divergence(const Vector3D& x) const override;
 		virtual Vector3D Curl(const Vector3D& x) const override;
 		virtual Vector3D Sample(const Vector3D& x) const override;
+		void Swap(Grid3* other) override;
+		virtual void Fill(Vector3D value) override;
+		virtual void Fill(const std::function<Vector3D(const Vector3D&)>& func) override;
+		std::function<Vector3D(size_t, size_t, size_t)> Position() const;
 	protected:
 		void onResize(
 			const Vector3<size_t>& resolution,
@@ -302,6 +327,9 @@ namespace CalfFluidEngine {
 			const Vector3D& initialValue = Vector3D::zero);
 		virtual Vector3<size_t> GetDataSize() const override;
 		virtual Vector3D GetDataOrigin() const override;
+		std::shared_ptr<VectorGrid3> Clone() const override;
+		
+		
 	};
 
 	class VertexCenteredVectorGrid3 final : public CollocatedVectorGrid3 {
@@ -327,6 +355,7 @@ namespace CalfFluidEngine {
 			const Vector3D& initialValue = Vector3D::zero);
 		virtual Vector3<size_t> GetDataSize() const override;
 		virtual Vector3D GetDataOrigin() const override;
+		std::shared_ptr<VectorGrid3> Clone() const override;
 	};
 
 	class ScalarGridBuilder3 {
