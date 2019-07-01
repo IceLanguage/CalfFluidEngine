@@ -14,7 +14,12 @@ namespace CalfFluidEngine {
 		Array3(const Array3& other)
 		{
 			_size = other._size;
-			_data = other._data;
+			_data.resize(other._data.size());
+			std::copy(other._data.begin(), other._data.end(), _data.begin());
+		}
+		explicit Array3(const Vector3<size_t>& size, const T& initVal = T())
+		{
+			Resize(size, initVal);
 		}
 		void Resize(const Vector3<size_t>& size, const T& initVal = T())
 		{

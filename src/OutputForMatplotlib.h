@@ -3,7 +3,7 @@
  
 #include <direct.h>
 #include <vector>
-
+#include <Array3.h>
 #include "../External/cnpy/cnpy.h"
 #include "../External/pystring/pystring.h"
 #include <ParticleSystemSolver3.h>
@@ -49,6 +49,20 @@ public:
 		};
 		cnpy::npy_save(filename, data.data(), dim, 2, "w");
 	}
+
+	template <typename T> 
+	void SaveData(
+		const Array3<T>& data, 
+		const std::string& name) 
+	{
+		std::string filename = getFullFilePath(name); 
+		unsigned int dim[3] = { 
+		static_cast<unsigned int>(data.Size().z),
+		static_cast<unsigned int>(data.Size().y),
+		static_cast<unsigned int>(data.Size().x)
+		}; 
+		cnpy::npy_save(filename, data.data(), dim, 3, "w"); 
+	} 
 
 	template<typename ParticleSystem>
 	void SaveParticleDataXY(
