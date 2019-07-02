@@ -50,12 +50,23 @@ namespace CalfFluidEngine {
 		virtual ~SemiLagrangianAdvectionSolver3();
 
 		void Advect(
+			const ScalarGrid3& input,
+			const VectorField3& flow,
+			double dt,
+			ScalarGrid3* output,
+			const ScalarField3& boundarySignedDistance) override final;
+		void Advect(
+				const CollocatedVectorGrid3& input,
+				const VectorField3& flow,
+				double dt,
+				CollocatedVectorGrid3* output,
+				const ScalarField3& boundarySignedDistance) override final;
+		void Advect(
 			const FaceCenteredGrid3& input, 
 			const VectorField3& flow,
 			double dt, 
 			FaceCenteredGrid3* output,
-			const ScalarField3& boundarySignedDistance = ConstantScalarField3(
-				std::numeric_limits<double>::max())) override final;
+			const ScalarField3& boundarySignedDistance) override final;
 	private:
 		Vector3D backTrace(
 			const VectorField3& flow, 

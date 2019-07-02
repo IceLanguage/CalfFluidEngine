@@ -10,12 +10,11 @@ namespace CalfFluidEngine {
 	class Array3 final
 	{
 	public:
-		Array3() {};
+		Array3() { };
 		Array3(const Array3& other)
 		{
 			_size = other._size;
-			_data.resize(other._data.size());
-			std::copy(other._data.begin(), other._data.end(), _data.begin());
+			_data = other._data;
 		}
 		explicit Array3(const Vector3<size_t>& size, const T& initVal = T())
 		{
@@ -139,9 +138,12 @@ namespace CalfFluidEngine {
 					}
 			});
 		}
+		const T* const data() const {
+			return _data.data();
+		}
 	private:
-		Vector3<size_t> _size;
-		std::vector<T> _data;
+		Vector3<size_t> _size = Vector3<size_t>(0, 0, 0);
+		std::vector<T> _data = std::vector<T>();
 	};
 }
 #endif

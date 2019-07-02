@@ -11,21 +11,29 @@ namespace CalfFluidEngine {
 	{
 	public:
 		explicit LinearArraySampler3(
-			const Array3<T>& accessor,
+			Array3<T>* accessor,
 			const Vector3<R>& gridSpacing,
 			const Vector3<R>& gridOrigin)
 		{
 			_gridSpacing = gridSpacing;
 			_invGridSpacing = Vector3<R>(static_cast<R>(1) / gridSpacing.x, static_cast<R>(1) / gridSpacing.y, static_cast<R>(1) / gridSpacing.z);
 			_origin = gridOrigin;
-			_accessor = std::make_shared<Array3<T>>(accessor);
+			_accessor = accessor;
+		}
+
+		void Reset(const Vector3<R>& gridSpacing,
+			const Vector3<R>& gridOrigin)
+		{
+			_gridSpacing = gridSpacing;
+			_invGridSpacing = Vector3<R>(static_cast<R>(1) / gridSpacing.x, static_cast<R>(1) / gridSpacing.y, static_cast<R>(1) / gridSpacing.z);
+			_origin = gridOrigin;
 		}
 		LinearArraySampler3(const LinearArraySampler3& other)
 		{
 			_gridSpacing = other._gridSpacing;
 			_invGridSpacing = other._invGridSpacing;
 			_origin = other._origin;
-			_accessor = std::make_shared<Array3<T>>(*other._accessor);
+			_accessor = other._accessor;
 		}
 		T operator()(const Vector3<R>& x) const
 		{
@@ -110,7 +118,7 @@ namespace CalfFluidEngine {
 		Vector3<R> _gridSpacing;
 		Vector3<R> _invGridSpacing;
 		Vector3<R> _origin;
-		std::shared_ptr<Array3<T>> _accessor;
+		Array3<T>* _accessor;
 	};
 }
 #endif

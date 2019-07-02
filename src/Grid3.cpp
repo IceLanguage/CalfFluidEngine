@@ -52,7 +52,7 @@ void CalfFluidEngine::Grid3::setSizeParameters(const Vector3<size_t>& resolution
 
 CalfFluidEngine::ScalarGrid3::ScalarGrid3() : 
 	_linearSampler(LinearArraySampler3<double, double>(
-	_data, Vector3D(1, 1, 1), Vector3D::zero)) 
+	&_data, Vector3D(1, 1, 1), Vector3D::zero)) 
 {
 }
 
@@ -186,7 +186,7 @@ void CalfFluidEngine::ScalarGrid3::Swap(Grid3 * other)
 void CalfFluidEngine::ScalarGrid3::resetSampler()
 {
 	_linearSampler = LinearArraySampler3<double, double>(
-		_data, GetGridSpacing(), GetDataOrigin());
+		&_data, GetGridSpacing(), GetDataOrigin());
 	_sampler = _linearSampler.GetFunctor();
 }
 
@@ -318,11 +318,11 @@ _dataOriginU(0.0, 0.5, 0.5),
 _dataOriginV(0.5, 0.0, 0.5),
 _dataOriginW(0.5, 0.5, 0.0),
 _uLinearSampler(LinearArraySampler3<double, double>(
-_dataU, Vector3D(1, 1, 1), _dataOriginU)),
+&_dataU, Vector3D(1, 1, 1), _dataOriginU)),
 _vLinearSampler(LinearArraySampler3<double, double>(
-_dataV, Vector3D(1, 1, 1), _dataOriginV)),
+&_dataV, Vector3D(1, 1, 1), _dataOriginV)),
 _wLinearSampler(LinearArraySampler3<double, double>(
-_dataW, Vector3D(1, 1, 1), _dataOriginW))
+&_dataW, Vector3D(1, 1, 1), _dataOriginW))
 {
 }
 
@@ -338,21 +338,22 @@ CalfFluidEngine::FaceCenteredGrid3::FaceCenteredGrid3(size_t resolutionX, size_t
 
 CalfFluidEngine::FaceCenteredGrid3::FaceCenteredGrid3(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & origin, const Vector3D & initialValue):
 	_uLinearSampler(LinearArraySampler3<double, double>(
-		_dataU, Vector3D(1, 1, 1), _dataOriginU)),
+		&_dataU, Vector3D(1, 1, 1), _dataOriginU)),
 	_vLinearSampler(LinearArraySampler3<double, double>(
-		_dataV, Vector3D(1, 1, 1), _dataOriginV)),
+		&_dataV, Vector3D(1, 1, 1), _dataOriginV)),
 	_wLinearSampler(LinearArraySampler3<double, double>(
-		_dataW, Vector3D(1, 1, 1), _dataOriginW))
+		&_dataW, Vector3D(1, 1, 1), _dataOriginW))
 {
 	Resize(resolution, gridSpacing, origin, initialValue);
 }
 
-CalfFluidEngine::FaceCenteredGrid3::FaceCenteredGrid3(const FaceCenteredGrid3 & other) : _uLinearSampler(LinearArraySampler3<double, double>(
-	_dataU, Vector3D(1, 1, 1), _dataOriginU)),
+CalfFluidEngine::FaceCenteredGrid3::FaceCenteredGrid3(const FaceCenteredGrid3 & other) : 
+	_uLinearSampler(LinearArraySampler3<double, double>(
+		&_dataU, Vector3D(1, 1, 1), _dataOriginU)),
 	_vLinearSampler(LinearArraySampler3<double, double>(
-		_dataV, Vector3D(1, 1, 1), _dataOriginV)),
+		&_dataV, Vector3D(1, 1, 1), _dataOriginV)),
 	_wLinearSampler(LinearArraySampler3<double, double>(
-		_dataW, Vector3D(1, 1, 1), _dataOriginW)) {
+		&_dataW, Vector3D(1, 1, 1), _dataOriginW)) {
 	SetGrid(other);
 
 	_dataU.Set(other._dataU);
@@ -676,11 +677,11 @@ void CalfFluidEngine::FaceCenteredGrid3::onResize(const Vector3<size_t>& resolut
 
 void CalfFluidEngine::FaceCenteredGrid3::resetSampler()
 {
-	LinearArraySampler3<double, double> uSampler(_dataU,
+	LinearArraySampler3<double, double> uSampler(&_dataU,
 		GetGridSpacing(), _dataOriginU);
-	LinearArraySampler3<double, double> vSampler(_dataV,
+	LinearArraySampler3<double, double> vSampler(&_dataV,
 		GetGridSpacing(), _dataOriginV);
-	LinearArraySampler3<double, double> wSampler(_dataW,
+	LinearArraySampler3<double, double> wSampler(&_dataW,
 		GetGridSpacing(), _dataOriginW);
 
 	_uLinearSampler = uSampler;
@@ -696,8 +697,8 @@ void CalfFluidEngine::FaceCenteredGrid3::resetSampler()
 }
 
 CalfFluidEngine::CollocatedVectorGrid3::CollocatedVectorGrid3():
-	_linearSampler(LinearArraySampler3<Vector3D, double>(
-	_data, Vector3D(1, 1, 1), Vector3D::zero))
+	_linearSampler(
+	&_data, Vector3D(1, 1, 1), Vector3D::zero)
 {
 }
 
@@ -757,6 +758,11 @@ Vector3D CalfFluidEngine::CollocatedVectorGrid3::Curl(const Vector3D & x) const
 	return result;
 }
 
+std::function<Vector3D(const Vector3D&)> CalfFluidEngine::CollocatedVectorGrid3::Sampler() const
+{
+	return _sampler;
+}
+
 Vector3D CalfFluidEngine::CollocatedVectorGrid3::Sample(const Vector3D & x) const
 {
 	return _sampler(x);
@@ -797,6 +803,21 @@ std::function<Vector3D(size_t, size_t, size_t)> CalfFluidEngine::CollocatedVecto
 	};
 }
 
+void CalfFluidEngine::CollocatedVectorGrid3::ParallelForEach(const std::function<void(size_t, size_t, size_t)>& func) const
+{
+	_data.ParallelForEach(func);
+}
+
+Array3<Vector3D>& CalfFluidEngine::CollocatedVectorGrid3::GetArray3Data()
+{
+	return _data;
+}
+
+const Array3<Vector3D>& CalfFluidEngine::CollocatedVectorGrid3::GetArray3Data() const
+{
+	return _data;
+}
+
 void CalfFluidEngine::CollocatedVectorGrid3::onResize(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & origin, const Vector3D & initialValue)
 {
 	_data.Resize(GetDataSize(), initialValue);
@@ -805,8 +826,10 @@ void CalfFluidEngine::CollocatedVectorGrid3::onResize(const Vector3<size_t>& res
 
 void CalfFluidEngine::CollocatedVectorGrid3::resetSampler()
 {
-	_linearSampler = LinearArraySampler3<Vector3D, double>(
-		_data, GetGridSpacing(), GetDataOrigin());
+	/*auto sampler = LinearArraySampler3<Vector3D, double>(
+		&_data, GetGridSpacing(), GetDataOrigin());
+	_linearSampler = sampler;*/
+	_linearSampler.Reset(GetGridSpacing(), GetDataOrigin());
 	_sampler = _linearSampler.GetFunctor();
 }
 

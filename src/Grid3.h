@@ -286,11 +286,17 @@ namespace CalfFluidEngine {
 
 		virtual double Divergence(const Vector3D& x) const override;
 		virtual Vector3D Curl(const Vector3D& x) const override;
+		std::function<Vector3D(const Vector3D&)> Sampler() const override;
 		virtual Vector3D Sample(const Vector3D& x) const override;
 		void Swap(Grid3* other) override;
 		virtual void Fill(Vector3D value) override;
 		virtual void Fill(const std::function<Vector3D(const Vector3D&)>& func) override;
 		std::function<Vector3D(size_t, size_t, size_t)> Position() const;
+
+		void ParallelForEach(const std::function<void(size_t, size_t, size_t)>& func) const;
+
+		Array3<Vector3D>& GetArray3Data();
+		const Array3<Vector3D>& GetArray3Data() const;
 	protected:
 		void onResize(
 			const Vector3<size_t>& resolution,
@@ -301,7 +307,7 @@ namespace CalfFluidEngine {
 		void resetSampler();
 		LinearArraySampler3<Vector3D, double> _linearSampler;
 		std::function<Vector3D(const Vector3D&)> _sampler;
-		Array3<Vector3D> _data;
+		Array3<Vector3D> _data = Array3<Vector3D>();
 	};
 
 	class CellCenteredVectorGrid3 final : public CollocatedVectorGrid3 {

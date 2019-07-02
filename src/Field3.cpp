@@ -40,7 +40,7 @@ CalfFluidEngine::ConstantVectorField3::ConstantVectorField3(const Vector3D & val
 
 Vector3D CalfFluidEngine::ConstantVectorField3::Sample(const Vector3D & x) const
 {
-	return Vector3D::zero;
+	return _value;
 }
 
 double CalfFluidEngine::ConstantVectorField3::Divergence(const Vector3D & x) const

@@ -19,6 +19,56 @@ CalfFluidEngine::SemiLagrangianAdvectionSolver3::~SemiLagrangianAdvectionSolver3
 }
 
 void CalfFluidEngine::SemiLagrangianAdvectionSolver3::Advect(
+	const ScalarGrid3 & input, 
+	const VectorField3 & flow, 
+	double dt, 
+	ScalarGrid3 * output, 
+	const ScalarField3 & boundarySignedDistance)
+{
+	double h = min3(
+		output->GetGridSpacing().x,
+		output->GetGridSpacing().y,
+		output->GetGridSpacing().z);
+	auto inputDataPos = input.Position();
+	auto outputDataPos = output->Position();
+
+	auto& outputData = output->GetArray3Data();
+	output->ParallelForEach([&](size_t i, size_t j, size_t k) {
+		if (boundarySignedDistance.Sample(inputDataPos(i, j, k)) > 0.0) {
+			Vector3D pt = backTrace(
+				flow, dt, h, 
+				outputDataPos(i, j, k), 
+				boundarySignedDistance);
+			outputData(i, j, k) = input.Sampler()(pt);
+		}
+	});
+}
+
+void CalfFluidEngine::SemiLagrangianAdvectionSolver3::Advect(const CollocatedVectorGrid3 & input, const VectorField3 & flow, double dt, CollocatedVectorGrid3 * output, const ScalarField3 & boundarySignedDistance)
+{
+	double h = min3(
+		output->GetGridSpacing().x,
+		output->GetGridSpacing().y,
+		output->GetGridSpacing().z);
+	auto inputDataPos = input.Position();
+	auto outputDataPos = output->Position();
+
+	auto& outputData = output->GetArray3Data();
+	output->ParallelForEach([&](size_t i, size_t j, size_t k) {
+		if (boundarySignedDistance.Sample(inputDataPos(i, j, k)) > 0.0) {
+			Vector3D pt = backTrace(
+				flow, dt, h,
+				outputDataPos(i, j, k),
+				boundarySignedDistance);
+			Vector3D v = input.Sample(pt);
+			outputData(i, j, k) = v;
+		}
+	});
+
+	
+}
+
+void CalfFluidEngine::SemiLagrangianAdvectionSolver3::Advect(
 	const FaceCenteredGrid3 & input, 
 	const VectorField3 & flow, 
 	double dt, 
