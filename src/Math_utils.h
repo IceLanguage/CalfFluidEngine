@@ -67,7 +67,7 @@ template <class T>
 inline void GetBarycentric(T x, size_t iLow, size_t iHigh, size_t* i, T* f)
 {
 	T s = std::floor(x);
-	*i = static_cast<size_t>(s);
+	*i = static_cast<size_t>(s > 0 ?s : 0);
 
 	iLow -= iLow;
 	iHigh -= iLow;
