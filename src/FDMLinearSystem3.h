@@ -130,6 +130,7 @@ namespace CalfFluidEngine {
 	// incomplete Cholesky conjugate gradient (ICCG).
 	class FDM_ICCGSolver3 : public IFDMLinearSystemSolver3 {
 	public:
+		FDM_ICCGSolver3(unsigned int maxNumberOfIterations, double tolerance);
 		virtual bool Solve(FDMLinearSystem3* system) override;
 	private:
 		struct Preconditioner final {

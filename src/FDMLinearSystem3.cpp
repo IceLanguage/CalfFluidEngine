@@ -126,6 +126,9 @@ bool CalfFluidEngine::FDMConjugateGradientSolver3::Solve(FDMLinearSystem3 * syst
 		iter < _maxNumberOfIterations;
 }
 
+CalfFluidEngine::FDM_ICCGSolver3::FDM_ICCGSolver3(unsigned int maxNumberOfIterations, double tolerance)
+	: _maxNumberOfIterations(maxNumberOfIterations),_maxResidualTolerance(tolerance) {}
+
 bool CalfFluidEngine::FDM_ICCGSolver3::Solve(FDMLinearSystem3 * system)
 {
 	Vector3<size_t> size = system->A.Size();
