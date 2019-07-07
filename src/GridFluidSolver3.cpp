@@ -7,6 +7,11 @@ CalfFluidEngine::GridFluidSolver3::GridFluidSolver3()
 
 CalfFluidEngine::GridFluidSolver3::GridFluidSolver3(const Vector3<size_t>& resolution, const Vector3D & gridSpacing, const Vector3D & gridOrigin)
 {
+	_grids = std::make_shared<GridSystemData3>();
+	_grids->Resize(resolution, gridSpacing, gridOrigin);
+
+	_diffusionSolver = std::make_shared<GridBackwardEulerDiffusionSolver3>();
+	SetIsUsingFixedTimeSteps(false);
 }
 
 CalfFluidEngine::GridFluidSolver3::~GridFluidSolver3()
