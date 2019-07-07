@@ -9,13 +9,20 @@ CalfFluidEngine::GridFluidSolver3::GridFluidSolver3(const Vector3<size_t>& resol
 {
 	_grids = std::make_shared<GridSystemData3>();
 	_grids->Resize(resolution, gridSpacing, gridOrigin);
-
+	_pressureSolver = std::make_shared<GridFractionalSinglePhasePressureSolver3>();
 	_diffusionSolver = std::make_shared<GridBackwardEulerDiffusionSolver3>();
+	_advectionSolver = std::make_shared<SemiLagrangianAdvectionSolver3>();
 	SetIsUsingFixedTimeSteps(false);
 }
 
 CalfFluidEngine::GridFluidSolver3::~GridFluidSolver3()
 {
+}
+
+void CalfFluidEngine::GridFluidSolver3::onInitialize()
+{
+	updateCollider(0.0);
+	updateEmitter(0.0);
 }
 
 void CalfFluidEngine::GridFluidSolver3::onTimeStep(double timeIntervalInSeconds)
@@ -74,6 +81,14 @@ void CalfFluidEngine::GridFluidSolver3::computeViscosity(double timeIntervalInSe
 
 void CalfFluidEngine::GridFluidSolver3::computePressure(double timeIntervalInSeconds)
 {
+	if (_pressureSolver != nullptr) {
+		auto vel = _grids->GetVelocity();
+		auto vel0 = std::dynamic_pointer_cast<FaceCenteredGrid3>(vel->Clone());
+
+		_pressureSolver->Solve(*vel0, timeIntervalInSeconds, vel.get(),
+			*GetColliderSignedDistance());
+		applyBoundaryCondition();
+	}
 }
 
 void CalfFluidEngine::GridFluidSolver3::computeAdvection(double timeIntervalInSeconds)
@@ -99,6 +114,7 @@ void CalfFluidEngine::GridFluidSolver3::applyBoundaryCondition()
 	std::shared_ptr<FaceCenteredGrid3> vel = _grids->GetVelocity();
 
 	if (vel != nullptr && _boundaryConditionSolver != nullptr) {
+		unsigned int depth = static_cast<unsigned int>(std::ceil(_maxCfl));
 		
 	}
 }
@@ -110,8 +126,33 @@ std::shared_ptr<ScalarField3> CalfFluidEngine::GridFluidSolver3::GetFluidSignedD
 
 void CalfFluidEngine::GridFluidSolver3::timeStepStart(double timeStepInSeconds)
 {
+	updateCollider(timeStepInSeconds);
+	updateEmitter(timeStepInSeconds);
+
+	if (_boundaryConditionSolver != nullptr) {
+
+	}
+
+	applyBoundaryCondition();
+
+	onTimeStepStart(timeStepInSeconds);
 }
 
 void CalfFluidEngine::GridFluidSolver3::timeStepEnd(double timeStepInSeconds)
 {
+	onTimeStepEnd(timeStepInSeconds);
+}
+
+void CalfFluidEngine::GridFluidSolver3::updateCollider(double timeIntervalInSeconds)
+{
+	if (_collider != nullptr) {
+		_collider->Update(GetCurrentTime(), timeIntervalInSeconds);
+	}
+}
+
+void CalfFluidEngine::GridFluidSolver3::updateEmitter(double timeIntervalInSeconds)
+{
+	if (_emitter != nullptr) {
+		_emitter->Update(GetCurrentTime(), timeIntervalInSeconds);
+	}
 }
