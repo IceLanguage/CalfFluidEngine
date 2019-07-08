@@ -33,6 +33,8 @@ namespace CalfFluidEngine {
 		virtual void ConstrainVelocity(
 			FaceCenteredGrid3* velocity,
 			unsigned int extrapolationDepth = 5) = 0;
+
+		const std::shared_ptr<Collider3>& GetCollider() const{ return _collider; }
 	protected:
 
 		//**********************************************
@@ -65,6 +67,7 @@ namespace CalfFluidEngine {
 			const Vector3D& gridOrigin) override;
 	private:
 		std::shared_ptr<CellCenteredScalarGrid3> _colliderSignedDistance;
+		std::shared_ptr<CustomVectorField3> _colliderVel;
 	};
 }
 #endif

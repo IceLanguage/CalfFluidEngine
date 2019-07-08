@@ -103,6 +103,7 @@ namespace CalfFluidEngine{
 		std::function<Vector3D(const Vector3D&)> Sampler() const override;
 		double Divergence(const Vector3D& x) const override;
 		Vector3D Curl(const Vector3D& x) const override;
+		class Builder;
 	private:
 		std::function<Vector3D(const Vector3D&)> _customFunction;
 		double _resolution = 1e-3;

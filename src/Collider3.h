@@ -23,6 +23,8 @@ namespace CalfFluidEngine {
 		//Returns the velocity of the collider at given point.
 		//**********************************************
 		virtual Vector3D VelocityAt(const Vector3D& point) const = 0;
+
+		const std::shared_ptr<Surface3>& GetSurface() const { return _surface; }
 	protected:
 		struct ColliderQueryResult final {
 			double distance;
