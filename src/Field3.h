@@ -79,6 +79,34 @@ namespace CalfFluidEngine{
 	private:
 		double _value = 0.0;
 	};
+
+	class CustomScalarField3 final : public ScalarField3 {
+	public:
+		CustomScalarField3(
+			const std::function<double(const Vector3D&)>& customFunction,
+			double derivativeResolution = 1e-3);
+		double Sample(const Vector3D& x) const override;
+		std::function<double(const Vector3D&)> Sampler() const override;
+		Vector3D Gradient(const Vector3D& x) const override;
+		double Laplacian(const Vector3D& x) const override;
+	private:
+		std::function<double(const Vector3D&)> _customFunction;
+		double _resolution = 1e-3;
+	};
+
+	class CustomVectorField3 final : public VectorField3 {
+	public:
+		CustomVectorField3(
+			const std::function<Vector3D(const Vector3D&)>& customFunction,
+			double derivativeResolution = 1e-3);
+		Vector3D Sample(const Vector3D& x) const override;
+		std::function<Vector3D(const Vector3D&)> Sampler() const override;
+		double Divergence(const Vector3D& x) const override;
+		Vector3D Curl(const Vector3D& x) const override;
+	private:
+		std::function<Vector3D(const Vector3D&)> _customFunction;
+		double _resolution = 1e-3;
+	};
 }
 
 

@@ -20,3 +20,20 @@ void CalfFluidEngine::GridBoundaryConditionSolver3::UpdateCollider(const std::sh
 
 	onColliderUpdated(gridSize, gridSpacing, gridOrigin);
 }
+
+CalfFluidEngine::GridFractionalBoundaryConditionSolver3::GridFractionalBoundaryConditionSolver3()
+{
+}
+
+CalfFluidEngine::GridFractionalBoundaryConditionSolver3::~GridFractionalBoundaryConditionSolver3()
+{
+}
+
+void CalfFluidEngine::GridFractionalBoundaryConditionSolver3::ConstrainVelocity(FaceCenteredGrid3 * velocity, unsigned int extrapolationDepth)
+{
+
+}
+
+void CalfFluidEngine::GridFractionalBoundaryConditionSolver3::onColliderUpdated(const Vector3<size_t>& gridSize, const Vector3D & gridSpacing, const Vector3D & gridOrigin)
+{
+}

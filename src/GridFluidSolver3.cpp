@@ -115,7 +115,7 @@ void CalfFluidEngine::GridFluidSolver3::applyBoundaryCondition()
 
 	if (vel != nullptr && _boundaryConditionSolver != nullptr) {
 		unsigned int depth = static_cast<unsigned int>(std::ceil(_maxCfl));
-		
+		_boundaryConditionSolver->ConstrainVelocity(vel.get(), depth);
 	}
 }
 
@@ -130,7 +130,9 @@ void CalfFluidEngine::GridFluidSolver3::timeStepStart(double timeStepInSeconds)
 	updateEmitter(timeStepInSeconds);
 
 	if (_boundaryConditionSolver != nullptr) {
-
+		_boundaryConditionSolver->UpdateCollider(
+			_collider, _grids->GetResolution(), _grids->GetGridSpacing(),
+			_grids->GetOrigin());
 	}
 
 	applyBoundaryCondition();

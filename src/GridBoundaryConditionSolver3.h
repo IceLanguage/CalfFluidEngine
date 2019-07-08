@@ -23,6 +23,16 @@ namespace CalfFluidEngine {
 		//Returns the velocity field of the collider.
 		//**********************************************
 		virtual std::shared_ptr<VectorField3> GetColliderVelocityField() const = 0;
+
+		//**********************************************
+		//constrains the velocity field to conform the collider boundary.
+		//param velocity Input and output velocity grid.
+	    //param extrapolationDepth Number of inner-collider grid cells that
+		//velocity will get extrapolated.
+		//**********************************************
+		virtual void ConstrainVelocity(
+			FaceCenteredGrid3* velocity,
+			unsigned int extrapolationDepth = 5) = 0;
 	protected:
 
 		//**********************************************
@@ -37,6 +47,24 @@ namespace CalfFluidEngine {
 		Vector3<size_t> _gridSize;
 		Vector3D _gridSpacing;
 		Vector3D _gridOrigin;
+	};
+
+	class GridFractionalBoundaryConditionSolver3
+		: public GridBoundaryConditionSolver3 {
+	public:
+		GridFractionalBoundaryConditionSolver3();
+		virtual ~GridFractionalBoundaryConditionSolver3();
+
+		void ConstrainVelocity(
+			FaceCenteredGrid3* velocity,
+			unsigned int extrapolationDepth) override;
+	protected:
+		void onColliderUpdated(
+			const Vector3<size_t>& gridSize,
+			const Vector3D& gridSpacing,
+			const Vector3D& gridOrigin) override;
+	private:
+		std::shared_ptr<CellCenteredScalarGrid3> _colliderSignedDistance;
 	};
 }
 #endif
